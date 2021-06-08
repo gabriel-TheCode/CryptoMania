@@ -10,13 +10,17 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CryptoMania">
-        <activity android:name=".MainActivity">
+        <activity android:name=".presentation.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".presentation.onboarding.OnboardingActivity" />
+        <activity android:name=".presentation.onboarding.OnboardingFinishActivity" />
+        <activity android:name=".presentation.coindetails.CoinDetailsActivity" />
+        <activity android:name=".presentation.main.MainActivity"/>
     </application>
 
 </manifest>
