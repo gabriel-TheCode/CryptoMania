@@ -3,11 +3,8 @@ package com.thecode.cryptomania.datasource.network.model
 import com.google.gson.annotations.SerializedName
 
 
-class CoinObjectResponse {
+class CoinObjectResponse (
 
-    val coins: List<Result> = listOf()
-
-    inner class Result(
         @SerializedName("id")
         val id: String,
 
@@ -52,6 +49,5 @@ class CoinObjectResponse {
 
         @SerializedName("market_cap_change_percentage_24h")
         val market_cap_change_percentage_24h: Float,
-    )
 
-}
+        )

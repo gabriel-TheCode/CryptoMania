@@ -9,16 +9,16 @@ import javax.inject.Inject
 class CoinMapper @Inject constructor() :
     EntityMapper<CoinObjectResponse, Coin> {
 
-    override fun mapToDomain(entity: CoinObjectResponse): Coin {
+    override fun mapToDomain(entity: List<CoinObjectResponse>): Coin {
        return Coin(
-           entity.coins.map {
+           entity.map {
                mapFromExchangeItem(it)
            }
        )
     }
 
 
-    private fun mapFromExchangeItem(coin: CoinObjectResponse.Result): CoinItem {
+    private fun mapFromExchangeItem(coin: CoinObjectResponse): CoinItem {
         return CoinItem(
             coin.id,
             coin.symbol,

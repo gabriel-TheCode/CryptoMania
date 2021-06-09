@@ -4,7 +4,6 @@ import com.thecode.cryptomania.core.domain.Coin
 import com.thecode.cryptomania.core.domain.Exchange
 import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
 import com.thecode.cryptomania.datasource.network.mapper.EntityMapper
-import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
 import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import com.thecode.cryptomania.datasource.network.model.ExchangeObjectResponse
 import dagger.Module
@@ -23,9 +22,9 @@ object MapperModule {
         return CoinMapper()
     }
 
-    @Singleton
+    /*@Singleton
     @Provides
     fun provideExchangeResponseMapper(): EntityMapper<ExchangeObjectResponse, Exchange> {
         return ExchangeMapper()
-    }
+    }*/
 }

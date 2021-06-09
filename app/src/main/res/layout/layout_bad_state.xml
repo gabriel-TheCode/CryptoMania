@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    android:id="@+id/layout_bad_state"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:visibility="gone"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ImageView
+        android:id="@+id/img_state"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_baseline_signal_wifi_connected_no_internet_4_24" />
+    <TextView
+        android:id="@+id/text_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/dark_blue"
+        android:text="@string/internet_connection_error"
+        android:textSize="16sp"
+        android:gravity="center"
+        android:layout_margin="20dp"
+        android:fontFamily="@font/ubuntu_medium"/>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_retry"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_margin="10dp"
+        android:text="@string/retry"
+        android:textColor="?colorPrimary"
+        android:background="@drawable/rounded_outline"
+        android:fontFamily="@font/ubuntu_medium"/>
+
+</LinearLayout>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="150dp"
+    android:layout_width="150dp"
+    app:cardCornerRadius="10dp"
+    android:layout_margin="5dp">
+
+    <RelativeLayout
+        android:id="@+id/layout_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:elevation="8dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/layout_head_content">
+
+            <ImageView
+                android:id="@+id/icon_coin"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_margin="10dp"
+                android:background="@drawable/circle_image_background"
+                android:src="@mipmap/ic_launcher_foreground" />
+
+            <TextView
+                android:id="@+id/text_name_coin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toEndOf="@id/icon_coin"
+                android:ellipsize="end"
+                android:maxLines="1"
+                android:textColor="@color/dark_blue"
+                android:text="BITCOIN"
+                android:fontFamily="@font/ubuntu_regular"/>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/text_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@id/layout_head_content"
+            android:ellipsize="end"
+            android:textSize="26sp"
+            android:maxLines="1"
+            android:textStyle="bold"
+            android:textColor="@color/dark_blue"
+            android:text="$ 37.800"
+            android:fontFamily="@font/ubuntu_regular"/>
+
+        <TextView
+            android:id="@+id/text_percentage"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="10dp"
+            android:layout_below="@id/text_price"
+            android:ellipsize="end"
+            android:textSize="22sp"
+            android:maxLines="1"
+            android:textColor="@color/md_green_400"
+            android:text="+4,5%"
+            android:fontFamily="@font/ubuntu_regular"/>
+
+
+    </RelativeLayout>
+
+
+</androidx.cardview.widget.CardView>

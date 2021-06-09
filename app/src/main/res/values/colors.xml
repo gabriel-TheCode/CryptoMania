@@ -8,9 +8,17 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+    <color name="colorPrimary">@color/md_blue_500</color>
+    <color name="colorPrimaryDark">@color/md_blue_700</color>
+    <color name="colorAccent">@color/md_amber_500</color>
+
     <color name="light_grey">#ABABAB</color>
     <color name="dark_grey">#333333</color>
     <color name="dark_blue">#405467</color>
+    <color name="primaryBackgroundColor">#F5F7FB</color>
+    <color name="primaryCardBackgroundColor">@color/md_white_1000</color>
+    <color name="primaryChipBackgroundColor">#eeeeee</color>
+    <color name="primarySearchBackgroundColor">#F5F7FB</color>
 
     <!-- google's material design colors from
      http://www.google.com/design/spec/style/color.html#color-ui-color-palette -->

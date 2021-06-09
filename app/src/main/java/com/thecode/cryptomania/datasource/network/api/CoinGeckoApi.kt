@@ -4,24 +4,25 @@ import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import com.thecode.cryptomania.datasource.network.model.ExchangeObjectResponse
 import com.thecode.cryptomania.datasource.network.model.MarketChartObjectResponse
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface CoinGeckoApi {
 
     //region Coins
     @GET("coins/markets")
-    fun getAllCoins(
+    suspend fun getAllCoins(
         @Query("vs_currency") currency: String
-    ): CoinObjectResponse
+    ): List<CoinObjectResponse>
 
-    @GET("/coins/{id}") //TODO L'id doit etre passé dans la requete, j'ai oublié la syntaxe
+    @GET("coins/{id}")
     suspend fun getCoinById(
-        @Query("id") id: String
+        @Path(value = "id", encoded = true) coinId: String
     ): CoinObjectResponse
 
-    @GET("/coins/{id}/market_chart") //TODO L'id doit etre passé dans la requete, j'ai oublié la syntaxe
+    @GET("coins/{id}/market_chart")
     suspend fun getMarketChart(
-        @Query("id") id: String,
+        @Path(value = "id", encoded = true) coinId: String,
         @Query("vs_currency") currency: String,
         @Query("days") days: String
     ): MarketChartObjectResponse
@@ -30,7 +31,7 @@ interface CoinGeckoApi {
 
     //region Exchange
     @GET("/exchanges")
-    suspend fun getAllExchanges(): ExchangeObjectResponse
+    suspend fun getAllExchanges(): List<ExchangeObjectResponse>
 
     @GET("/exchanges")
     suspend fun getExchangesPerPage(

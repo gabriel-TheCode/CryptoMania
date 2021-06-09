@@ -11,7 +11,6 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.OnBoardingState
 import com.thecode.cryptomania.databinding.ActivityOnboardingBinding
-import com.thecode.cryptomania.presentation.main.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

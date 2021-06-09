@@ -1,18 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".presentation.main.MainActivity">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.main.MainActivity"
+    android:background="@color/white">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/view_pager"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="60dp"/>
+
+    <com.gauravk.bubblenavigation.BubbleNavigationLinearView
+        android:id="@+id/bottom_navigation_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#F5F7FB"
+        android:elevation="8dp"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/home"
+            app:bt_title="@string/home"
+            app:bt_titleSize="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="?colorPrimary"
+            app:bt_colorInactive="@color/md_grey_400"
+            app:bt_icon="@drawable/ic_baseline_home_gray_24"
+            app:bt_shape="@drawable/rounded_rect_bg_nav"/>
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/search"
+            app:bt_title="@string/markets"
+            app:bt_titleSize="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="?colorPrimary"
+            app:bt_colorInactive="@color/md_grey_400"
+            app:bt_icon="@drawable/ic_baseline_bar_chart_gray_24"
+            app:bt_shape="@drawable/rounded_rect_bg_nav"/>
+
+
+        <com.gauravk.bubblenavigation.BubbleToggleView
+            android:id="@+id/bookmark"
+            app:bt_title="@string/wallet"
+            app:bt_titleSize="10sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            app:bt_colorActive="?colorPrimary"
+            app:bt_colorInactive="@color/md_grey_400"
+            app:bt_icon="@drawable/ic_baseline_account_balance_wallet_gray_24"
+            app:bt_shape="@drawable/rounded_rect_bg_nav"/>
+    </com.gauravk.bubblenavigation.BubbleNavigationLinearView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

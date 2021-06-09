@@ -8,7 +8,6 @@ import com.thecode.cryptomania.datasource.CoinGeckoApiRemoteService
 import com.thecode.cryptomania.datasource.CoinGeckoApiRemoteServiceImpl
 import com.thecode.cryptomania.datasource.network.api.CoinGeckoApi
 import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
-import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
 import com.thecode.cryptomania.utils.AppConstants
 import com.thecode.cryptomania.utils.AppConstants.REQUEST_TIMEOUT
 import dagger.Module
@@ -61,13 +60,11 @@ object NetworkModule {
     @Provides
     fun provideRemoteDataSource(
         coinGeckoRemoteService: CoinGeckoApiRemoteService,
-        coinMapper: CoinMapper,
-        exchangeMapper: ExchangeMapper
+        coinMapper: CoinMapper
     ): AppRemoteDataSourceImpl {
         return AppRemoteDataSourceImpl(
             coinGeckoRemoteService,
-            coinMapper,
-            exchangeMapper
+            coinMapper
         )
     }
 

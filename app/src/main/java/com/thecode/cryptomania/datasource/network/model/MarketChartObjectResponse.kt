@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 class MarketChartObjectResponse {
 
     @SerializedName("prices")
-    val prices: List<CoinObjectResponse.Result> = listOf()
+    val prices: List<Result> = listOf()
 
     inner class Result(
         val volume: Float,

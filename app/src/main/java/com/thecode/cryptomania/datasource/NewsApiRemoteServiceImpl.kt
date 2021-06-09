@@ -8,7 +8,7 @@ import retrofit2.Response
 
 interface CoinGeckoApiRemoteService {
     //region COIN
-    suspend fun getAllCoins(currency: String): CoinObjectResponse
+    suspend fun getAllCoins(currency: String): List<CoinObjectResponse>
 
     suspend fun getCoinById(id: String): CoinObjectResponse
 
@@ -18,7 +18,7 @@ interface CoinGeckoApiRemoteService {
 
     //region EXCHANGE
 
-    suspend fun getAllExchanges(): ExchangeObjectResponse
+    suspend fun getAllExchanges(): List<ExchangeObjectResponse>
 
     //endregion
 }
@@ -29,7 +29,7 @@ class CoinGeckoApiRemoteServiceImpl constructor(
 
     override suspend fun getAllCoins(
         currency: String
-    ): CoinObjectResponse {
+    ): List<CoinObjectResponse> {
         return coinGeckoApi.getAllCoins(currency)
     }
 
@@ -45,7 +45,7 @@ class CoinGeckoApiRemoteServiceImpl constructor(
         return coinGeckoApi.getMarketChart(coinId, currency, days)
     }
 
-    override suspend fun getAllExchanges(): ExchangeObjectResponse {
+    override suspend fun getAllExchanges(): List<ExchangeObjectResponse> {
         return coinGeckoApi.getAllExchanges()
     }
 }

@@ -16,8 +16,7 @@
         android:layout_alignParentEnd="true"
         android:layout_marginTop="30dp"
         android:layout_marginStart="30dp"
-        android:layout_marginEnd="30dp"
-        android:layout_alignParentRight="true" />
+        android:layout_marginEnd="30dp" />
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPager"
@@ -42,24 +41,21 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
-            android:layout_alignParentLeft="true"
             android:layout_centerVertical="true"
             android:layout_margin="30dp"
             app:tabBackground="@drawable/onboarding_viewpager_selector"/>
 
 
-        <Button
+        <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_next_step"
             android:layout_width="wrap_content"
             android:layout_height="50dp"
             android:background="?android:attr/selectableItemBackground"
-            android:drawableTint="@color/md_grey_900"
             android:text="@string/next"
             android:textSize="16sp"
             android:layout_margin="10dp"
             android:textColor="?colorPrimary"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true" />
+            android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>
 

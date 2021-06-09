@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.main.home.HomeFragment"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+
+
+    <FrameLayout
+        android:id="@+id/frame_header"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"
+        android:background="@drawable/header_background">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="26sp"
+                android:text="My-CoolPay"
+                android:textStyle="bold"
+                android:textColor="@color/md_white_1000"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginTop="30dp"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Hello, John Doe"
+                android:textSize="26sp"
+                android:textColor="@color/md_white_1000"
+                android:layout_marginStart="30dp"
+                android:layout_marginEnd="30dp"
+                android:layout_marginBottom="14dp"/>
+
+            <TextView
+                android:id="@+id/text_top_currencies"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/top_crypto_currencies"
+                android:textSize="18sp"
+                android:textColor="@color/white"
+                android:layout_marginStart="30dp"/>
+        </LinearLayout>
+
+
+
+    </FrameLayout>
+
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/refresh_layout"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        android:layout_marginTop="120dp">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_top_crypto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:clipToPadding="false"
+        android:padding="20dp"
+        android:layoutAnimation="@anim/layout_animation_fall_down"
+        android:layout_below="@id/text_top_currencies"
+        android:layout_margin="20dp" />
+
+        <include
+            android:id="@+id/included"
+            layout="@layout/layout_bad_state"/>
+
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+
+    <TextView
+        android:id="@+id/rankings"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:text="@string/rankings"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_below="@id/refresh_layout"/>
+
+    <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+        android:id="@+id/themedButtonGroup"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginVertical="10dp"
+        android:layout_below="@id/rankings">
+
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/btnHot"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/hot"
+            app:toggle_backgroundColor="@color/primaryCardBackgroundColor"
+            app:toggle_selectedBackgroundColor="#5e6fed"
+            app:toggle_iconGravity="center"
+            app:toggle_iconPadding="25dp"/>
+
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/btnWinners"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/winners"
+            app:toggle_backgroundColor="@color/primaryCardBackgroundColor"
+            app:toggle_selectedBackgroundColor="#5e6fed"
+            app:toggle_iconGravity="center"
+            app:toggle_iconPadding="25dp"/>
+
+        <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
+            android:id="@+id/btnLosers"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:text="@string/losers"
+            app:toggle_backgroundColor="@color/primaryCardBackgroundColor"
+            app:toggle_selectedBackgroundColor="#5e6fed"
+            app:toggle_iconGravity="center"
+            app:toggle_iconPadding="25dp"/>
+
+
+    </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
+
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerview_crypto_ranking"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layoutAnimation="@anim/layout_animation_fall_down"
+        android:layout_below="@id/themedButtonGroup" />
+
+</RelativeLayout>

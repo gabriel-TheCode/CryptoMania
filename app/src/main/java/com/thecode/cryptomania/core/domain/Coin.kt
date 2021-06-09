@@ -2,7 +2,7 @@ package com.thecode.cryptomania.core.domain
 
 
 data class Coin(
-    val articles: List<CoinItem>
+    val coins: List<CoinItem>
 )
 
 data class CoinItem(
