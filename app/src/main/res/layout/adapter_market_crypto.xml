@@ -2,7 +2,6 @@
     android:id="@+id/layout_container"
     android:layout_width="match_parent"
     android:layout_height="80dp"
-    android:padding="20dp"
     android:focusable="true"
     android:clickable="true"
     android:gravity="center_vertical"
@@ -14,7 +13,7 @@
         android:id="@+id/img_icon"
         android:layout_width="40dp"
         android:layout_height="40dp"
-        android:layout_marginEnd="10dp"
+        android:layout_margin="10dp"
         android:src="@drawable/ic_baseline_monetization_on_gray_24"
         android:padding="5dp"
         android:background="@drawable/rounded_image_background"/>
@@ -22,12 +21,13 @@
 
     <TextView
         android:id="@+id/text_name"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="15dp"
+        android:text="BTC"
+        android:textAllCaps="true"
         android:ellipsize="end"
-        android:text="BITCOIN"
-        android:maxLines="1"
+        android:layout_marginEnd="20dp"
+        android:layout_marginTop="20dp"
         android:fontFamily="@font/ubuntu_medium"
         android:textSize="16sp"
         android:textColor="@color/dark_blue"
@@ -35,23 +35,14 @@
         android:layout_toStartOf="@id/text_price"/>
 
 
-    <TextView
-        android:id="@+id/text_symbol"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="BTC"
-        android:textAllCaps="true"
-        android:textColor="@color/md_grey_400"
-        android:textSize="10sp"
-        android:layout_toEndOf="@id/img_icon"
-        android:layout_below="@id/text_name"/>
-
 
     <TextView
         android:id="@+id/text_price"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="10dp"
         android:text="$37 098"
         android:textStyle="bold"
         android:textColor="@color/md_red_400"/>
@@ -60,17 +51,31 @@
         android:id="@+id/layout_percent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:background="@color/md_red_400">
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_below="@id/text_price"
+        android:background="@drawable/rounded_background_red">
 
         <TextView
             android:id="@+id/text_percentage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="- 10.5 %"
+            android:textSize="12sp"
             android:layout_margin="3dp"
             android:textColor="@color/white"/>
+
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_cap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="3948349,3434,343"
+        android:textSize="14sp"
+        android:layout_marginEnd="10dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true"/>
 
 
 </RelativeLayout>

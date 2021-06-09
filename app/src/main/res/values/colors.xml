@@ -17,6 +17,7 @@
     <color name="dark_blue">#405467</color>
     <color name="primaryBackgroundColor">#F5F7FB</color>
     <color name="primaryCardBackgroundColor">@color/md_white_1000</color>
+    <color name="light_gray_background">#F5F6F9</color>
     <color name="primaryChipBackgroundColor">#eeeeee</color>
     <color name="primarySearchBackgroundColor">#F5F7FB</color>
 

@@ -4,7 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.main.home.HomeFragment"
     app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
 
@@ -24,7 +23,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
-                android:text="My-CoolPay"
+                android:text="Crypto Mania"
                 android:textStyle="bold"
                 android:textColor="@color/md_white_1000"
                 android:layout_marginStart="30dp"
@@ -60,7 +59,7 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="120dp">
+        android:layout_marginTop="130dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_top_crypto"
@@ -68,7 +67,8 @@
         android:layout_height="match_parent"
         android:orientation="horizontal"
         android:clipToPadding="false"
-        android:padding="20dp"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="10dp"
         android:layoutAnimation="@anim/layout_animation_fall_down"
         android:layout_below="@id/text_top_currencies"
         android:layout_margin="20dp" />
@@ -136,7 +136,6 @@
         android:id="@+id/recyclerview_crypto_ranking"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layoutAnimation="@anim/layout_animation_fall_down"
         android:layout_below="@id/themedButtonGroup" />
 

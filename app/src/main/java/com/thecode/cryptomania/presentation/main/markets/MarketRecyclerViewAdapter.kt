@@ -1,4 +1,4 @@
-package com.thecode.cryptomania.presentation.main.home
+package com.thecode.cryptomania.presentation.main.markets
 
 
 import android.view.LayoutInflater
@@ -12,19 +12,20 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.CoinItem
-import com.thecode.cryptomania.databinding.AdapterRankingCryptoBinding
-import kotlin.math.min
+import com.thecode.cryptomania.databinding.AdapterMarketCryptoBinding
+import com.thecode.cryptomania.presentation.main.home.CoinCardOnClickListener
+import kotlin.math.ln
+import kotlin.math.pow
 
 
-class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
-    RecyclerView.Adapter<RankingRecyclerViewAdapter.CoinViewHolder>() {
+class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
+    RecyclerView.Adapter<MarketRecyclerViewAdapter.CoinViewHolder>() {
 
-    private lateinit var binding: AdapterRankingCryptoBinding
+    private lateinit var binding: AdapterMarketCryptoBinding
     var coinsList: List<CoinItem> = listOf()
-    private val limit = 10
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
-        binding = AdapterRankingCryptoBinding.inflate(
+        binding = AdapterMarketCryptoBinding.inflate(
             LayoutInflater.from(parent.context),
             parent,
             false
@@ -33,13 +34,13 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
     }
 
     override fun getItemCount(): Int {
-        return min(coinsList.size, limit)
+        return coinsList.size
     }
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         val coin = coinsList[position]
-        holder.tvCoinName.text = coin.name
-        holder.tvCoinSymbol.text = coin.symbol
+        holder.tvCoinName.text = coin.symbol
+        holder.tvMarketCap.text = withSuffix(coin.market_cap)
         if (coin.price_change_percentage_24h > 0){
             holder.tvCoinPrice.setTextColor(
                 ContextCompat.getColor(
@@ -48,6 +49,7 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
                 )
             )
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_green)
+
         }else{
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_red)
             holder.tvCoinPrice.setTextColor(
@@ -78,11 +80,20 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
         notifyDataSetChanged()
     }
 
-    class CoinViewHolder(binding: AdapterRankingCryptoBinding) : RecyclerView.ViewHolder(binding.root) {
+    private fun withSuffix(count: Float): String {
+        if (count < 1000) return "" + count
+        val exp = (ln(count.toDouble()) / ln(1000.0)).toInt()
+        return String.format(
+            "%.1f %c",
+            count / 1000.0.pow(exp.toDouble()),
+            "kMGTPE"[exp - 1]
+        )
+    }
+    class CoinViewHolder(binding: AdapterMarketCryptoBinding) : RecyclerView.ViewHolder(binding.root) {
 
         val container: RelativeLayout = binding.layoutContainer
         val tvCoinName: TextView = binding.textName
-        val tvCoinSymbol: TextView = binding.textSymbol
+        val tvMarketCap: TextView = binding.textCap
         val tvCoinPrice: TextView = binding.textPrice
         val layoutPercentage: RelativeLayout = binding.layoutPercent
         val tvCoinPercentage: TextView = binding.textPercentage

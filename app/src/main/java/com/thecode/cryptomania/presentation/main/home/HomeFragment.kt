@@ -179,17 +179,6 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
         btnRetry.setOnClickListener { fetchTopCryptoCurrency() }
 
-        refreshLayout.setColorSchemeResources(
-            R.color.colorPrimary,
-            R.color.colorPrimary,
-            R.color.colorPrimaryDark,
-            R.color.colorPrimaryDark
-        )
-        val typedValue = TypedValue()
-        val theme: Resources.Theme = requireContext().theme
-        theme.resolveAttribute(R.attr.primaryCardBackgroundColor, typedValue, true)
-        @ColorInt val color = typedValue.data
-        refreshLayout.setProgressBackgroundColorSchemeColor(color)
         refreshLayout.setOnRefreshListener {
             fetchTopCryptoCurrency()
         }

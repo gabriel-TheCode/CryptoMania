@@ -53,11 +53,12 @@
         android:id="@+id/layout_start"
         android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:background="?colorPrimary"
+        android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true"
         android:gravity="center"
         android:clickable="true"
-        android:focusable="true">
+        android:focusable="true"
+        android:foreground="?android:attr/selectableItemBackground">
 
         <androidx.appcompat.widget.AppCompatTextView
             android:layout_width="wrap_content"

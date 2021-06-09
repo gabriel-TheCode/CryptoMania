@@ -1,0 +1,102 @@
+<androidx.constraintlayout.widget.ConstraintLayout android:id="@+id/layout_container"
+    android:layout_width="match_parent"
+    android:layout_height="80dp"
+    android:padding="20dp"
+    android:focusable="true"
+    android:clickable="true"
+    android:gravity="center_vertical"
+    android:background="?android:attr/selectableItemBackground"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/img_icon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/text_rank"
+        android:src="@drawable/ic_baseline_monetization_on_gray_24"
+        android:background="@drawable/circle_image_background"/>
+
+
+    <TextView
+        android:id="@+id/text_rank"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:fontFamily="@font/ubuntu_medium"
+        android:textSize="28sp"
+        android:textColor="@color/dark_blue"
+        android:layout_toEndOf="@id/img_icon"/>
+
+    <TextView
+        android:id="@+id/text_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Binance"
+        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/ubuntu_medium"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toEndOf="@id/img_icon"
+        android:textSize="16sp"
+        android:textColor="@color/dark_blue"
+        android:layout_toEndOf="@id/img_icon"/>
+
+    <TextView
+        android:id="@+id/text_year"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="2012"
+        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/ubuntu_medium"
+        app:layout_constraintTop_toBottomOf="@id/text_name"
+        app:layout_constraintStart_toEndOf="@id/img_icon"
+        android:textSize="14sp"
+        android:textColor="@color/dark_blue"
+        android:layout_toEndOf="@id/img_icon"/>
+
+
+    <RelativeLayout
+        android:id="@+id/layout_trust_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:background="@drawable/rounded_background_green">
+
+
+        <TextView
+            android:id="@+id/text_trust_score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10"
+            android:layout_margin="3dp"
+            android:textColor="@color/white"/>
+
+
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_town"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Cayman Islands"
+        android:gravity="center"
+        android:layout_marginStart="20dp"
+        android:fontFamily="@font/ubuntu_medium"
+        app:layout_constraintTop_toBottomOf="@id/layout_trust_score"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:textColor="@color/dark_blue"
+        android:layout_toEndOf="@id/img_icon"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

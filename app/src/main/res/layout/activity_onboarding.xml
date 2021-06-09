@@ -54,7 +54,7 @@
             android:text="@string/next"
             android:textSize="16sp"
             android:layout_margin="10dp"
-            android:textColor="?colorPrimary"
+            android:textColor="@color/colorPrimary"
             android:layout_alignParentEnd="true"/>
 
     </RelativeLayout>

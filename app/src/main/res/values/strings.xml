@@ -13,7 +13,6 @@
     <string name="description_onboarding_finish">The world’s #1 most-trusted cryptocurrency data authority.</string>
     <string name="finish">finish</string>
     <string name="home">Home</string>
-    <string name="wallet">Wallet</string>
     <string name="markets">Markets</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="rankings">Rankings</string>
@@ -27,5 +26,8 @@
     <string name="network_error">Network error</string>
     <string name="check_internet">Please check your internet connection</string>
     <string name="retry">retry</string>
+    <string name="crypto_currencies">Crypto currencies</string>
+    <string name="exchanges">Exchanges</string>
+    <string name="wallet">Wallet</string>
 
 </resources>

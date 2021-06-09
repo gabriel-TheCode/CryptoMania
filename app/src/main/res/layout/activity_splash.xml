@@ -1,9 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@color/colorPrimary"
+        android:gravity="center_vertical">
+
+
 
     <LinearLayout
         android:id="@+id/layout_image_content"
@@ -29,7 +34,8 @@
             android:id="@+id/layout_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_below="@+id/layout_image_content">
 
             <TextView
                 android:id="@+id/text_title"
@@ -39,7 +45,7 @@
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:fontFamily="@font/baloo_medium"
-                android:textColor="@color/dark_blue"
+                android:textColor="@color/white"
                 android:textSize="25sp"/>
 
             <TextView
@@ -50,7 +56,7 @@
                 android:layout_marginVertical="30dp"
                 android:layout_gravity="center"
                 android:text="The world’s leading independent cryptocurrency data aggregator."
-                android:textColor="@color/dark_blue"
+                android:textColor="@color/white"
                 android:textAlignment="center"
                 android:textSize="16sp"/>
 
@@ -59,4 +65,4 @@
 
 
 
-</LinearLayout>
+</RelativeLayout>
