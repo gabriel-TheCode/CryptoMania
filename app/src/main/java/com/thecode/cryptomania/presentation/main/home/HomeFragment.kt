@@ -1,15 +1,13 @@
 package com.thecode.cryptomania.presentation.main.home
 
-import android.content.res.Resources
+import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.ColorInt
 import androidx.appcompat.widget.AppCompatButton
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -21,6 +19,7 @@ import com.thecode.cryptomania.base.BaseFragment
 import com.thecode.cryptomania.core.domain.CoinItem
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.FragmentHomeBinding
+import com.thecode.cryptomania.presentation.coindetails.CoinDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter
@@ -231,7 +230,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
 
     override fun openCoinDetails(coin: CoinItem) {
-        TODO("Not yet implemented")
+        openCoinDetailsActivity(coin)
     }
 
 

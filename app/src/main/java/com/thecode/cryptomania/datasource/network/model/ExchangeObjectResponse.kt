@@ -11,13 +11,13 @@ class ExchangeObjectResponse (
         val name: String,
 
         @SerializedName("year_established")
-        val year_established: Int,
+        var year_established: Int? = null,
 
         @SerializedName("country")
-        val country: String,
+        var country: String? = null,
 
         @SerializedName("description")
-        val description: String,
+        var description: String? = null,
 
         @SerializedName("url")
         val url: String,
@@ -26,7 +26,7 @@ class ExchangeObjectResponse (
         val image: String,
 
         @SerializedName("has_trading_incentive")
-        val has_trading_incentive: Boolean,
+        var has_trading_incentive: Boolean? = null,
 
         @SerializedName("trust_score")
         val trust_score: Int,

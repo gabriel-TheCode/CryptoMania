@@ -1,4 +1,4 @@
-package com.thecode.cryptomania.presentation.main.home
+package com.thecode.cryptomania.presentation.main.markets
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor(
+class MarketViewModel @Inject constructor(
     private val getCoins: GetCoins,
     private val getExchanges: GetExchanges
 ) : ViewModel() {
@@ -25,13 +25,27 @@ class HomeViewModel @Inject constructor(
     val coinState: LiveData<DataState<Coin>>
         get() = _coinState
 
+    private val _exchangeState = MutableLiveData<DataState<Exchange>>()
+    val exchangeState: LiveData<DataState<Exchange>>
+        get() = _exchangeState
 
     fun getCoins(currency: String) {
-
         viewModelScope.launch {
             _coinState.value.let { _ ->
                 getCoins.invoke(currency).onEach {
                     _coinState.value = it
+                }.launchIn(viewModelScope)
+            }
+        }
+    }
+
+
+
+    fun getExchanges() {
+        viewModelScope.launch {
+            _exchangeState.value.let { _ ->
+                getExchanges.invoke().onEach {
+                    _exchangeState.value = it
                 }.launchIn(viewModelScope)
             }
         }

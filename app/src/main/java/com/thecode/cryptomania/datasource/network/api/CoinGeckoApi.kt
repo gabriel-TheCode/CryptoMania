@@ -30,14 +30,8 @@ interface CoinGeckoApi {
     //endregion
 
     //region Exchange
-    @GET("/exchanges")
+    @GET("exchanges")
     suspend fun getAllExchanges(): List<ExchangeObjectResponse>
-
-    @GET("/exchanges")
-    suspend fun getExchangesPerPage(
-        @Query("per_page") perPage: String,
-        @Query("pages") page: String
-    ): ExchangeObjectResponse
 
     //endregion
 }

@@ -18,9 +18,9 @@ import com.thecode.cryptomania.R
 import com.thecode.cryptomania.base.BaseFragment
 import com.thecode.cryptomania.core.domain.CoinItem
 import com.thecode.cryptomania.core.domain.DataState
+import com.thecode.cryptomania.core.domain.ExchangeItem
 import com.thecode.cryptomania.databinding.FragmentMarketsBinding
 import com.thecode.cryptomania.presentation.main.home.CoinCardOnClickListener
-import com.thecode.cryptomania.presentation.main.home.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
@@ -28,23 +28,24 @@ import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 
 
 @AndroidEntryPoint
-class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
+class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClickListener {
 
     // ViewModel
-    private val viewModel: HomeViewModel by viewModels()
+    private val viewModel: MarketViewModel by viewModels()
 
     // Listener
     private var coinOnClickListener: CoinCardOnClickListener = this
+    private var exchangeOnClickListener: ExchangeOnClickListener = this
 
     // View Binding
     private var _binding: FragmentMarketsBinding? = null
     private val binding get() = _binding!!
 
-    private var category: String = "General"
-
     // Views
     private lateinit var recyclerViewMarket: RecyclerView
+    private lateinit var recyclerViewExchange: RecyclerView
     lateinit var marketRecyclerAdapter: MarketRecyclerViewAdapter
+    lateinit var exchangeRecyclerAdapter: ExchangeRecyclerViewAdapter
     private lateinit var refreshLayout: SwipeRefreshLayout
     lateinit var btnRetry: AppCompatButton
     lateinit var layoutBadState: View
@@ -68,7 +69,7 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
         initViews()
         initRecyclerViews()
 
-        fetchTopCryptoCurrency()
+        fetchMarkets()
 
         return view
     }
@@ -79,13 +80,18 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
         _binding = null
     }
 
-    private fun fetchTopCryptoCurrency() {
+    private fun fetchMarkets() {
         viewModel.getCoins("usd")
         recyclerViewMarket.scheduleLayoutAnimation()
     }
 
+    private fun fetchExchanges() {
+        viewModel.getExchanges()
+        recyclerViewExchange.scheduleLayoutAnimation()
+    }
+
     private fun showInternetConnectionErrorLayout() {
-        if (marketRecyclerAdapter.itemCount > 0) {
+        if (marketRecyclerAdapter.itemCount > 0 || exchangeRecyclerAdapter.itemCount > 0) {
             showErrorDialog(
                 getString(R.string.network_error),
                 getString(R.string.check_internet)
@@ -98,7 +104,7 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
     }
 
     private fun showBadStateLayout() {
-        if (marketRecyclerAdapter.itemCount > 0) {
+        if (marketRecyclerAdapter.itemCount > 0 || exchangeRecyclerAdapter.itemCount > 0) {
             showErrorDialog(
                 getString(R.string.error),
                 getString(R.string.service_unavailable)
@@ -109,6 +115,12 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
             btnRetry.isVisible = true
         }
     }
+
+    private fun showRecyclerViewMarket(state: Boolean){
+            recyclerViewMarket.isVisible = state
+            recyclerViewExchange.isVisible = !state
+    }
+
 
     private fun hideBadStateLayout() {
         layoutBadState.isVisible = false
@@ -122,7 +134,34 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
                     is DataState.Success -> {
                         hideBadStateLayout()
                         hideLoadingProgress()
-                        populateRecyclerView(it.data.coins)
+                        showRecyclerViewMarket(true)
+                        populateRecyclerViewMarket(it.data.coins)
+                    }
+                    is DataState.Loading -> {
+                        showLoadingProgress()
+                    }
+                    is DataState.Error -> {
+                        hideLoadingProgress()
+                        showInternetConnectionErrorLayout()
+                        Toast.makeText(
+                            activity,
+                            getString(R.string.internet_connection_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
+        )
+
+        viewModel.exchangeState.observe(
+            viewLifecycleOwner,
+            {
+                when (it) {
+                    is DataState.Success -> {
+                        hideBadStateLayout()
+                        hideLoadingProgress()
+                        showRecyclerViewMarket(false)
+                        populateRecyclerViewExchange(it.data.exchanges)
                     }
                     is DataState.Loading -> {
                         showLoadingProgress()
@@ -150,6 +189,7 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
     }
 
     private fun initRecyclerViews() {
+        //Crypto Market
         marketRecyclerAdapter = MarketRecyclerViewAdapter(coinOnClickListener)
         recyclerViewMarket.layoutManager = LinearLayoutManager(activity)
         recyclerViewMarket.addItemDecoration(
@@ -159,11 +199,23 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
             )
         )
         recyclerViewMarket.adapter = SlideInBottomAnimationAdapter(marketRecyclerAdapter)
+
+        //Exchanges
+        exchangeRecyclerAdapter = ExchangeRecyclerViewAdapter(exchangeOnClickListener)
+        recyclerViewExchange.layoutManager = LinearLayoutManager(activity)
+        recyclerViewExchange.addItemDecoration(
+            DividerItemDecoration(
+                activity,
+                LinearLayoutManager.VERTICAL
+            )
+        )
+        recyclerViewExchange.adapter = SlideInBottomAnimationAdapter(exchangeRecyclerAdapter)
     }
 
     private fun initViews() {
         refreshLayout = binding.refreshLayout
         recyclerViewMarket = binding.recyclerviewCryptoMarkets
+        recyclerViewExchange = binding.recyclerviewCryptoExchanges
         btnRetry = binding.included.btnRetry
         layoutBadState = binding.included.layoutBadState
         imgState = binding.included.imgState
@@ -173,52 +225,57 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener {
         btnExchange = binding.btnExchange
 
 
-        btnRetry.setOnClickListener { fetchTopCryptoCurrency() }
+        btnRetry.setOnClickListener { if (btnCrypto.isSelected) fetchMarkets() else fetchExchanges() }
 
         refreshLayout.setOnRefreshListener {
-            fetchTopCryptoCurrency()
+            if (btnCrypto.isSelected) fetchMarkets() else fetchExchanges()
         }
 
         themedButtonGroup.selectButton(btnCrypto)
 
         themedButtonGroup.setOnSelectListener {
             when (it) {
-                btnCrypto -> {
-                    category = "Hot"
-                    showToast(category)
-                    //fetchCryptoRanking()
-                }
-
-                btnExchange -> {
-                    category = "Winner"
-                    showToast(category)
-                    //fetchCryptoRanking()
-                }
+                btnCrypto -> fetchMarkets()
+                btnExchange -> fetchExchanges()
             }
         }
     }
 
-    private fun showToast(message: String) {
-        Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
-    }
-
-    private fun populateRecyclerView(coins: List<CoinItem>) {
+    private fun populateRecyclerViewMarket(coins: List<CoinItem>) {
         if (coins.isEmpty()) {
             showBadStateLayout()
         } else {
             val coinArrayList: ArrayList<CoinItem> = ArrayList()
             for (i in coins.indices) {
-                val article = coins[i]
-                coinArrayList.add(article)
+                val coin = coins[i]
+                coinArrayList.add(coin)
                 marketRecyclerAdapter.setCoinListItems(coinArrayList)
                 recyclerViewMarket.scheduleLayoutAnimation()
             }
         }
     }
 
+    private fun populateRecyclerViewExchange(exchanges: List<ExchangeItem>) {
+        if (exchanges.isEmpty()) {
+            showBadStateLayout()
+        } else {
+            val exchangeArrayList: ArrayList<ExchangeItem> = ArrayList()
+            for (i in exchanges.indices) {
+                val exchange = exchanges[i]
+                exchangeArrayList.add(exchange)
+                exchangeRecyclerAdapter.setExchangeListItems(exchangeArrayList)
+                recyclerViewExchange.scheduleLayoutAnimation()
+            }
+        }
+    }
+
 
     override fun openCoinDetails(coin: CoinItem) {
-        TODO("Not yet implemented")
+        openCoinDetailsActivity(coin)
+    }
+
+    override fun openExchangeDetails(exchange: ExchangeItem) {
+        openExchangeDetailsActivity(exchange)
     }
 
 

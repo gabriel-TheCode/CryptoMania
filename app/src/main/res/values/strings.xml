@@ -29,5 +29,6 @@
     <string name="crypto_currencies">Crypto currencies</string>
     <string name="exchanges">Exchanges</string>
     <string name="wallet">Wallet</string>
+    <string name="market_subtitle">List all supported coins price, market cap, volume...</string>
 
 </resources>

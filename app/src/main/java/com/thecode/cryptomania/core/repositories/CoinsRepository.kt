@@ -14,7 +14,7 @@ class CoinsRepository @Inject constructor(
         return networkDataSource.fetchCoins(currency)
     }
 
-    /*suspend fun fetchCoinById(id: String): Coin {
+    suspend fun fetchCoinById(id: String): Coin {
         return networkDataSource.fetchCoinById(id)
-    }*/
+    }
 }

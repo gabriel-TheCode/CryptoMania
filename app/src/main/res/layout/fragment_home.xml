@@ -11,7 +11,7 @@
     <FrameLayout
         android:id="@+id/frame_header"
         android:layout_width="match_parent"
-        android:layout_height="250dp"
+        android:layout_height="180dp"
         android:background="@drawable/header_background">
 
         <LinearLayout
@@ -24,21 +24,12 @@
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
                 android:text="Crypto Mania"
+                android:layout_marginBottom="10dp"
                 android:textStyle="bold"
                 android:textColor="@color/md_white_1000"
                 android:layout_marginStart="30dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginTop="30dp"/>
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Hello, John Doe"
-                android:textSize="26sp"
-                android:textColor="@color/md_white_1000"
-                android:layout_marginStart="30dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="14dp"/>
 
             <TextView
                 android:id="@+id/text_top_currencies"
@@ -59,7 +50,7 @@
         android:id="@+id/refresh_layout"
         android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:layout_marginTop="130dp">
+        android:layout_marginTop="92dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerview_top_crypto"
@@ -87,7 +78,7 @@
         android:textSize="18sp"
         android:text="@string/rankings"
         android:layout_marginHorizontal="20dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="10dp"
         android:layout_below="@id/refresh_layout"/>
 
     <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
