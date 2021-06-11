@@ -1,24 +1,22 @@
 package com.thecode.cryptomania.datasource.network.mapper
 
 
-import com.thecode.cryptomania.core.domain.MarketChartItem
 import com.thecode.cryptomania.datasource.network.model.MarketChartObjectResponse
 import javax.inject.Inject
 
 class MarketChartMapper @Inject constructor() :
-    ItemMapper<MarketChartObjectResponse, List<MarketChartItem>> {
-    override fun mapToDomain(entity: MarketChartObjectResponse): List<MarketChartItem> {
-        return entity.prices[0].map { mapResultItem(it) }
+    ItemMapper<MarketChartObjectResponse, List<List<Number>>> {
+    override fun mapToDomain(entity: MarketChartObjectResponse): List<List<Number>> {
+        return entity.prices
+
     }
 
-    private fun mapResultItem(m: MarketChartObjectResponse.MarketChart): MarketChartItem {
-        return MarketChartItem(
-            m.timestamp,
-            m.price
-        )
+    private fun mapResultItem(m: MarketChartObjectResponse): List<Number> {
+        val prices = arrayOf(m.prices[0][0], m.prices[0][1])
+        return prices.toList()
     }
 
-    override fun mapToEntity(domainModel: List<MarketChartItem>): MarketChartObjectResponse {
+    override fun mapToEntity(domainModel: List<List<Number>>): MarketChartObjectResponse {
         TODO("Not yet implemented")
     }
 

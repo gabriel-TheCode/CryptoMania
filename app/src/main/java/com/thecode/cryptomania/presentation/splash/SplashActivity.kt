@@ -15,13 +15,16 @@ import com.thecode.cryptomania.databinding.ActivitySplashBinding
 import com.thecode.cryptomania.presentation.main.MainActivity
 import com.thecode.cryptomania.presentation.onboarding.OnboardingActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     private val viewModel: SplashViewModel by viewModels()
-    val activityScope = CoroutineScope(Dispatchers.Main)
+    private val activityScope = CoroutineScope(Dispatchers.Main)
 
     private lateinit var binding: ActivitySplashBinding
     private lateinit var logo: ImageView
@@ -57,7 +60,7 @@ class SplashActivity : AppCompatActivity() {
         rotate.interpolator = LinearInterpolator()
         logo.startAnimation(rotate)
 
-       activityScope.launch {
+        activityScope.launch {
             delay(4500)
             val intent: Intent = if (viewModel.isOnboardingCompleted()) {
                 Intent(applicationContext, MainActivity::class.java)
@@ -68,11 +71,5 @@ class SplashActivity : AppCompatActivity() {
             startActivity(intent)
 
         }
-    }
-
-
-    override fun onPause() {
-        activityScope.cancel()
-        super.onPause()
     }
 }

@@ -2,7 +2,6 @@ package com.thecode.cryptomania.core.remote
 
 import com.thecode.cryptomania.core.domain.Coin
 import com.thecode.cryptomania.core.domain.Exchange
-import com.thecode.cryptomania.core.domain.MarketChartItem
 import com.thecode.cryptomania.datasource.CoinGeckoApiRemoteService
 import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
 import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
@@ -21,7 +20,7 @@ interface AppRemoteDataSource {
         coinId: String,
         currency: String,
         days: Int
-    ): List<MarketChartItem>
+    ): List<List<Number>>
 }
 
 class AppRemoteDataSourceImpl @Inject constructor(
@@ -48,7 +47,7 @@ class AppRemoteDataSourceImpl @Inject constructor(
         coinId: String,
         currency: String,
         days: Int
-    ): List<MarketChartItem> {
+    ): List<List<Number>> {
         return marketChartMapper.mapToDomain(apiService.getMarketChart(coinId, currency, days))
     }
 

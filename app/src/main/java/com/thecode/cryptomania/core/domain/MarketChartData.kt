@@ -5,7 +5,8 @@ data class MarketChartData(
     val prices: List<List<MarketChartItem>>
 )
 
-class MarketChartItem(
+
+data class MarketChartItem(
     val timestamp: Long,
     val price: Float
 )

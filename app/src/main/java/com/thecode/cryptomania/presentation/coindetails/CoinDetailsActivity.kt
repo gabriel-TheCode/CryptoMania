@@ -2,13 +2,16 @@ package com.thecode.cryptomania.presentation.coindetails
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.view.isVisible
 import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
@@ -25,7 +28,6 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.DataState
-import com.thecode.cryptomania.core.domain.MarketChartItem
 import com.thecode.cryptomania.databinding.ActivityCoinDetailsBinding
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
@@ -43,6 +45,8 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     lateinit var btnRetry: AppCompatButton
     lateinit var layoutBadState: View
+    lateinit var textState: TextView
+    lateinit var imgState: ImageView
     private lateinit var textCoinName: TextView
     private lateinit var textCoinSymbol: TextView
     private lateinit var textCoinMcap: TextView
@@ -60,6 +64,7 @@ class CoinDetailsActivity : AppCompatActivity() {
     private lateinit var btnWeek: ThemedButton
     private lateinit var btnMonth: ThemedButton
     private lateinit var anyChartView: AnyChartView
+    private lateinit var progressBar: ProgressBar
 
     private lateinit var id: String
     private lateinit var name: String
@@ -96,9 +101,11 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         setUpChart()
 
-        viewModel.getMarketChart(id, "usd", 7)
+        fetchChart()
+
 
     }
+
 
     private fun initViews() {
         imgCoin = binding.imgIcon
@@ -119,10 +126,15 @@ class CoinDetailsActivity : AppCompatActivity() {
         btnWeek = binding.btnWeek
         btnMonth = binding.btnMonth
         anyChartView = binding.layoutChart
+        btnRetry = binding.included.btnRetry
+        layoutBadState = binding.included.layoutBadState
+        imgState = binding.included.imgState
+        textState = binding.included.textState
+        progressBar = binding.progressBar
 
-        anyChartView.setProgressBar(binding.progressBar)
-
+        anyChartView.setProgressBar(progressBar)
         themedButtonGroup.selectButton(btnDay)
+        btnRetry.setOnClickListener { fetchChart() }
     }
 
     private fun getCoinData() {
@@ -167,6 +179,9 @@ class CoinDetailsActivity : AppCompatActivity() {
         }
     }
 
+    private fun fetchChart() {
+        viewModel.getMarketChart(id, "usd", 7)
+    }
 
     private fun subscribeObservers() {
         viewModel.chartState.observe(
@@ -176,8 +191,11 @@ class CoinDetailsActivity : AppCompatActivity() {
                         populateChart(it.data)
                     }
                     is DataState.Loading -> {
+                        progressBar.isVisible = true
                     }
                     is DataState.Error -> {
+                        progressBar.isVisible = false
+                        showBadStateLayout()
                         Toast.makeText(
                             this,
                             getString(R.string.internet_connection_error),
@@ -190,18 +208,32 @@ class CoinDetailsActivity : AppCompatActivity() {
     }
 
 
-    private fun populateChart(items: List<MarketChartItem>) {
+    private fun showBadStateLayout() {
+        layoutBadState.isVisible = true
+        textState.text = getString(R.string.internet_connection_error)
+        btnRetry.isVisible = true
+    }
+
+
+    private fun populateChart(items: List<List<Number>>) {
+        var timestamp: Number = 0
+        var price: Number = 0
         if (items.isEmpty()) {
             Toast.makeText(
                 this,
-                getString(R.string.internet_connection_error),
+                getString(R.string.no_result_found),
                 Toast.LENGTH_SHORT
             ).show()
         } else {
             for (i in items.indices) {
                 val data = items[i]
-                seriesData.add(CustomDataEntry(data.timestamp.toString(), data.price))
+                Log.d("Market Chart values", data.toString())
+                timestamp = data[0]
+                price = data[1]
             }
+
+            seriesData.add(CustomDataEntry(timestamp.toString(), price))
+
         }
 
         val set: Set = Set.instantiate()

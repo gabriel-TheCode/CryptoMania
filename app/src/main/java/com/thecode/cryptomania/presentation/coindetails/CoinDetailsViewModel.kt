@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.thecode.cryptomania.core.domain.DataState
-import com.thecode.cryptomania.core.domain.MarketChartItem
 import com.thecode.cryptomania.core.usecases.GetMarketChart
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
@@ -17,8 +16,8 @@ class CoinDetailsViewModel @Inject constructor(
     private val getMarketChart: GetMarketChart,
 ) : ViewModel() {
 
-    private val _chartState = MutableLiveData<DataState<List<MarketChartItem>>>()
-    val chartState: LiveData<DataState<List<MarketChartItem>>>
+    private val _chartState = MutableLiveData<DataState<List<List<Number>>>>()
+    val chartState: LiveData<DataState<List<List<Number>>>>
         get() = _chartState
 
     fun getMarketChart(coinId: String, currency: String, days: Int) {

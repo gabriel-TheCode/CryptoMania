@@ -1,6 +1,5 @@
 package com.thecode.cryptomania.core.repositories
 
-import com.thecode.cryptomania.core.domain.MarketChartItem
 import com.thecode.cryptomania.core.remote.AppRemoteDataSourceImpl
 import com.thecode.cryptomania.datasource.network.mapper.MarketChartMapper
 import javax.inject.Inject
@@ -14,7 +13,7 @@ class MarketChartRepository @Inject constructor(
         coinId: String,
         currency: String,
         days: Int
-    ): List<MarketChartItem> {
+    ): List<List<Number>> {
         return networkDataSource.fetchMarketChartData(coinId, currency, days)
     }
 

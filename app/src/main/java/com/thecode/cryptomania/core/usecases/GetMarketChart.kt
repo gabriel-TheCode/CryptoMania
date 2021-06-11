@@ -1,7 +1,6 @@
 package com.thecode.cryptomania.core.usecases
 
 import com.thecode.cryptomania.core.domain.DataState
-import com.thecode.cryptomania.core.domain.MarketChartItem
 import com.thecode.cryptomania.core.repositories.MarketChartRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -16,7 +15,7 @@ class GetMarketChart @Inject constructor(
         coinId: String,
         currency: String,
         days: Int
-    ): Flow<DataState<List<MarketChartItem>>> = flow {
+    ): Flow<DataState<List<List<Number>>>> = flow {
         emit(DataState.Loading)
         try {
             val data = repository.fetchMarketChartData(coinId, currency, days)
