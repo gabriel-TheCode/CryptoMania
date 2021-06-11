@@ -63,7 +63,6 @@ Design & implement an Android application based on [CoinGeckoAPI](https://coinge
 
 ## Languages, libraries and tools used
 
-- [UI Inspiration](https://dribbble.com/shots/5495387-News-App-Dark-and-Light-Theme)
 - [Kotlin](https://kotlinlang.org/)
 - [AndroidX libraries](https://developer.android.com/jetpack/androidx)
 - [Android Architecture Components](https://developer.android.com/topic/libraries/architecture) : [Lifecycle](https://developer.android.com/topic/libraries/architecture/lifecycle), [LiveData](https://developer.android.com/topic/libraries/architecture/livedata), [Room](https://developer.android.com/jetpack/androidx/releases/room), [ViewModel](https://developer.android.com/topic/libraries/architecture/viewmodel)
