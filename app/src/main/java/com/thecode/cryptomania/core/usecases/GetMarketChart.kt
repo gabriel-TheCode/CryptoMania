@@ -12,7 +12,11 @@ import javax.inject.Inject
 class GetMarketChart @Inject constructor(
     private val repository: MarketChartRepository
 ) {
-    suspend operator fun invoke(coinId: String, currency: String, days: Int): Flow<DataState<List<MarketChartItem>>> = flow {
+    suspend operator fun invoke(
+        coinId: String,
+        currency: String,
+        days: Int
+    ): Flow<DataState<List<MarketChartItem>>> = flow {
         emit(DataState.Loading)
         try {
             val data = repository.fetchMarketChartData(coinId, currency, days)

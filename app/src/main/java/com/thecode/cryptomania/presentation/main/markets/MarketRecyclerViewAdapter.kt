@@ -42,7 +42,7 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
         val coin = coinsList[position]
         holder.tvCoinName.text = coin.symbol
         holder.tvMarketCap.text = coin.market_cap.withNumberSuffix().addPrefix("$")
-        if (coin.price_change_percentage_24h > 0){
+        if (coin.price_change_percentage_24h > 0) {
             holder.tvCoinPrice.setTextColor(
                 ContextCompat.getColor(
                     holder.container.context,
@@ -51,7 +51,7 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
             )
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_green)
 
-        }else{
+        } else {
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_red)
             holder.tvCoinPrice.setTextColor(
                 ContextCompat.getColor(
@@ -82,7 +82,8 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
     }
 
 
-    class CoinViewHolder(binding: AdapterMarketCryptoBinding) : RecyclerView.ViewHolder(binding.root) {
+    class CoinViewHolder(binding: AdapterMarketCryptoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         val container: RelativeLayout = binding.layoutContainer
         val tvCoinName: TextView = binding.textName

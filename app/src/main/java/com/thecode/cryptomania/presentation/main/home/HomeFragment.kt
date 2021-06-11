@@ -156,7 +156,8 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
     private fun initRecyclerViews() {
         coinCardRecyclerAdapter = CoinCardRecyclerViewAdapter(coinOnClickListener)
-        recyclerViewTopCrypto.layoutManager = LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
+        recyclerViewTopCrypto.layoutManager =
+            LinearLayoutManager(activity, LinearLayoutManager.HORIZONTAL, false)
         recyclerViewTopCrypto.adapter = SlideInBottomAnimationAdapter(coinCardRecyclerAdapter)
 
         rankingRecyclerAdapter = RankingRecyclerViewAdapter(coinOnClickListener)

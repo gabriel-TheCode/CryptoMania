@@ -17,7 +17,11 @@ interface AppRemoteDataSource {
 
     suspend fun fetchExchanges(): Exchange
 
-    suspend fun fetchMarketChartData(coinId: String, currency: String, days: Int): List<MarketChartItem>
+    suspend fun fetchMarketChartData(
+        coinId: String,
+        currency: String,
+        days: Int
+    ): List<MarketChartItem>
 }
 
 class AppRemoteDataSourceImpl @Inject constructor(
@@ -40,7 +44,11 @@ class AppRemoteDataSourceImpl @Inject constructor(
         return exchangeMapper.mapToDomain(apiService.getAllExchanges())
     }
 
-    override suspend fun fetchMarketChartData(coinId: String, currency: String, days: Int): List<MarketChartItem> {
+    override suspend fun fetchMarketChartData(
+        coinId: String,
+        currency: String,
+        days: Int
+    ): List<MarketChartItem> {
         return marketChartMapper.mapToDomain(apiService.getMarketChart(coinId, currency, days))
     }
 

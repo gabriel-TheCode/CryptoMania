@@ -15,16 +15,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="120dp">
+        android:layout_marginBottom="20dp">
 
 
         <ImageView
 
             android:id="@+id/image_logo"
-            android:layout_width="186dp"
-            android:layout_height="159dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_gravity="center"
-            app:srcCompat="@mipmap/ic_launcher_foreground"/>
+            app:srcCompat="@drawable/wanchain"/>
 
 
     </LinearLayout>
@@ -53,7 +53,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
-                android:layout_marginVertical="30dp"
                 android:layout_gravity="center"
                 android:text="The world’s leading independent cryptocurrency data aggregator."
                 android:textColor="@color/white"

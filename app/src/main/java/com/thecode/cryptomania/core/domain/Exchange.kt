@@ -5,7 +5,7 @@ data class Exchange(
     val exchanges: List<ExchangeItem>
 )
 
-data class ExchangeItem (
+data class ExchangeItem(
     val id: String,
     val name: String,
     var year_established: Int? = null,

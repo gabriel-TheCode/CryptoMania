@@ -10,7 +10,11 @@ class MarketChartRepository @Inject constructor(
     private val marketChartMapper: MarketChartMapper
 ) {
 
-    suspend fun fetchMarketChartData(coinId: String, currency: String, days: Int): List<MarketChartItem> {
+    suspend fun fetchMarketChartData(
+        coinId: String,
+        currency: String,
+        days: Int
+    ): List<MarketChartItem> {
         return networkDataSource.fetchMarketChartData(coinId, currency, days)
     }
 

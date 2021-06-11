@@ -68,7 +68,7 @@ class CoinDetailsActivity : AppCompatActivity() {
     private var currentPrice: Float? = 0F
     private var high24h: Float? = 0F
     private var low24h: Float? = 0F
-    private var marketCap: Float ?= 0F
+    private var marketCap: Float? = 0F
     private var totalVolume: Float? = 0F
     private var priceChangePercentage24h: Float? = 0F
     private var priceMCapChange24h: Float? = 0F
@@ -100,7 +100,7 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     }
 
-    private fun initViews(){
+    private fun initViews() {
         imgCoin = binding.imgIcon
         textCoinName = binding.textName
         textCoinSymbol = binding.textSymbol
@@ -125,7 +125,7 @@ class CoinDetailsActivity : AppCompatActivity() {
         themedButtonGroup.selectButton(btnDay)
     }
 
-    private fun getCoinData(){
+    private fun getCoinData() {
 
         // RECEIVE OUR DATA
         val i = intent
@@ -144,12 +144,12 @@ class CoinDetailsActivity : AppCompatActivity() {
         maxSupply = i.extras?.getFloat("maxSupply")
     }
 
-    private fun setCoinData(){
+    private fun setCoinData() {
         Glide.with(this).load(image)
-                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-                .error(R.drawable.ic_baseline_monetization_on_gray_24)
-                .apply(RequestOptions().centerCrop())
-                .into(imgCoin)
+            .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+            .error(R.drawable.ic_baseline_monetization_on_gray_24)
+            .apply(RequestOptions().centerCrop())
+            .into(imgCoin)
         textCoinName.text = name
         textCoinPrice.text = currentPrice.toString().addPrefix("$")
         textCoinSymbol.text = symbol
@@ -162,7 +162,7 @@ class CoinDetailsActivity : AppCompatActivity() {
         textAth.text = ath.toString().addPrefix("$")
         textMaxSupply.text = String.format("%.0f", maxSupply)
 
-        if (priceChangePercentage24h!! < 0){
+        if (priceChangePercentage24h!! < 0) {
             binding.layoutPercent.setBackgroundResource(R.drawable.rounded_background_red)
         }
     }
@@ -170,32 +170,32 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     private fun subscribeObservers() {
         viewModel.chartState.observe(
-                this, {
-                    when (it) {
-                        is DataState.Success -> {
-                            populateChart(it.data)
-                        }
-                        is DataState.Loading -> {
-                        }
-                        is DataState.Error -> {
-                            Toast.makeText(
-                                    this,
-                                    getString(R.string.internet_connection_error),
-                                    Toast.LENGTH_SHORT
-                            ).show()
-                        }
+            this, {
+                when (it) {
+                    is DataState.Success -> {
+                        populateChart(it.data)
+                    }
+                    is DataState.Loading -> {
+                    }
+                    is DataState.Error -> {
+                        Toast.makeText(
+                            this,
+                            getString(R.string.internet_connection_error),
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
+            }
         )
     }
 
 
-    private fun populateChart(items: List<MarketChartItem>){
+    private fun populateChart(items: List<MarketChartItem>) {
         if (items.isEmpty()) {
             Toast.makeText(
-                    this,
-                    getString(R.string.internet_connection_error),
-                    Toast.LENGTH_SHORT
+                this,
+                getString(R.string.internet_connection_error),
+                Toast.LENGTH_SHORT
             ).show()
         } else {
             for (i in items.indices) {
@@ -212,13 +212,13 @@ class CoinDetailsActivity : AppCompatActivity() {
         series.name(name)
         series.hovered().markers().enabled(true)
         series.hovered().markers()
-                .type(MarkerType.CIRCLE)
-                .size(4.0)
+            .type(MarkerType.CIRCLE)
+            .size(4.0)
         series.tooltip()
-                .position("right")
-                .anchor(Anchor.LEFT_CENTER)
-                .offsetX(5.0)
-                .offsetY(5.0)
+            .position("right")
+            .anchor(Anchor.LEFT_CENTER)
+            .offsetX(5.0)
+            .offsetY(5.0)
 
         cartesian.legend().enabled(true)
         cartesian.legend().fontSize(13.0)
@@ -228,7 +228,7 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     }
 
-    private fun setUpChart(){
+    private fun setUpChart() {
 
         cartesian = AnyChart.line()
         cartesian.animation(true)
@@ -237,8 +237,8 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         cartesian.crosshair().enabled(true)
         cartesian.crosshair()
-                .yLabel(true)
-                .yStroke(null as Stroke?, null, null, null as String?, null as String?)
+            .yLabel(true)
+            .yStroke(null as Stroke?, null, null, null as String?, null as String?)
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
 
@@ -248,12 +248,11 @@ class CoinDetailsActivity : AppCompatActivity() {
         cartesian.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
 
 
-
     }
 
     private class CustomDataEntry(
-            x: String?,
-            value: Number?
+        x: String?,
+        value: Number?
     ) :
-            ValueDataEntry(x, value)
+        ValueDataEntry(x, value)
 }

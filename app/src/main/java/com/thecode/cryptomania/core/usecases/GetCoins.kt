@@ -16,11 +16,11 @@ class GetCoins @Inject constructor(
         emit(DataState.Loading)
         try {
             val data = repository.fetchCoins(currency)
-                if (data.coins.isEmpty()) {
-                    emit(DataState.Error(Exception("No result found")))
-                } else {
-                    emit(DataState.Success(data))
-                }
+            if (data.coins.isEmpty()) {
+                emit(DataState.Error(Exception("No result found")))
+            } else {
+                emit(DataState.Success(data))
+            }
 
         } catch (e: Exception) {
             emit(DataState.Error(Exception(e.message)))

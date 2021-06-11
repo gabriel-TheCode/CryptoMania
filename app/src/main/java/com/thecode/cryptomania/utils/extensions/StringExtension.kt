@@ -14,11 +14,11 @@ fun String.toDateHMS(): Date {
     return SimpleDateFormat(pattern, Locale.getDefault()).parse(this) ?: Date()
 }
 
-fun String.addSuffix(value: String): String{
+fun String.addSuffix(value: String): String {
     return this + value
 }
 
-fun String.addPrefix(value: String): String{
+fun String.addPrefix(value: String): String {
     return value + this
 }
 

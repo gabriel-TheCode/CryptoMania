@@ -8,7 +8,7 @@ import javax.inject.Inject
 class MarketChartMapper @Inject constructor() :
     ItemMapper<MarketChartObjectResponse, List<MarketChartItem>> {
     override fun mapToDomain(entity: MarketChartObjectResponse): List<MarketChartItem> {
-       return entity.prices[0].map { mapResultItem(it) }
+        return entity.prices[0].map { mapResultItem(it) }
     }
 
     private fun mapResultItem(m: MarketChartObjectResponse.MarketChart): MarketChartItem {

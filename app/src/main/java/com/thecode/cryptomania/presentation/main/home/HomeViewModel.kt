@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.thecode.cryptomania.core.domain.Coin
 import com.thecode.cryptomania.core.domain.DataState
-import com.thecode.cryptomania.core.domain.Exchange
 import com.thecode.cryptomania.core.usecases.GetCoins
-import com.thecode.cryptomania.core.usecases.GetExchanges
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach

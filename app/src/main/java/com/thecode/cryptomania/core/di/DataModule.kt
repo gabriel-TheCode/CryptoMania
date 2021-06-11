@@ -1,9 +1,9 @@
 package com.thecode.cryptomania.core.di
 
 
+import com.thecode.cryptomania.application.CryptoManiaDataStore
 import com.thecode.cryptomania.core.local.AppLocalDataSource
 import com.thecode.cryptomania.core.local.AppLocalDataSourceImpl
-import com.thecode.cryptomania.application.CryptoManiaDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

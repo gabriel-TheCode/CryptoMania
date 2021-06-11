@@ -40,7 +40,6 @@ class MarketViewModel @Inject constructor(
     }
 
 
-
     fun getExchanges() {
         viewModelScope.launch {
             _exchangeState.value.let { _ ->

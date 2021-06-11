@@ -116,9 +116,9 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
         }
     }
 
-    private fun showRecyclerViewMarket(state: Boolean){
-            recyclerViewMarket.isVisible = state
-            recyclerViewExchange.isVisible = !state
+    private fun showRecyclerViewMarket(state: Boolean) {
+        recyclerViewMarket.isVisible = state
+        recyclerViewExchange.isVisible = !state
     }
 
 
@@ -221,7 +221,7 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
         imgState = binding.included.imgState
         textState = binding.included.textState
         themedButtonGroup = binding.themedButtonGroup
-        btnCrypto= binding.btnCrypto
+        btnCrypto = binding.btnCrypto
         btnExchange = binding.btnExchange
 
 

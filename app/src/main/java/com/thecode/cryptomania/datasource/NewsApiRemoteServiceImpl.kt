@@ -1,7 +1,7 @@
 package com.thecode.cryptomania.datasource
 
-import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import com.thecode.cryptomania.datasource.network.api.CoinGeckoApi
+import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import com.thecode.cryptomania.datasource.network.model.ExchangeObjectResponse
 import com.thecode.cryptomania.datasource.network.model.MarketChartObjectResponse
 
@@ -11,7 +11,11 @@ interface CoinGeckoApiRemoteService {
 
     suspend fun getCoinById(id: String): CoinObjectResponse
 
-    suspend fun getMarketChart(coinId: String, currency: String, days: Int): MarketChartObjectResponse
+    suspend fun getMarketChart(
+        coinId: String,
+        currency: String,
+        days: Int
+    ): MarketChartObjectResponse
 
     //endregion
 

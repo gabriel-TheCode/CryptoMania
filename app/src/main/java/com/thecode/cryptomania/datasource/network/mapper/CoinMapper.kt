@@ -10,11 +10,11 @@ class CoinMapper @Inject constructor() :
     EntityMapper<CoinObjectResponse, Coin> {
 
     override fun mapToDomain(entity: List<CoinObjectResponse>): Coin {
-       return Coin(
-           entity.map {
-               mapFromCoinItem(it)
-           }
-       )
+        return Coin(
+            entity.map {
+                mapFromCoinItem(it)
+            }
+        )
     }
 
 

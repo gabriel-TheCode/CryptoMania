@@ -30,7 +30,8 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
     private val limit = 10
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
-        binding = AdapterTopCryptoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        binding =
+            AdapterTopCryptoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CoinViewHolder(binding)
     }
 
@@ -41,18 +42,20 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         val coin = coinsList[position]
         holder.tvCoinName.text = coin.name
-        holder.tvCoinPrice.text =  coin.current_price.toString().addPrefix("$")
+        holder.tvCoinPrice.text = coin.current_price.toString().addPrefix("$")
 
         if (coin.price_change_percentage_24h > 0)
             holder.tvCoinPercentage.setTextColor(
-            ContextCompat.getColor(
-                holder.container.context,
-                R.color.md_green_400
-            ))  else holder.tvCoinPercentage.setTextColor(
+                ContextCompat.getColor(
+                    holder.container.context,
+                    R.color.md_green_400
+                )
+            ) else holder.tvCoinPercentage.setTextColor(
             ContextCompat.getColor(
                 holder.container.context,
                 R.color.md_red_400
-            ))
+            )
+        )
         val percent = String.format("%.2f", coin.price_change_percentage_24h)
         holder.tvCoinPercentage.text = percent.addSuffix("%")
 

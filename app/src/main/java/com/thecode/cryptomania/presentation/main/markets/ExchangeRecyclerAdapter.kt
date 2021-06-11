@@ -11,8 +11,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.ExchangeItem
 import com.thecode.cryptomania.databinding.AdapterExchangeCryptoBinding
-import kotlin.math.ln
-import kotlin.math.pow
 
 
 interface ExchangeOnClickListener {
@@ -66,7 +64,8 @@ class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener)
         notifyDataSetChanged()
     }
 
-    class ExchangeViewHolder(binding: AdapterExchangeCryptoBinding) : RecyclerView.ViewHolder(binding.root) {
+    class ExchangeViewHolder(binding: AdapterExchangeCryptoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         val container: ConstraintLayout = binding.layoutContainer
         val tvExchangeName: TextView = binding.textName

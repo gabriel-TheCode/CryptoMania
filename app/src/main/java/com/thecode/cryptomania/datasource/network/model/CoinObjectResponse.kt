@@ -3,7 +3,7 @@ package com.thecode.cryptomania.datasource.network.model
 import com.google.gson.annotations.SerializedName
 
 
-class CoinObjectResponse (
+class CoinObjectResponse(
 
         @SerializedName("id")
         val id: String,

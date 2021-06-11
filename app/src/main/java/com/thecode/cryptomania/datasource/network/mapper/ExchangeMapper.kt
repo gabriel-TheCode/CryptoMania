@@ -10,11 +10,11 @@ class ExchangeMapper @Inject constructor() :
     EntityMapper<ExchangeObjectResponse, Exchange> {
 
     override fun mapToDomain(entity: List<ExchangeObjectResponse>): Exchange {
-       return Exchange(
-           entity.map {
-               mapFromExchangeItem(it)
-           }
-       )
+        return Exchange(
+            entity.map {
+                mapFromExchangeItem(it)
+            }
+        )
     }
 
 

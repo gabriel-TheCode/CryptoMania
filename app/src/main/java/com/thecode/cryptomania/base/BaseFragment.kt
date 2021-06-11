@@ -51,7 +51,7 @@ open class BaseFragment : Fragment() {
         requireActivity().startActivity(i)
     }
 
-    fun openExchangeDetailsActivity(exchange: ExchangeItem){
+    fun openExchangeDetailsActivity(exchange: ExchangeItem) {
         startActivity(
             Intent(
                 Intent.ACTION_VIEW,

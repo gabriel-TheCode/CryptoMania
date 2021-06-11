@@ -42,7 +42,7 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
         val coin = coinsList[position]
         holder.tvCoinName.text = coin.name
         holder.tvCoinSymbol.text = coin.symbol
-        if (coin.price_change_percentage_24h > 0){
+        if (coin.price_change_percentage_24h > 0) {
             holder.tvCoinPrice.setTextColor(
                 ContextCompat.getColor(
                     holder.container.context,
@@ -50,7 +50,7 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
                 )
             )
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_green)
-        }else{
+        } else {
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_red)
             holder.tvCoinPrice.setTextColor(
                 ContextCompat.getColor(
@@ -80,7 +80,8 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
         notifyDataSetChanged()
     }
 
-    class CoinViewHolder(binding: AdapterRankingCryptoBinding) : RecyclerView.ViewHolder(binding.root) {
+    class CoinViewHolder(binding: AdapterRankingCryptoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
 
         val container: RelativeLayout = binding.layoutContainer
         val tvCoinName: TextView = binding.textName
