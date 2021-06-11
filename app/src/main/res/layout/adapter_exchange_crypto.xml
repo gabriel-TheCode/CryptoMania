@@ -18,8 +18,7 @@
         android:layout_marginStart="20dp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toEndOf="@id/text_rank"
-        android:src="@drawable/ic_baseline_monetization_on_gray_24"
-        android:background="@drawable/circle_image_background"/>
+        android:src="@drawable/ic_baseline_monetization_on_gray_24"/>
 
 
     <TextView
@@ -55,7 +54,7 @@
         android:text="2012"
         android:gravity="center"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/ubuntu_medium"
+        android:fontFamily="@font/ubuntu_regular"
         app:layout_constraintTop_toBottomOf="@id/text_name"
         app:layout_constraintStart_toEndOf="@id/img_icon"
         android:textSize="14sp"
@@ -92,7 +91,6 @@
         android:text="Cayman Islands"
         android:gravity="center"
         android:layout_marginStart="20dp"
-        android:fontFamily="@font/ubuntu_medium"
         app:layout_constraintTop_toBottomOf="@id/layout_trust_score"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

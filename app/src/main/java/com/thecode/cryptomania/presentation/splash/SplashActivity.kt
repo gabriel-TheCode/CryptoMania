@@ -8,12 +8,22 @@ import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
 import android.widget.ImageView
 import android.widget.LinearLayout
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.databinding.ActivitySplashBinding
+import com.thecode.cryptomania.presentation.main.MainActivity
 import com.thecode.cryptomania.presentation.onboarding.OnboardingActivity
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
+@AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
+
+    private val viewModel: SplashViewModel by viewModels()
 
     private lateinit var binding: ActivitySplashBinding
     private lateinit var logo: ImageView
@@ -48,14 +58,17 @@ class SplashActivity : AppCompatActivity() {
         rotate.duration = 3000
         rotate.interpolator = LinearInterpolator()
         logo.startAnimation(rotate)
-        val myThread: Thread = object : Thread() {
-            override fun run() {
-                    sleep(4500)
-                    val intent = Intent(applicationContext, OnboardingActivity::class.java)
-                    startActivity(intent)
-                    finish()
+
+        CoroutineScope(Dispatchers.Main).launch {
+                    delay(4500)
+                val intent: Intent = if (viewModel.isOnboardingCompleted()) {
+                    Intent(applicationContext, MainActivity::class.java)
+                } else {
+                    Intent(applicationContext, OnboardingActivity::class.java)
+                }
+                finish()
+                startActivity(intent)
+
             }
-        }
-        myThread.start()
     }
 }

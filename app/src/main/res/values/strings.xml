@@ -30,5 +30,10 @@
     <string name="exchanges">Exchanges</string>
     <string name="wallet">Wallet</string>
     <string name="market_subtitle">List all supported coins price, market cap, volume...</string>
+    <string name="chart">Chart</string>
+    <string name="day">Day</string>
+    <string name="week">Week</string>
+    <string name="month">Month</string>
+    <string name="statistics">Statistics</string>
 
 </resources>

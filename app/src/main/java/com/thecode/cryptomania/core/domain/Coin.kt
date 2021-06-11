@@ -21,4 +21,6 @@ data class CoinItem(
     val price_change_percentage_24h: Float,
     val market_cap_change_24h: Float,
     val market_cap_change_percentage_24h: Float,
+    val ath: Float,
+    val max_supply: Float
 )

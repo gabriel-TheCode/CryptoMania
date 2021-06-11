@@ -13,6 +13,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.CoinItem
 import com.thecode.cryptomania.databinding.AdapterRankingCryptoBinding
+import com.thecode.cryptomania.utils.extensions.addPrefix
+import com.thecode.cryptomania.utils.extensions.addSuffix
 import kotlin.math.min
 
 
@@ -57,9 +59,9 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
                 )
             )
         }
-        holder.tvCoinPrice.text = "$" + coin.current_price.toString()
+        holder.tvCoinPrice.text = coin.current_price.toString().addPrefix("$")
         val percent = String.format("%.2f", coin.price_change_percentage_24h)
-        holder.tvCoinPercentage.text = "$percent %"
+        holder.tvCoinPercentage.text = percent.addSuffix("%")
 
         Glide.with(holder.itemView.context).load(coin.image)
             .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)

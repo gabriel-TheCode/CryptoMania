@@ -1,6 +1,7 @@
 package com.thecode.cryptomania.base
 
 import android.content.Intent
+import android.net.Uri
 import androidx.fragment.app.Fragment
 import com.thecode.aestheticdialogs.AestheticDialog
 import com.thecode.aestheticdialogs.DialogStyle
@@ -42,12 +43,20 @@ open class BaseFragment : Fragment() {
         i.putExtra("marketCap", coin.market_cap)
         i.putExtra("totalVolume", coin.total_volume)
         i.putExtra("priceChangePercentage24h", coin.price_change_percentage_24h)
+        i.putExtra("priceMcapChangePercentage24h", coin.market_cap_change_percentage_24h)
+        i.putExtra("ath", coin.ath)
+        i.putExtra("maxSupply", coin.max_supply)
 
         // START DETAIL ACTIVITY
         requireActivity().startActivity(i)
     }
 
     fun openExchangeDetailsActivity(exchange: ExchangeItem){
-
+        startActivity(
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(exchange.url)
+            )
+        )
     }
 }

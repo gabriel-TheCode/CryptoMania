@@ -2,9 +2,11 @@ package com.thecode.cryptomania.core.remote
 
 import com.thecode.cryptomania.core.domain.Coin
 import com.thecode.cryptomania.core.domain.Exchange
+import com.thecode.cryptomania.core.domain.MarketChartItem
 import com.thecode.cryptomania.datasource.CoinGeckoApiRemoteService
 import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
 import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
+import com.thecode.cryptomania.datasource.network.mapper.MarketChartMapper
 import javax.inject.Inject
 
 interface AppRemoteDataSource {
@@ -15,13 +17,14 @@ interface AppRemoteDataSource {
 
     suspend fun fetchExchanges(): Exchange
 
-    suspend fun fetchMarketChartData(coinId: String, currency: String, days: Int)
+    suspend fun fetchMarketChartData(coinId: String, currency: String, days: Int): List<MarketChartItem>
 }
 
 class AppRemoteDataSourceImpl @Inject constructor(
     private val apiService: CoinGeckoApiRemoteService,
     private val coinMapper: CoinMapper,
-    private val exchangeMapper: ExchangeMapper
+    private val exchangeMapper: ExchangeMapper,
+    private val marketChartMapper: MarketChartMapper
 
 ) : AppRemoteDataSource {
 
@@ -37,8 +40,8 @@ class AppRemoteDataSourceImpl @Inject constructor(
         return exchangeMapper.mapToDomain(apiService.getAllExchanges())
     }
 
-    override suspend fun fetchMarketChartData(coinId: String, currency: String, days: Int) {
-        TODO("Not yet implemented")
+    override suspend fun fetchMarketChartData(coinId: String, currency: String, days: Int): List<MarketChartItem> {
+        return marketChartMapper.mapToDomain(apiService.getMarketChart(coinId, currency, days))
     }
 
 

@@ -12,13 +12,13 @@ class CoinMapper @Inject constructor() :
     override fun mapToDomain(entity: List<CoinObjectResponse>): Coin {
        return Coin(
            entity.map {
-               mapFromExchangeItem(it)
+               mapFromCoinItem(it)
            }
        )
     }
 
 
-    private fun mapFromExchangeItem(coin: CoinObjectResponse): CoinItem {
+    private fun mapFromCoinItem(coin: CoinObjectResponse): CoinItem {
         return CoinItem(
             coin.id,
             coin.symbol,
@@ -35,6 +35,8 @@ class CoinMapper @Inject constructor() :
             coin.price_change_percentage_24h,
             coin.market_cap_change_24h,
             coin.market_cap_change_percentage_24h,
+            coin.ath,
+            coin.max_supply
         )
     }
 

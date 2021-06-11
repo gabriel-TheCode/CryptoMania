@@ -1,14 +1,16 @@
 package com.thecode.cryptomania.datasource.network.model
 
 import com.google.gson.annotations.SerializedName
+import java.sql.Timestamp
 
-class MarketChartObjectResponse {
+class MarketChartObjectResponse (
+        @SerializedName("prices")
+        val prices: List<List<MarketChart>>,
+){
+        data class MarketChart (
+                val timestamp: Long,
 
-    @SerializedName("prices")
-    val prices: List<Result> = listOf()
-
-    inner class Result(
-        val volume: Float,
-        val price: Float,
-    )
+                val price: Float
+        )
 }
+

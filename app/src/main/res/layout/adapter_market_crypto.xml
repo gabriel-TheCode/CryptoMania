@@ -67,6 +67,17 @@
 
     </RelativeLayout>
 
+
+    <TextView
+        android:id="@+id/text_title_cap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Market cap"
+        android:textSize="14sp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_alignParentEnd="true"/>
+
     <TextView
         android:id="@+id/text_cap"
         android:layout_width="wrap_content"
@@ -74,6 +85,8 @@
         android:text="3948349,3434,343"
         android:textSize="14sp"
         android:layout_marginEnd="10dp"
+        android:textColor="@color/dark_blue"
+        android:layout_below="@id/text_title_cap"
         android:layout_alignParentEnd="true"
         android:layout_centerInParent="true"/>
 

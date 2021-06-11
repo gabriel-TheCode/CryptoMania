@@ -17,8 +17,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    private val getCoins: GetCoins,
-    private val getExchanges: GetExchanges
+    private val getCoins: GetCoins
 ) : ViewModel() {
 
     private val _coinState = MutableLiveData<DataState<Coin>>()

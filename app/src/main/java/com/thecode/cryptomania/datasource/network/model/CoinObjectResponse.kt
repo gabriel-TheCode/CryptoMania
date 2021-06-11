@@ -50,4 +50,10 @@ class CoinObjectResponse (
         @SerializedName("market_cap_change_percentage_24h")
         val market_cap_change_percentage_24h: Float,
 
+        @SerializedName("ath")
+        val ath: Float,
+
+        @SerializedName("max_supply")
+        val max_supply: Float,
+
         )

@@ -1,11 +1,11 @@
 package com.thecode.cryptomania.presentation.main.home
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.RelativeLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatButton
@@ -19,7 +19,6 @@ import com.thecode.cryptomania.base.BaseFragment
 import com.thecode.cryptomania.core.domain.CoinItem
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.FragmentHomeBinding
-import com.thecode.cryptomania.presentation.coindetails.CoinDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter
@@ -55,6 +54,8 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
     private lateinit var btnHot: ThemedButton
     private lateinit var btnWinner: ThemedButton
     private lateinit var btnLoser: ThemedButton
+    private lateinit var layoutContent: RelativeLayout
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -83,8 +84,6 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
     private fun fetchTopCryptoCurrency() {
         viewModel.getCoins("usd")
-        recyclerViewTopCrypto.scheduleLayoutAnimation()
-        recyclerViewRanking.scheduleLayoutAnimation()
     }
 
     private fun showInternetConnectionErrorLayout() {
@@ -94,6 +93,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
                 getString(R.string.check_internet)
             )
         } else {
+            layoutContent.isVisible = false
             layoutBadState.isVisible = true
             textState.text = getString(R.string.internet_connection_error)
             btnRetry.isVisible = true
@@ -107,6 +107,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
                 getString(R.string.service_unavailable)
             )
         } else {
+            layoutContent.isVisible = false
             layoutBadState.isVisible = true
             textState.text = getString(R.string.no_result_found)
             btnRetry.isVisible = true
@@ -115,6 +116,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
     private fun hideBadStateLayout() {
         layoutBadState.isVisible = false
+        layoutContent.isVisible = true
     }
 
     private fun subscribeObservers() {
@@ -174,6 +176,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         btnHot = binding.btnHot
         btnLoser = binding.btnLosers
         btnWinner = binding.btnWinners
+        layoutContent = binding.layoutContent
 
 
         btnRetry.setOnClickListener { fetchTopCryptoCurrency() }
@@ -188,20 +191,14 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
             when (it) {
                 btnHot -> {
                     category = "Hot"
-                    showToast(category)
-                    //fetchCryptoRanking()
                 }
 
                 btnWinner -> {
                     category = "Winner"
-                    showToast(category)
-                    //fetchCryptoRanking()
                 }
 
                 btnLoser -> {
                     category = "Loser"
-                    showToast(category)
-                    //fetchCryptoRanking()
                 }
             }
         }
