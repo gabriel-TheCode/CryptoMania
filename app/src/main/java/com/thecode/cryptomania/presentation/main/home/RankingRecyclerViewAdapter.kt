@@ -74,7 +74,7 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
         }
     }
 
-    fun setCoinListItems(coinsList: ArrayList<CoinItem>) {
+    fun setCoinListItems(coinsList: List<CoinItem>) {
         this.coinsList = emptyList()
         this.coinsList = coinsList
         notifyDataSetChanged()

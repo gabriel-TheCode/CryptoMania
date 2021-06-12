@@ -1,7 +1,6 @@
 package com.thecode.cryptomania.presentation.main
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.viewpager2.widget.ViewPager2
 import com.gauravk.bubblenavigation.BubbleNavigationLinearView
@@ -12,7 +11,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
-    private val viewModel: MainViewModel by viewModels()
     private lateinit var binding: ActivityMainBinding
 
     private lateinit var bnlv: BubbleNavigationLinearView

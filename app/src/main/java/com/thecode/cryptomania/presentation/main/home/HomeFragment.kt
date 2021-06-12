@@ -55,6 +55,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
     private lateinit var btnWinner: ThemedButton
     private lateinit var btnLoser: ThemedButton
     private lateinit var layoutContent: RelativeLayout
+    private lateinit var coinList: List<CoinItem>
 
 
     override fun onCreateView(
@@ -191,15 +192,15 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         themedButtonGroup.setOnSelectListener {
             when (it) {
                 btnHot -> {
-                    category = "Hot"
+                    fetchTopCryptoCurrency()
                 }
 
                 btnWinner -> {
-                    category = "Winner"
+                    fetchTopCryptoCurrency()
                 }
 
                 btnLoser -> {
-                    category = "Loser"
+                    fetchTopCryptoCurrency()
                 }
             }
         }
@@ -217,12 +218,27 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
             for (i in coins.indices) {
                 val article = coins[i]
                 coinArrayList.add(article)
+            }
                 coinCardRecyclerAdapter.setCoinListItems(coinArrayList)
                 recyclerViewTopCrypto.scheduleLayoutAnimation()
 
-                rankingRecyclerAdapter.setCoinListItems(coinArrayList)
+                when {
+                    btnHot.isSelected -> {
+                        rankingRecyclerAdapter.setCoinListItems(coinArrayList)
+                    }
+                    btnLoser.isSelected -> {
+                        coinList =
+                            coins.sortedBy { it.price_change_percentage_24h } //Losers
+                        rankingRecyclerAdapter.setCoinListItems(coinList)
+                    }
+                    btnWinner.isSelected -> {
+                        coinList =
+                            coins.sortedByDescending { it.price_change_percentage_24h } //Winners
+                        rankingRecyclerAdapter.setCoinListItems(coinList)
+                    }
+                }
                 recyclerViewRanking.scheduleLayoutAnimation()
-            }
+
         }
     }
 

@@ -274,7 +274,7 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
 
-        cartesian.title("Cryto currency fluctuation chart.")
+        cartesian.title("Crypto currency fluctuation chart.")
 
         cartesian.yAxis(0).title("Price (USD)")
         cartesian.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)

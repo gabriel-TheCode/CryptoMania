@@ -49,6 +49,10 @@ open class BaseFragment : Fragment() {
 
         // START DETAIL ACTIVITY
         requireActivity().startActivity(i)
+
+        //val intent = Intent(context, CoinDetailsActivity::class.java)
+        //intent.putExtra("coin", coin)
+        //requireActivity().startActivity(intent)
     }
 
     fun openExchangeDetailsActivity(exchange: ExchangeItem) {
