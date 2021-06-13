@@ -32,7 +32,7 @@ class AppRemoteDataSourceImpl @Inject constructor(
 ) : AppRemoteDataSource {
 
     override suspend fun fetchCoins(currency: String): Coin {
-        return coinMapper.mapToDomain(apiService.getAllCoins(currency))
+        return coinMapper.mapFromList(apiService.getAllCoins(currency))
     }
 
     override suspend fun fetchCoinById(coinId: String): Coin {
@@ -40,7 +40,7 @@ class AppRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun fetchExchanges(): Exchange {
-        return exchangeMapper.mapToDomain(apiService.getAllExchanges())
+        return exchangeMapper.mapFromList(apiService.getAllExchanges())
     }
 
     override suspend fun fetchMarketChartData(

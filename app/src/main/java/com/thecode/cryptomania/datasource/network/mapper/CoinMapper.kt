@@ -7,41 +7,39 @@ import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import javax.inject.Inject
 
 class CoinMapper @Inject constructor() :
-    EntityMapper<CoinObjectResponse, Coin> {
+    EntityMapper<CoinObjectResponse, CoinItem> {
 
-    override fun mapToDomain(entity: List<CoinObjectResponse>): Coin {
+    fun mapFromList(entities: List<CoinObjectResponse>): Coin {
         return Coin(
-            entity.map {
-                mapFromCoinItem(it)
+            entities.map {
+                mapToDomain(it)
             }
         )
     }
 
-
-    private fun mapFromCoinItem(coin: CoinObjectResponse): CoinItem {
-        return CoinItem(
-            coin.id,
-            coin.symbol,
-            coin.name,
-            coin.image,
-            coin.current_price,
-            coin.market_cap,
-            coin.market_cap_rank,
-            coin.fully_diluted_valuation,
-            coin.total_volume,
-            coin.high_24h,
-            coin.low_24h,
-            coin.price_change_24h,
-            coin.price_change_percentage_24h,
-            coin.market_cap_change_24h,
-            coin.market_cap_change_percentage_24h,
-            coin.ath,
-            coin.max_supply
-        )
+    override fun mapToEntity(domainModel: CoinItem): CoinObjectResponse {
+        TODO("Not yet implemented")
     }
 
-
-    override fun mapToEntity(domainModel: Coin): CoinObjectResponse {
-        TODO("Not yet implemented")
+    override fun mapToDomain(entity: CoinObjectResponse): CoinItem {
+        return CoinItem(
+            entity.id,
+            entity.symbol,
+            entity.name,
+            entity.image,
+            entity.current_price,
+            entity.market_cap,
+            entity.market_cap_rank,
+            entity.fully_diluted_valuation,
+            entity.total_volume,
+            entity.high_24h,
+            entity.low_24h,
+            entity.price_change_24h,
+            entity.price_change_percentage_24h,
+            entity.market_cap_change_24h,
+            entity.market_cap_change_percentage_24h,
+            entity.ath,
+            entity.max_supply
+        )
     }
 }

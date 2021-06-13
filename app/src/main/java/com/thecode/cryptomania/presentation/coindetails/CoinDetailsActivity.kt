@@ -35,6 +35,8 @@ import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 import dagger.hilt.android.AndroidEntryPoint
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
+import java.sql.Date
+import java.sql.Timestamp
 
 @AndroidEntryPoint
 class CoinDetailsActivity : AppCompatActivity() {
@@ -79,6 +81,7 @@ class CoinDetailsActivity : AppCompatActivity() {
     private var priceMCapChange24h: Float? = 0F
     private var ath: Float? = 0F
     private var maxSupply: Float? = 0F
+    private var days: Int = 1
 
     private val seriesData: MutableList<DataEntry> = ArrayList()
     private lateinit var cartesian: Cartesian
@@ -101,7 +104,7 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         setUpChart()
 
-        fetchChart()
+        fetchChart(days)
 
 
     }
@@ -134,7 +137,26 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         anyChartView.setProgressBar(progressBar)
         themedButtonGroup.selectButton(btnDay)
-        btnRetry.setOnClickListener { fetchChart() }
+        btnRetry.setOnClickListener { fetchChart(days) }
+
+        themedButtonGroup.setOnSelectListener {
+            when (it) {
+                btnDay -> {
+                    days = 1
+                    fetchChart(days)
+                }
+
+                btnWeek -> {
+                    days = 7
+                    fetchChart(days)
+                }
+
+                btnMonth -> {
+                    days = 30
+                    fetchChart(days)
+                }
+            }
+        }
     }
 
     private fun getCoinData() {
@@ -179,8 +201,8 @@ class CoinDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchChart() {
-        viewModel.getMarketChart(id, "usd", 7)
+    private fun fetchChart(days: Int) {
+        viewModel.getMarketChart(id, "usd", days)
     }
 
     private fun subscribeObservers() {
@@ -216,7 +238,7 @@ class CoinDetailsActivity : AppCompatActivity() {
 
 
     private fun populateChart(items: List<List<Number>>) {
-        var timestamp: Number = 0
+        var timestamp: Timestamp? = null
         var price: Number = 0
         if (items.isEmpty()) {
             Toast.makeText(
@@ -227,9 +249,10 @@ class CoinDetailsActivity : AppCompatActivity() {
         } else {
             for (i in items.indices) {
                 val data = items[i]
-                Log.d("Market Chart values", data.toString())
-                timestamp = data[0]
+
+                timestamp = Timestamp(data[0].toLong())
                 price = data[1]
+                Log.d("Market Chart values", "[$timestamp, $price]")
             }
 
             seriesData.add(CustomDataEntry(timestamp.toString(), price))

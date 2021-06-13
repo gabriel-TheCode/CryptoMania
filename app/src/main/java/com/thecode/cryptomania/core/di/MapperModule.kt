@@ -1,7 +1,9 @@
 package com.thecode.cryptomania.core.di
 
 import com.thecode.cryptomania.core.domain.Coin
+import com.thecode.cryptomania.core.domain.CoinItem
 import com.thecode.cryptomania.core.domain.Exchange
+import com.thecode.cryptomania.core.domain.ExchangeItem
 import com.thecode.cryptomania.datasource.network.mapper.*
 import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import com.thecode.cryptomania.datasource.network.model.ExchangeObjectResponse
@@ -18,19 +20,19 @@ object MapperModule {
 
     @Singleton
     @Provides
-    fun provideCoinResponseMapper(): EntityMapper<CoinObjectResponse, Coin> {
+    fun provideCoinResponseMapper(): EntityMapper<CoinObjectResponse, CoinItem> {
         return CoinMapper()
     }
 
     @Singleton
     @Provides
-    fun provideExchangeResponseMapper(): EntityMapper<ExchangeObjectResponse, Exchange> {
+    fun provideExchangeResponseMapper(): EntityMapper<ExchangeObjectResponse, ExchangeItem> {
         return ExchangeMapper()
     }
 
     @Singleton
     @Provides
-    fun provideMarketChartResponseMapper(): ItemMapper<MarketChartObjectResponse, List<List<Number>>> {
+    fun provideMarketChartResponseMapper(): EntityMapper<MarketChartObjectResponse, List<List<Number>>> {
         return MarketChartMapper()
     }
 }
