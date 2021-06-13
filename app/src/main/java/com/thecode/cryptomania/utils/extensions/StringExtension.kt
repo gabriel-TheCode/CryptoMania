@@ -9,7 +9,7 @@ fun String.toDate(): Date {
     return SimpleDateFormat(pattern, Locale.getDefault()).parse(this) ?: Date()
 }
 
-fun String.toDateHMS(): Date {
+fun String.toDateYMD(): Date {
     val pattern = "yyyy-MM-dd'T'HH:mm:ss'Z'"
     return SimpleDateFormat(pattern, Locale.getDefault()).parse(this) ?: Date()
 }

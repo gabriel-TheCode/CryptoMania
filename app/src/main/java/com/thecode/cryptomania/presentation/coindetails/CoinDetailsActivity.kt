@@ -18,8 +18,6 @@ import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.charts.Cartesian
 import com.anychart.core.cartesian.series.Line
-import com.anychart.data.Mapping
-import com.anychart.data.Set
 import com.anychart.enums.Anchor
 import com.anychart.enums.MarkerType
 import com.anychart.enums.TooltipPositionMode
@@ -35,7 +33,6 @@ import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 import dagger.hilt.android.AndroidEntryPoint
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
-import java.sql.Date
 import java.sql.Timestamp
 
 @AndroidEntryPoint
@@ -45,10 +42,10 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityCoinDetailsBinding
 
-    lateinit var btnRetry: AppCompatButton
-    lateinit var layoutBadState: View
-    lateinit var textState: TextView
-    lateinit var imgState: ImageView
+    private lateinit var btnRetry: AppCompatButton
+    private lateinit var layoutBadState: View
+    private lateinit var textState: TextView
+    private lateinit var imgState: ImageView
     private lateinit var textCoinName: TextView
     private lateinit var textCoinSymbol: TextView
     private lateinit var textCoinMcap: TextView
@@ -83,9 +80,6 @@ class CoinDetailsActivity : AppCompatActivity() {
     private var maxSupply: Float? = 0F
     private var days: Int = 1
 
-    private val seriesData: MutableList<DataEntry> = ArrayList()
-    private lateinit var cartesian: Cartesian
-
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,8 +95,6 @@ class CoinDetailsActivity : AppCompatActivity() {
         initViews()
 
         setCoinData()
-
-        setUpChart()
 
         fetchChart(days)
 
@@ -210,12 +202,14 @@ class CoinDetailsActivity : AppCompatActivity() {
             this, {
                 when (it) {
                     is DataState.Success -> {
+                        hideBadStateLayout()
                         populateChart(it.data)
                     }
                     is DataState.Loading -> {
                         progressBar.isVisible = true
                     }
                     is DataState.Error -> {
+                        anyChartView.clear()
                         progressBar.isVisible = false
                         showBadStateLayout()
                         Toast.makeText(
@@ -236,10 +230,16 @@ class CoinDetailsActivity : AppCompatActivity() {
         btnRetry.isVisible = true
     }
 
+    private fun hideBadStateLayout() {
+        layoutBadState.isVisible = false
+    }
+
 
     private fun populateChart(items: List<List<Number>>) {
-        var timestamp: Timestamp? = null
-        var price: Number = 0
+        var timestamp: Timestamp?
+        var price: Number
+        val seriesData: MutableList<DataEntry> = ArrayList()
+
         if (items.isEmpty()) {
             Toast.makeText(
                 this,
@@ -249,43 +249,20 @@ class CoinDetailsActivity : AppCompatActivity() {
         } else {
             for (i in items.indices) {
                 val data = items[i]
-
                 timestamp = Timestamp(data[0].toLong())
                 price = data[1]
                 Log.d("Market Chart values", "[$timestamp, $price]")
+                seriesData.add(CustomDataEntry(timestamp.toString(), price))
             }
-
-            seriesData.add(CustomDataEntry(timestamp.toString(), price))
-
         }
 
-        val set: Set = Set.instantiate()
-        set.data(seriesData)
-        val series1Mapping: Mapping = set.mapAs("{ x: 'x', value: 'value' }")
-
-        val series: Line = cartesian.line(series1Mapping)
-        series.name(name)
-        series.hovered().markers().enabled(true)
-        series.hovered().markers()
-            .type(MarkerType.CIRCLE)
-            .size(4.0)
-        series.tooltip()
-            .position("right")
-            .anchor(Anchor.LEFT_CENTER)
-            .offsetX(5.0)
-            .offsetY(5.0)
-
-        cartesian.legend().enabled(true)
-        cartesian.legend().fontSize(13.0)
-        cartesian.legend().padding(0.0, 0.0, 10.0, 0.0)
-
-        anyChartView.setChart(cartesian)
+        val newCartesian = AnyChart.line()
+        setUpChart(newCartesian, seriesData)
 
     }
 
-    private fun setUpChart() {
+    private fun setUpChart(cartesian: Cartesian, seriesData: MutableList<DataEntry>) {
 
-        cartesian = AnyChart.line()
         cartesian.animation(true)
 
         cartesian.padding(10.0, 20.0, 5.0, 20.0)
@@ -302,6 +279,26 @@ class CoinDetailsActivity : AppCompatActivity() {
         cartesian.yAxis(0).title("Price (USD)")
         cartesian.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
 
+        val series: Line = cartesian.line(seriesData)
+        series.name(name)
+        series.hovered().markers().enabled(true)
+        series.hovered().markers()
+            .type(MarkerType.CIRCLE)
+            .size(4.0)
+        series.tooltip()
+            .position("right")
+            .anchor(Anchor.LEFT_CENTER)
+            .offsetX(5.0)
+            .offsetY(5.0)
+
+        cartesian.legend().enabled(true)
+        cartesian.legend().fontSize(13.0)
+        cartesian.legend().padding(0.0, 0.0, 10.0, 0.0)
+
+
+
+        anyChartView.setChart(cartesian)
+        series.data(seriesData)
 
     }
 
