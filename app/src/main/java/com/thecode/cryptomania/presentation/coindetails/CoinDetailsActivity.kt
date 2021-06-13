@@ -11,22 +11,22 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatButton
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
-import com.anychart.AnyChart
-import com.anychart.AnyChartView
-import com.anychart.chart.common.dataentry.DataEntry
-import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.anychart.charts.Cartesian
-import com.anychart.core.cartesian.series.Line
-import com.anychart.enums.Anchor
-import com.anychart.enums.MarkerType
-import com.anychart.enums.TooltipPositionMode
-import com.anychart.graphics.vector.Stroke
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.github.mikephil.charting.charts.LineChart
+import com.github.mikephil.charting.components.XAxis
+import com.github.mikephil.charting.data.Entry
+import com.github.mikephil.charting.data.LineData
+import com.github.mikephil.charting.data.LineDataSet
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
+import com.github.mikephil.charting.formatter.ValueFormatter
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.ActivityCoinDetailsBinding
+import com.thecode.cryptomania.utils.MonthSlashDayDateFormatter
+import com.thecode.cryptomania.utils.TimeDateFormatter
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
 import com.thecode.cryptomania.utils.extensions.withNumberSuffix
@@ -34,6 +34,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 import java.sql.Timestamp
+import kotlin.math.absoluteValue
+
 
 @AndroidEntryPoint
 class CoinDetailsActivity : AppCompatActivity() {
@@ -62,8 +64,9 @@ class CoinDetailsActivity : AppCompatActivity() {
     private lateinit var btnDay: ThemedButton
     private lateinit var btnWeek: ThemedButton
     private lateinit var btnMonth: ThemedButton
-    private lateinit var anyChartView: AnyChartView
+    private lateinit var chart: LineChart
     private lateinit var progressBar: ProgressBar
+    private var xAxisFormatter: ValueFormatter = TimeDateFormatter()
 
     private lateinit var id: String
     private lateinit var name: String
@@ -120,14 +123,13 @@ class CoinDetailsActivity : AppCompatActivity() {
         btnDay = binding.btnDay
         btnWeek = binding.btnWeek
         btnMonth = binding.btnMonth
-        anyChartView = binding.layoutChart
+        chart = binding.layoutChart
         btnRetry = binding.included.btnRetry
         layoutBadState = binding.included.layoutBadState
         imgState = binding.included.imgState
         textState = binding.included.textState
         progressBar = binding.progressBar
 
-        anyChartView.setProgressBar(progressBar)
         themedButtonGroup.selectButton(btnDay)
         btnRetry.setOnClickListener { fetchChart(days) }
 
@@ -135,17 +137,22 @@ class CoinDetailsActivity : AppCompatActivity() {
             when (it) {
                 btnDay -> {
                     days = 1
+                    xAxisFormatter = TimeDateFormatter()
                     fetchChart(days)
                 }
 
                 btnWeek -> {
                     days = 7
+                    xAxisFormatter = MonthSlashDayDateFormatter()
                     fetchChart(days)
+
                 }
 
                 btnMonth -> {
                     days = 30
+                    xAxisFormatter = MonthSlashDayDateFormatter()
                     fetchChart(days)
+
                 }
             }
         }
@@ -209,7 +216,6 @@ class CoinDetailsActivity : AppCompatActivity() {
                         progressBar.isVisible = true
                     }
                     is DataState.Error -> {
-                        anyChartView.clear()
                         progressBar.isVisible = false
                         showBadStateLayout()
                         Toast.makeText(
@@ -238,7 +244,7 @@ class CoinDetailsActivity : AppCompatActivity() {
     private fun populateChart(items: List<List<Number>>) {
         var timestamp: Timestamp?
         var price: Number
-        val seriesData: MutableList<DataEntry> = ArrayList()
+        val seriesData: MutableList<Entry> = ArrayList()
 
         if (items.isEmpty()) {
             Toast.makeText(
@@ -250,61 +256,60 @@ class CoinDetailsActivity : AppCompatActivity() {
             for (i in items.indices) {
                 val data = items[i]
                 timestamp = Timestamp(data[0].toLong())
+                val f = data[0].toFloat()
                 price = data[1]
-                Log.d("Market Chart values", "[$timestamp, $price]")
-                seriesData.add(CustomDataEntry(timestamp.toString(), price))
+                Log.d("Market Chart values", "[$f, $price]")
+                seriesData.add(Entry(f.absoluteValue, price.toFloat()))
             }
         }
 
-        val newCartesian = AnyChart.line()
-        setUpChart(newCartesian, seriesData)
+        setUpChart(seriesData)
 
     }
 
-    private fun setUpChart(cartesian: Cartesian, seriesData: MutableList<DataEntry>) {
+    private fun setUpChart(data: MutableList<Entry>) {
 
-        cartesian.animation(true)
-
-        cartesian.padding(10.0, 20.0, 5.0, 20.0)
-
-        cartesian.crosshair().enabled(true)
-        cartesian.crosshair()
-            .yLabel(true)
-            .yStroke(null as Stroke?, null, null, null as String?, null as String?)
-
-        cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
-
-        cartesian.title("Crypto currency fluctuation chart.")
-
-        cartesian.yAxis(0).title("Price (USD)")
-        cartesian.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
-
-        val series: Line = cartesian.line(seriesData)
-        series.name(name)
-        series.hovered().markers().enabled(true)
-        series.hovered().markers()
-            .type(MarkerType.CIRCLE)
-            .size(4.0)
-        series.tooltip()
-            .position("right")
-            .anchor(Anchor.LEFT_CENTER)
-            .offsetX(5.0)
-            .offsetY(5.0)
-
-        cartesian.legend().enabled(true)
-        cartesian.legend().fontSize(13.0)
-        cartesian.legend().padding(0.0, 0.0, 10.0, 0.0)
-
-
-
-        anyChartView.setChart(cartesian)
-        series.data(seriesData)
-
+        val xAxis: XAxis = chart.xAxis
+        xAxis.setDrawAxisLine(true)
+        xAxis.position = XAxis.XAxisPosition.BOTTOM_INSIDE
+        xAxis.setAvoidFirstLastClipping(true)
+        chart.axisLeft.isEnabled = true
+        chart.axisLeft.setDrawGridLines(false)
+        chart.xAxis.setDrawGridLines(false)
+        chart.axisRight.isEnabled = false
+        chart.legend.isEnabled = false
+        chart.isDoubleTapToZoomEnabled = false
+        chart.setScaleEnabled(false)
+        chart.description.isEnabled = false
+        chart.contentDescription = ""
+        chart.setNoDataText("No data")
+        chart.setNoDataTextColor(ContextCompat.getColor(this, R.color.md_red_400))
+        //chart.setOnChartValueSelectedListener(this)
+        xAxis.valueFormatter = xAxisFormatter
+        val dataSet = setUpLineDataSet(data)
+        val lineData = LineData(dataSet)
+        chart.data = lineData
+        chart.animateX(800)
+        progressBar.visibility = View.GONE
     }
 
-    private class CustomDataEntry(
-        x: String?,
-        value: Number?
-    ) :
-        ValueDataEntry(x, value)
+    private fun setUpLineDataSet(entries: List<Entry>): LineDataSet {
+        val dataSet = LineDataSet(entries, "Price")
+        dataSet.color = ContextCompat.getColor(this, R.color.colorPrimaryDark)
+        dataSet.fillColor = ContextCompat.getColor(this, R.color.colorPrimary)
+        dataSet.setDrawHighlightIndicators(true)
+        dataSet.setDrawFilled(true)
+        dataSet.setDrawCircles(true)
+        dataSet.setCircleColor(ContextCompat.getColor(this, R.color.colorPrimaryDark))
+        dataSet.setDrawCircleHole(false)
+        dataSet.setDrawValues(false)
+        dataSet.circleRadius = 1f
+        dataSet.highlightLineWidth = 2f
+        dataSet.isHighlightEnabled = true
+        dataSet.setDrawHighlightIndicators(true)
+        dataSet.highLightColor = ContextCompat.getColor(this, R.color.colorAccent) // color for highlight indicator
+        return dataSet
+    }
+
+
 }

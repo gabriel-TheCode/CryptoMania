@@ -163,12 +163,11 @@
         </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
 
 
-        <com.anychart.AnyChartView
+        <com.github.mikephil.charting.charts.LineChart
             android:id="@+id/layout_chart"
             app:layout_constraintTop_toBottomOf="@id/themedButtonGroup"
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:background="@drawable/rounded_background_red"
             android:layout_marginVertical="20dp"
             android:orientation="vertical" />
 
