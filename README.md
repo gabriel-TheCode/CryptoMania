@@ -1,9 +1,8 @@
 # CryptoMania
  A cryptocurrency data aggregator that tracks price, volume, social stats.
 
-[![platform](https://img.shields.io/badge/platform-Android-yellow.svg)](https://www.android.com)
-[![API](https://img.shields.io/badge/API-21%2B-brightgreen.svg?style=plastic)](https://android-arsenal.com/api?level=21)
-[![License: MIT](https://img.shields.io/badge/License-MIT-red.svg)](https://opensource.org/licenses/MIT)
+[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
+![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
 
 
 <a name="description"></a>
@@ -24,24 +23,24 @@ Design & implement an Android application based on [CoinGeckoAPI](https://coinge
     <th>1. Splashscreen</th>
     <th>2. Home</th>
     <th>3. Exchanges</th>
+    
   </tr>
   <tr>
     <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/1.png"/></td>
     <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/2.png"/></td>
     <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/3.png"/></td>
   </tr>
-   </table>
 
-  <table>
-    <tr>
-    <th>5. Markets</th>
-    <th>6. Wallet</th>
-    <th>7. Market Chart/ Coin Details</th>
+  <tr>
+    <th>4. Markets</th>
+    <th>5. Wallet</th>
+    <th>6. Market Chart/ Coin Details</th>
+    
   </tr>
   <tr>
-     <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/4.png"/></td>
-      <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/5.png"/></td>
-       <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/6.png"/></td>
+    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/4.png"/></td>
+    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/5.png"/></td>
+    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/6.png"/></td>
   </tr>
   </table>
 
@@ -76,6 +75,7 @@ Design & implement an Android application based on [CoinGeckoAPI](https://coinge
 - [Lottie](https://github.com/airbnb/lottie-android)
 - [Aesthetic Dialogs](https://github.com/gabriel-TheCode/AestheticDialogs)
 - [RecyclerView Animators](https://github.com/wasabeef/recyclerview-animators)
+- [AnyChart](https://github.com/AnyChart/AnyChart-Android)
 
 
 <a name="requirements"></a>
