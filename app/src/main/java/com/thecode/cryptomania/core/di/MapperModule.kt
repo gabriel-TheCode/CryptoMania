@@ -1,10 +1,11 @@
 package com.thecode.cryptomania.core.di
 
-import com.thecode.cryptomania.core.domain.Coin
 import com.thecode.cryptomania.core.domain.CoinItem
-import com.thecode.cryptomania.core.domain.Exchange
 import com.thecode.cryptomania.core.domain.ExchangeItem
-import com.thecode.cryptomania.datasource.network.mapper.*
+import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
+import com.thecode.cryptomania.datasource.network.mapper.EntityMapper
+import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
+import com.thecode.cryptomania.datasource.network.mapper.MarketChartMapper
 import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import com.thecode.cryptomania.datasource.network.model.ExchangeObjectResponse
 import com.thecode.cryptomania.datasource.network.model.MarketChartObjectResponse

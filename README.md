@@ -16,33 +16,9 @@ Design & implement an Android application based on [CoinGeckoAPI](https://coinge
 
 <a name="screenshots"></a>
 
-## Screenshots
+## Visual
 
-<table style="width:100%">
-  <tr>
-    <th>1. Splashscreen</th>
-    <th>2. Home</th>
-    <th>3. Exchanges</th>
-    
-  </tr>
-  <tr>
-    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/1.png"/></td>
-    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/2.png"/></td>
-    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/3.png"/></td>
-  </tr>
-
-  <tr>
-    <th>4. Markets</th>
-    <th>5. Wallet</th>
-    <th>6. Market Chart/ Coin Details</th>
-    
-  </tr>
-  <tr>
-    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/4.png"/></td>
-    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/5.png"/></td>
-    <td><img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/6.png"/></td>
-  </tr>
-  </table>
+<img src="https://github.com/gabriel-TheCode/AndroidLibrariesAssets/raw/master/CryptoMania/cryptomania.png"/>
 
 <a name="specifications"></a>
 

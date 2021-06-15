@@ -29,11 +29,24 @@
     <string name="crypto_currencies">Crypto currencies</string>
     <string name="exchanges">Exchanges</string>
     <string name="wallet">Wallet</string>
-    <string name="market_subtitle">List all supported coins price, market cap, volume...</string>
+    <string name="market_subtitle">List all supported coins price, market cap, volume…</string>
     <string name="chart">Chart</string>
     <string name="day">Day</string>
     <string name="week">Week</string>
     <string name="month">Month</string>
     <string name="statistics">Statistics</string>
+    <string name="max_supply">Max supply</string>
+    <string name="n_a">N/A</string>
+    <string name="price_change_24h">Price change 24h</string>
+    <string name="market_cap_change_24h">Market cap change 24h</string>
+    <string name="high_24h">High 24h</string>
+    <string name="low_24h">Low 24h</string>
+    <string name="market_cap">Market Cap.</string>
+    <string name="getting_started">GETTING STARTED</string>
+    <string name="splash_text">The world’s leading independent cryptocurrency data aggregator.</string>
+    <string name="crypto_mania">Crypto Mania</string>
+    <string name="coming_soon">Coming soon…</string>
+    <string name="join_the_whitelist">join the whitelist</string>
+    <string name="wallet_description"><![CDATA[Save & use your digital currencies easily, with low transaction fees and strong security track record.]]></string>
 
 </resources>

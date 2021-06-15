@@ -16,8 +16,8 @@ import com.anychart.AnyChart
 import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
-import com.anychart.charts.Cartesian
 import com.anychart.core.cartesian.series.Line
+import com.anychart.data.Set
 import com.anychart.enums.Anchor
 import com.anychart.enums.MarkerType
 import com.anychart.enums.TooltipPositionMode
@@ -34,6 +34,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import nl.bryanderidder.themedtogglebuttongroup.ThemedButton
 import nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
 import java.sql.Timestamp
+
 
 @AndroidEntryPoint
 class CoinDetailsActivity : AppCompatActivity() {
@@ -64,6 +65,8 @@ class CoinDetailsActivity : AppCompatActivity() {
     private lateinit var btnMonth: ThemedButton
     private lateinit var anyChartView: AnyChartView
     private lateinit var progressBar: ProgressBar
+
+    private lateinit var set: Set
 
     private lateinit var id: String
     private lateinit var name: String
@@ -98,7 +101,6 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         fetchChart(days)
 
-
     }
 
 
@@ -128,6 +130,7 @@ class CoinDetailsActivity : AppCompatActivity() {
         progressBar = binding.progressBar
 
         anyChartView.setProgressBar(progressBar)
+        anyChartView.setZoomEnabled(true)
         themedButtonGroup.selectButton(btnDay)
         btnRetry.setOnClickListener { fetchChart(days) }
 
@@ -251,17 +254,20 @@ class CoinDetailsActivity : AppCompatActivity() {
                 val data = items[i]
                 timestamp = Timestamp(data[0].toLong())
                 price = data[1]
-                Log.d("Market Chart values", "[$timestamp, $price]")
-                seriesData.add(CustomDataEntry(timestamp.toString(), price))
+
+                val date: String = timestamp.toString().substring(0, 19)
+                Log.d("Market Chart values", "[$date, $price]")
+                seriesData.add(ValueDataEntry(date, price))
             }
         }
 
-        val newCartesian = AnyChart.line()
-        setUpChart(newCartesian, seriesData)
+        setUpChart(seriesData)
 
     }
 
-    private fun setUpChart(cartesian: Cartesian, seriesData: MutableList<DataEntry>) {
+    private fun setUpChart(seriesData: MutableList<DataEntry>) {
+
+        val cartesian = AnyChart.line()
 
         cartesian.animation(true)
 
@@ -295,16 +301,8 @@ class CoinDetailsActivity : AppCompatActivity() {
         cartesian.legend().fontSize(13.0)
         cartesian.legend().padding(0.0, 0.0, 10.0, 0.0)
 
-
-
         anyChartView.setChart(cartesian)
-        series.data(seriesData)
+
 
     }
-
-    private class CustomDataEntry(
-        x: String?,
-        value: Number?
-    ) :
-        ValueDataEntry(x, value)
 }

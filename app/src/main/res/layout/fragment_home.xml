@@ -20,7 +20,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:textSize="26sp"
-                android:text="Crypto Mania"
+                android:text="@string/crypto_mania"
                 android:layout_marginBottom="10dp"
                 android:textStyle="bold"
                 android:textColor="@color/md_white_1000"

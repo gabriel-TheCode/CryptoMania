@@ -219,25 +219,25 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
                 val article = coins[i]
                 coinArrayList.add(article)
             }
-                coinCardRecyclerAdapter.setCoinListItems(coinArrayList)
-                recyclerViewTopCrypto.scheduleLayoutAnimation()
+            coinCardRecyclerAdapter.setCoinListItems(coinArrayList)
+            recyclerViewTopCrypto.scheduleLayoutAnimation()
 
-                when {
-                    btnHot.isSelected -> {
-                        rankingRecyclerAdapter.setCoinListItems(coinArrayList)
-                    }
-                    btnLoser.isSelected -> {
-                        coinList =
-                            coins.sortedBy { it.price_change_percentage_24h } //Losers
-                        rankingRecyclerAdapter.setCoinListItems(coinList)
-                    }
-                    btnWinner.isSelected -> {
-                        coinList =
-                            coins.sortedByDescending { it.price_change_percentage_24h } //Winners
-                        rankingRecyclerAdapter.setCoinListItems(coinList)
-                    }
+            when {
+                btnHot.isSelected -> {
+                    rankingRecyclerAdapter.setCoinListItems(coinArrayList)
                 }
-                recyclerViewRanking.scheduleLayoutAnimation()
+                btnLoser.isSelected -> {
+                    coinList =
+                        coins.sortedBy { it.price_change_percentage_24h } //Losers
+                    rankingRecyclerAdapter.setCoinListItems(coinList)
+                }
+                btnWinner.isSelected -> {
+                    coinList =
+                        coins.sortedByDescending { it.price_change_percentage_24h } //Winners
+                    rankingRecyclerAdapter.setCoinListItems(coinList)
+                }
+            }
+            recyclerViewRanking.scheduleLayoutAnimation()
 
         }
     }

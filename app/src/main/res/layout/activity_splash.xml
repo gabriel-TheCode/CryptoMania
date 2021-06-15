@@ -41,7 +41,7 @@
                 android:id="@+id/text_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Crypto Mania"
+                android:text="@string/crypto_mania"
                 android:layout_gravity="center"
                 android:textAlignment="center"
                 android:fontFamily="@font/baloo_medium"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="20dp"
                 android:layout_gravity="center"
-                android:text="The world’s leading independent cryptocurrency data aggregator."
+                android:text="@string/splash_text"
                 android:textColor="@color/white"
                 android:textAlignment="center"
                 android:textSize="16sp"/>

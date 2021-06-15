@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Wallet"
+            android:text="@string/wallet"
             android:textStyle="bold"
             android:textSize="26sp"
             android:textColor="@color/primaryBackgroundColor"
@@ -23,16 +23,14 @@
             android:layout_marginEnd="20dp"
             android:layout_marginTop="30dp"/>
 
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:textColor="@color/white"
-            android:text="Save &amp; use your digital currencies easily, with low transaction fees and strong security track record."/>
+            android:text="@string/wallet_description"/>
 
     </LinearLayout>
-
 
     <com.airbnb.lottie.LottieAnimationView
         android:id="@+id/image_onboarding"
@@ -45,8 +43,6 @@
         app:lottie_loop="true"
         app:lottie_autoPlay="true"/>
 
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -56,12 +52,10 @@
         android:layout_gravity="center"
         android:textColor="@color/colorPrimaryDark"/>
 
-
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Coming soon..."
+        android:text="@string/coming_soon"
         android:textSize="16sp"
         android:layout_gravity="center"
         android:textColor="@color/dark_blue"/>
@@ -72,8 +66,7 @@
         android:layout_height="50dp"
         android:layout_margin="30dp"
         android:background="@drawable/btn_blue_selector"
-        android:text="join the whitelist"
+        android:text="@string/join_the_whitelist"
         android:textColor="@color/md_white_1000"/>
-
 
 </LinearLayout>
