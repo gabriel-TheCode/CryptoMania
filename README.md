@@ -1,8 +1,8 @@
 # CryptoMania
  A cryptocurrency data aggregator that tracks price, volume, social stats.
 
-[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://forthebadge.com)
-![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)
+[![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://android.com)
+[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://gabrielthecode.com)
 
 
 <a name="description"></a>
