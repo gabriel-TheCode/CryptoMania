@@ -13,7 +13,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CoinDetailsViewModel @Inject constructor(
-    private val getMarketChart: GetMarketChart,
+        private val getMarketChart: GetMarketChart,
 ) : ViewModel() {
 
     private val _chartState = MutableLiveData<DataState<List<List<Number>>>>()

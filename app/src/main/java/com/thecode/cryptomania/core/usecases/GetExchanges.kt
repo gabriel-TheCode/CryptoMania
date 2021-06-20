@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GetExchanges @Inject constructor(
-    private val repository: ExchangeRepository
+        private val repository: ExchangeRepository
 ) {
     suspend operator fun invoke(): Flow<DataState<Exchange>> = flow {
         emit(DataState.Loading)

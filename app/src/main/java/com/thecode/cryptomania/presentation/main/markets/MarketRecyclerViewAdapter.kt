@@ -20,16 +20,16 @@ import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 
 
 class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
-    RecyclerView.Adapter<MarketRecyclerViewAdapter.CoinViewHolder>() {
+        RecyclerView.Adapter<MarketRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterMarketCryptoBinding
     var coinsList: List<CoinItem> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         binding = AdapterMarketCryptoBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
         )
         return CoinViewHolder(binding)
     }
@@ -44,20 +44,20 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
         holder.tvMarketCap.text = coin.market_cap.withNumberSuffix().addPrefix("$")
         if (coin.price_change_percentage_24h > 0) {
             holder.tvCoinPrice.setTextColor(
-                ContextCompat.getColor(
-                    holder.container.context,
-                    R.color.md_green_400
-                )
+                    ContextCompat.getColor(
+                            holder.container.context,
+                            R.color.md_green_400
+                    )
             )
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_green)
 
         } else {
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_red)
             holder.tvCoinPrice.setTextColor(
-                ContextCompat.getColor(
-                    holder.container.context,
-                    R.color.md_red_400
-                )
+                    ContextCompat.getColor(
+                            holder.container.context,
+                            R.color.md_red_400
+                    )
             )
         }
         holder.tvCoinPrice.text = coin.current_price.toString().addPrefix("$")
@@ -65,10 +65,10 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
         holder.tvCoinPercentage.text = percent.addSuffix("%")
 
         Glide.with(holder.itemView.context).load(coin.image)
-            .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-            .error(R.drawable.ic_baseline_monetization_on_gray_24)
-            .apply(RequestOptions().centerCrop())
-            .into(holder.image)
+                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+                .error(R.drawable.ic_baseline_monetization_on_gray_24)
+                .apply(RequestOptions().centerCrop())
+                .into(holder.image)
 
         holder.container.setOnClickListener {
             listener.openCoinDetails(coin)
@@ -83,7 +83,7 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
 
 
     class CoinViewHolder(binding: AdapterMarketCryptoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+            RecyclerView.ViewHolder(binding.root) {
 
         val container: RelativeLayout = binding.layoutContainer
         val tvCoinName: TextView = binding.textName

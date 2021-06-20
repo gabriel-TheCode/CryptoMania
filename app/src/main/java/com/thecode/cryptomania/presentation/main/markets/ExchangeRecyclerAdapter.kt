@@ -21,16 +21,16 @@ interface ExchangeOnClickListener {
 
 
 class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener) :
-    RecyclerView.Adapter<ExchangeRecyclerViewAdapter.ExchangeViewHolder>() {
+        RecyclerView.Adapter<ExchangeRecyclerViewAdapter.ExchangeViewHolder>() {
 
     private lateinit var binding: AdapterExchangeCryptoBinding
     var exchangesList: List<ExchangeItem> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExchangeViewHolder {
         binding = AdapterExchangeCryptoBinding.inflate(
-            LayoutInflater.from(parent.context),
-            parent,
-            false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
         )
         return ExchangeViewHolder(binding)
     }
@@ -48,10 +48,10 @@ class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener)
         holder.tvLocation.text = exchange.country
 
         Glide.with(holder.itemView.context).load(exchange.image)
-            .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-            .error(R.drawable.ic_baseline_monetization_on_gray_24)
-            .apply(RequestOptions().centerCrop())
-            .into(holder.image)
+                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+                .error(R.drawable.ic_baseline_monetization_on_gray_24)
+                .apply(RequestOptions().centerCrop())
+                .into(holder.image)
 
         holder.container.setOnClickListener {
             listener.openExchangeDetails(exchange)
@@ -65,7 +65,7 @@ class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener)
     }
 
     class ExchangeViewHolder(binding: AdapterExchangeCryptoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
+            RecyclerView.ViewHolder(binding.root) {
 
         val container: ConstraintLayout = binding.layoutContainer
         val tvExchangeName: TextView = binding.textName

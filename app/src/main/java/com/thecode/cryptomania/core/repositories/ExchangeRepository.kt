@@ -6,8 +6,8 @@ import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
 import javax.inject.Inject
 
 class ExchangeRepository @Inject constructor(
-    private val networkDataSource: AppRemoteDataSourceImpl,
-    private val exchange: ExchangeMapper
+        private val networkDataSource: AppRemoteDataSourceImpl,
+        private val exchange: ExchangeMapper
 ) {
 
     suspend fun fetchExchanges(): Exchange {

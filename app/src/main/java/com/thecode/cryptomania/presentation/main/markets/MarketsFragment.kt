@@ -56,9 +56,9 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
     private lateinit var btnExchange: ThemedButton
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMarketsBinding.inflate(inflater, container, false)
 
@@ -93,8 +93,8 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
     private fun showInternetConnectionErrorLayout() {
         if (marketRecyclerAdapter.itemCount > 0 || exchangeRecyclerAdapter.itemCount > 0) {
             showErrorDialog(
-                getString(R.string.network_error),
-                getString(R.string.check_internet)
+                    getString(R.string.network_error),
+                    getString(R.string.check_internet)
             )
         } else {
             layoutBadState.isVisible = true
@@ -106,8 +106,8 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
     private fun showBadStateLayout() {
         if (marketRecyclerAdapter.itemCount > 0 || exchangeRecyclerAdapter.itemCount > 0) {
             showErrorDialog(
-                getString(R.string.error),
-                getString(R.string.service_unavailable)
+                    getString(R.string.error),
+                    getString(R.string.service_unavailable)
             )
         } else {
             layoutBadState.isVisible = true
@@ -128,55 +128,55 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
 
     private fun subscribeObservers() {
         viewModel.coinState.observe(
-            viewLifecycleOwner,
-            {
-                when (it) {
-                    is DataState.Success -> {
-                        hideBadStateLayout()
-                        hideLoadingProgress()
-                        showRecyclerViewMarket(true)
-                        populateRecyclerViewMarket(it.data.coins)
-                    }
-                    is DataState.Loading -> {
-                        showLoadingProgress()
-                    }
-                    is DataState.Error -> {
-                        hideLoadingProgress()
-                        showInternetConnectionErrorLayout()
-                        Toast.makeText(
-                            activity,
-                            getString(R.string.internet_connection_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                viewLifecycleOwner,
+                {
+                    when (it) {
+                        is DataState.Success -> {
+                            hideBadStateLayout()
+                            hideLoadingProgress()
+                            showRecyclerViewMarket(true)
+                            populateRecyclerViewMarket(it.data.coins)
+                        }
+                        is DataState.Loading -> {
+                            showLoadingProgress()
+                        }
+                        is DataState.Error -> {
+                            hideLoadingProgress()
+                            showInternetConnectionErrorLayout()
+                            Toast.makeText(
+                                    activity,
+                                    getString(R.string.internet_connection_error),
+                                    Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-            }
         )
 
         viewModel.exchangeState.observe(
-            viewLifecycleOwner,
-            {
-                when (it) {
-                    is DataState.Success -> {
-                        hideBadStateLayout()
-                        hideLoadingProgress()
-                        showRecyclerViewMarket(false)
-                        populateRecyclerViewExchange(it.data.exchanges)
-                    }
-                    is DataState.Loading -> {
-                        showLoadingProgress()
-                    }
-                    is DataState.Error -> {
-                        hideLoadingProgress()
-                        showInternetConnectionErrorLayout()
-                        Toast.makeText(
-                            activity,
-                            getString(R.string.internet_connection_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
+                viewLifecycleOwner,
+                {
+                    when (it) {
+                        is DataState.Success -> {
+                            hideBadStateLayout()
+                            hideLoadingProgress()
+                            showRecyclerViewMarket(false)
+                            populateRecyclerViewExchange(it.data.exchanges)
+                        }
+                        is DataState.Loading -> {
+                            showLoadingProgress()
+                        }
+                        is DataState.Error -> {
+                            hideLoadingProgress()
+                            showInternetConnectionErrorLayout()
+                            Toast.makeText(
+                                    activity,
+                                    getString(R.string.internet_connection_error),
+                                    Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
-            }
         )
     }
 
@@ -193,10 +193,10 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
         marketRecyclerAdapter = MarketRecyclerViewAdapter(coinOnClickListener)
         recyclerViewMarket.layoutManager = LinearLayoutManager(activity)
         recyclerViewMarket.addItemDecoration(
-            DividerItemDecoration(
-                activity,
-                LinearLayoutManager.VERTICAL
-            )
+                DividerItemDecoration(
+                        activity,
+                        LinearLayoutManager.VERTICAL
+                )
         )
         recyclerViewMarket.adapter = SlideInBottomAnimationAdapter(marketRecyclerAdapter)
 
@@ -204,10 +204,10 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
         exchangeRecyclerAdapter = ExchangeRecyclerViewAdapter(exchangeOnClickListener)
         recyclerViewExchange.layoutManager = LinearLayoutManager(activity)
         recyclerViewExchange.addItemDecoration(
-            DividerItemDecoration(
-                activity,
-                LinearLayoutManager.VERTICAL
-            )
+                DividerItemDecoration(
+                        activity,
+                        LinearLayoutManager.VERTICAL
+                )
         )
         recyclerViewExchange.adapter = SlideInBottomAnimationAdapter(exchangeRecyclerAdapter)
     }

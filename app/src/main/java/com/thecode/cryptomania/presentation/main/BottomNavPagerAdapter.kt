@@ -8,7 +8,7 @@ import com.thecode.cryptomania.presentation.main.markets.MarketsFragment
 import com.thecode.cryptomania.presentation.main.wallet.WalletFragment
 
 class BottomNavPagerAdapter(fragmentActivity: FragmentActivity) :
-    FragmentStateAdapter(fragmentActivity) {
+        FragmentStateAdapter(fragmentActivity) {
     override fun createFragment(position: Int): Fragment {
         return when (position) {
             0 -> HomeFragment()

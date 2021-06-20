@@ -35,8 +35,8 @@ class MainActivity : AppCompatActivity() {
         bnlv = binding.bottomNavigationBar
         bnlv.setNavigationChangeListener { _, position ->
             viewPager.setCurrentItem(
-                position,
-                true
+                    position,
+                    true
             )
         }
         pagerAdapter = BottomNavPagerAdapter(this)

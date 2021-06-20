@@ -5,7 +5,7 @@ import com.thecode.cryptomania.datasource.network.model.MarketChartObjectRespons
 import javax.inject.Inject
 
 class MarketChartMapper @Inject constructor() :
-    EntityMapper<MarketChartObjectResponse, List<List<Number>>> {
+        EntityMapper<MarketChartObjectResponse, List<List<Number>>> {
     override fun mapToDomain(entity: MarketChartObjectResponse): List<List<Number>> {
         return entity.prices
     }

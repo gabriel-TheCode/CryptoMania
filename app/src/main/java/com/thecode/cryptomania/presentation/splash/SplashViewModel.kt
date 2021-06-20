@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SplashViewModel @Inject constructor(
-    private val isOnboardingCompleted: IsOnboardingCompleted
+        private val isOnboardingCompleted: IsOnboardingCompleted
 ) : ViewModel() {
     private val _state = MutableLiveData<Boolean>()
     val state: LiveData<Boolean>

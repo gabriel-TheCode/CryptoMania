@@ -49,12 +49,12 @@ class SplashActivity : AppCompatActivity() {
 
 
         val rotate = RotateAnimation(
-            0f,
-            720f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f,
-            Animation.RELATIVE_TO_SELF,
-            0.5f
+                0f,
+                720f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f,
+                Animation.RELATIVE_TO_SELF,
+                0.5f
         )
         rotate.duration = 3000
         rotate.interpolator = LinearInterpolator()

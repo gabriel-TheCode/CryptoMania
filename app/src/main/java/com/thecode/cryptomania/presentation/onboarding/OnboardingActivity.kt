@@ -83,12 +83,12 @@ class OnboardingActivity : AppCompatActivity() {
 
     private fun setUpObserver() {
         viewModel.state.observe(
-            this,
-            {
-                when (it) {
-                    is OnBoardingState.COMPLET -> onBoardingAdapter.setItem(it.list)
+                this,
+                {
+                    when (it) {
+                        is OnBoardingState.COMPLET -> onBoardingAdapter.setItem(it.list)
+                    }
                 }
-            }
         )
     }
 

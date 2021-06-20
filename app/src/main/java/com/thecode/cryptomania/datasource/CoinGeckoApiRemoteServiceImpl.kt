@@ -12,9 +12,9 @@ interface CoinGeckoApiRemoteService {
     suspend fun getCoinById(id: String): CoinObjectResponse
 
     suspend fun getMarketChart(
-        coinId: String,
-        currency: String,
-        days: Int
+            coinId: String,
+            currency: String,
+            days: Int
     ): MarketChartObjectResponse
 
     //endregion
@@ -27,11 +27,11 @@ interface CoinGeckoApiRemoteService {
 }
 
 class CoinGeckoApiRemoteServiceImpl constructor(
-    private val coinGeckoApi: CoinGeckoApi
+        private val coinGeckoApi: CoinGeckoApi
 ) : CoinGeckoApiRemoteService {
 
     override suspend fun getAllCoins(
-        currency: String
+            currency: String
     ): List<CoinObjectResponse> {
         return coinGeckoApi.getAllCoins(currency)
     }
@@ -41,9 +41,9 @@ class CoinGeckoApiRemoteServiceImpl constructor(
     }
 
     override suspend fun getMarketChart(
-        coinId: String,
-        currency: String,
-        days: Int
+            coinId: String,
+            currency: String,
+            days: Int
     ): MarketChartObjectResponse {
         return coinGeckoApi.getMarketChart(coinId, currency, days)
     }

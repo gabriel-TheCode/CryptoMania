@@ -14,7 +14,7 @@ interface AppLocalDataSource {
 }
 
 class AppLocalDataSourceImpl @Inject constructor(
-    private val dataStore: CryptoManiaDataStore
+        private val dataStore: CryptoManiaDataStore
 ) : AppLocalDataSource {
     override fun isOnboardingCompleted(): Flow<Boolean> {
         return dataStore.isOnboardingCompleted()

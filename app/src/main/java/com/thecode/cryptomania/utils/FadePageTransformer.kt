@@ -11,7 +11,7 @@ class FadePageTransformer : ViewPager2.PageTransformer {
 
         // Start Animation for a short period of time
         view.animate()
-            .alpha(1f).duration =
-            view.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
+                .alpha(1f).duration =
+                view.resources.getInteger(android.R.integer.config_shortAnimTime).toLong()
     }
 }

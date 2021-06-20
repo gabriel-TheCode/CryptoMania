@@ -13,8 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel @Inject constructor(
-    private val setOnboardingCompleted: SetOnboardingCompleted,
-    private val getOnBoardingParts: GetOnBoardingParts
+        private val setOnboardingCompleted: SetOnboardingCompleted,
+        private val getOnBoardingParts: GetOnBoardingParts
 ) : ViewModel() {
 
     private val _state = MutableLiveData<OnBoardingState>()

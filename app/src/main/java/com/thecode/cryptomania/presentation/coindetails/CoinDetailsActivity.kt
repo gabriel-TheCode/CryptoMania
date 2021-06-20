@@ -17,7 +17,6 @@ import com.anychart.AnyChartView
 import com.anychart.chart.common.dataentry.DataEntry
 import com.anychart.chart.common.dataentry.ValueDataEntry
 import com.anychart.core.cartesian.series.Line
-import com.anychart.data.Set
 import com.anychart.enums.Anchor
 import com.anychart.enums.MarkerType
 import com.anychart.enums.TooltipPositionMode
@@ -65,8 +64,6 @@ class CoinDetailsActivity : AppCompatActivity() {
     private lateinit var btnMonth: ThemedButton
     private lateinit var anyChartView: AnyChartView
     private lateinit var progressBar: ProgressBar
-
-    private lateinit var set: Set
 
     private lateinit var id: String
     private lateinit var name: String
@@ -175,10 +172,10 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     private fun setCoinData() {
         Glide.with(this).load(image)
-            .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-            .error(R.drawable.ic_baseline_monetization_on_gray_24)
-            .apply(RequestOptions().centerCrop())
-            .into(imgCoin)
+                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+                .error(R.drawable.ic_baseline_monetization_on_gray_24)
+                .apply(RequestOptions().centerCrop())
+                .into(imgCoin)
         textCoinName.text = name
         textCoinPrice.text = currentPrice.toString().addPrefix("$")
         textCoinSymbol.text = symbol
@@ -202,27 +199,27 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     private fun subscribeObservers() {
         viewModel.chartState.observe(
-            this, {
-                when (it) {
-                    is DataState.Success -> {
-                        hideBadStateLayout()
-                        populateChart(it.data)
-                    }
-                    is DataState.Loading -> {
-                        progressBar.isVisible = true
-                    }
-                    is DataState.Error -> {
-                        anyChartView.clear()
-                        progressBar.isVisible = false
-                        showBadStateLayout()
-                        Toast.makeText(
+                this, {
+            when (it) {
+                is DataState.Success -> {
+                    hideBadStateLayout()
+                    populateChart(it.data)
+                }
+                is DataState.Loading -> {
+                    progressBar.isVisible = true
+                }
+                is DataState.Error -> {
+                    anyChartView.invalidate()
+                    progressBar.isVisible = false
+                    showBadStateLayout()
+                    Toast.makeText(
                             this,
                             getString(R.string.internet_connection_error),
                             Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                    ).show()
                 }
             }
+        }
         )
     }
 
@@ -239,15 +236,17 @@ class CoinDetailsActivity : AppCompatActivity() {
 
 
     private fun populateChart(items: List<List<Number>>) {
+
+
         var timestamp: Timestamp?
         var price: Number
         val seriesData: MutableList<DataEntry> = ArrayList()
 
         if (items.isEmpty()) {
             Toast.makeText(
-                this,
-                getString(R.string.no_result_found),
-                Toast.LENGTH_SHORT
+                    this@CoinDetailsActivity,
+                    getString(R.string.no_result_found),
+                    Toast.LENGTH_SHORT
             ).show()
         } else {
             for (i in items.indices) {
@@ -267,6 +266,7 @@ class CoinDetailsActivity : AppCompatActivity() {
 
     private fun setUpChart(seriesData: MutableList<DataEntry>) {
 
+
         val cartesian = AnyChart.line()
 
         cartesian.animation(true)
@@ -275,8 +275,8 @@ class CoinDetailsActivity : AppCompatActivity() {
 
         cartesian.crosshair().enabled(true)
         cartesian.crosshair()
-            .yLabel(true)
-            .yStroke(null as Stroke?, null, null, null as String?, null as String?)
+                .yLabel(true)
+                .yStroke(null as Stroke?, null, null, null as String?, null as String?)
 
         cartesian.tooltip().positionMode(TooltipPositionMode.POINT)
 
@@ -289,20 +289,21 @@ class CoinDetailsActivity : AppCompatActivity() {
         series.name(name)
         series.hovered().markers().enabled(true)
         series.hovered().markers()
-            .type(MarkerType.CIRCLE)
-            .size(4.0)
+                .type(MarkerType.CIRCLE)
+                .size(4.0)
         series.tooltip()
-            .position("right")
-            .anchor(Anchor.LEFT_CENTER)
-            .offsetX(5.0)
-            .offsetY(5.0)
+                .position("right")
+                .anchor(Anchor.LEFT_CENTER)
+                .offsetX(5.0)
+                .offsetY(5.0)
 
         cartesian.legend().enabled(true)
         cartesian.legend().fontSize(13.0)
         cartesian.legend().padding(0.0, 0.0, 10.0, 0.0)
 
+        series.data(seriesData)
         anyChartView.setChart(cartesian)
 
-
     }
+
 }
