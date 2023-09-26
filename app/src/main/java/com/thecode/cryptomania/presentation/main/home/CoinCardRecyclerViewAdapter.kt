@@ -17,16 +17,14 @@ import com.thecode.cryptomania.utils.extensions.addSuffix
 import kotlin.math.min
 
 interface CoinCardOnClickListener {
-
     fun openCoinDetails(coin: CoinItem)
-
 }
 
 class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
         RecyclerView.Adapter<CoinCardRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterTopCryptoBinding
-    var coinsList: List<CoinItem> = listOf()
+    private var coinsList: List<CoinItem> = listOf()
     private val limit = 10
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
@@ -77,11 +75,10 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
     }
 
     class CoinViewHolder(binding: AdapterTopCryptoBinding) : RecyclerView.ViewHolder(binding.root) {
-
-        val container: RelativeLayout = binding.layoutContainer
-        val tvCoinName: TextView = binding.textNameCoin
-        val tvCoinPrice: TextView = binding.textPrice
-        val tvCoinPercentage: TextView = binding.textPercentage
-        val image: ImageView = binding.iconCoin
+        val container = binding.layoutContainer
+        val tvCoinName = binding.textNameCoin
+        val tvCoinPrice = binding.textPrice
+        val tvCoinPercentage = binding.textPercentage
+        val image = binding.iconCoin
     }
 }

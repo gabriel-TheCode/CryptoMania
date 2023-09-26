@@ -48,5 +48,9 @@
     <string name="coming_soon">Coming soon…</string>
     <string name="join_the_whitelist">join the whitelist</string>
     <string name="wallet_description"><![CDATA[Save & use your digital currencies easily, with low transaction fees and strong security track record.]]></string>
+    <string name="price_usd">Price (USD)</string>
+    <string name="crypto_currency_fluctuation_chart">Crypto currency fluctuation chart.</string>
+    <string name="market_chart_values">Market Chart values</string>
+    <string name="usd">usd</string>
 
 </resources>

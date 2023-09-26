@@ -30,31 +30,11 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
     // ViewModel
     private val viewModel: HomeViewModel by viewModels()
-
     // Listener
     private var coinOnClickListener: CoinCardOnClickListener = this
-
     // View Binding
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
-    private var category: String = "General"
-
-    // Views
-    private lateinit var recyclerViewTopCrypto: RecyclerView
-    lateinit var recyclerViewRanking: RecyclerView
-    lateinit var coinCardRecyclerAdapter: CoinCardRecyclerViewAdapter
-    lateinit var rankingRecyclerAdapter: RankingRecyclerViewAdapter
-    private lateinit var refreshLayout: SwipeRefreshLayout
-    lateinit var btnRetry: AppCompatButton
-    lateinit var layoutBadState: View
-    lateinit var textState: TextView
-    lateinit var imgState: ImageView
-    private lateinit var themedButtonGroup: ThemedToggleButtonGroup
-    private lateinit var btnHot: ThemedButton
-    private lateinit var btnWinner: ThemedButton
-    private lateinit var btnLoser: ThemedButton
-    private lateinit var layoutContent: RelativeLayout
     private lateinit var coinList: List<CoinItem>
 
 
