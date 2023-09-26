@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.core.domain.CoinItem
+import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.databinding.AdapterMarketCryptoBinding
 import com.thecode.cryptomania.presentation.main.home.CoinCardOnClickListener
 import com.thecode.cryptomania.utils.extensions.addPrefix
@@ -20,7 +20,7 @@ import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
 	RecyclerView.Adapter<MarketRecyclerViewAdapter.CoinViewHolder>() {
 	private lateinit var binding: AdapterMarketCryptoBinding
-	private var coinsList: List<CoinItem> = listOf()
+	private var coinsList: List<CoinItemDomainModel> = listOf()
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
 		binding = AdapterMarketCryptoBinding.inflate(
 			LayoutInflater.from(parent.context),
@@ -38,8 +38,8 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
 		val coin = coinsList[position]
 		holder.apply {
 			tvCoinName.text = coin.symbol
-			tvMarketCap.text = coin.market_cap.withNumberSuffix().addPrefix("$")
-			if (coin.price_change_percentage_24h > 0) {
+			tvMarketCap.text = coin.marketCap.withNumberSuffix().addPrefix("$")
+			if (coin.priceChangePercentage24h > 0) {
 				tvCoinPrice.setTextColor(
 					ContextCompat.getColor(
 						holder.container.context,
@@ -56,8 +56,8 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
 					)
 				)
 			}
-			tvCoinPrice.text = coin.current_price.toString().addPrefix("$")
-			val percent = String.format("%.2f", coin.price_change_percentage_24h)
+			tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
+			val percent = String.format("%.2f", coin.priceChangePercentage24h)
 			tvCoinPercentage.text = percent.addSuffix("%")
 
 			Glide.with(holder.itemView.context).load(coin.image)
@@ -72,7 +72,7 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
 		}
 	}
 
-	fun setCoinListItems(coinsList: ArrayList<CoinItem>) {
+	fun setCoinListItems(coinsList: ArrayList<CoinItemDomainModel>) {
 		this.coinsList = emptyList()
 		this.coinsList = coinsList
 		notifyDataSetChanged()

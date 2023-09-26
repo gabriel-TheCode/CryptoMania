@@ -10,7 +10,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.base.BaseFragment
-import com.thecode.cryptomania.core.domain.CoinItem
+import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,7 +28,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
     private val binding get() = _binding!!
     private lateinit var coinCardRecyclerAdapter: CoinCardRecyclerViewAdapter
     private lateinit var rankingRecyclerAdapter: RankingRecyclerViewAdapter
-    private lateinit var coinList: List<CoinItem>
+    private lateinit var coinList: List<CoinItemDomainModel>
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -164,12 +164,12 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun populateRecyclerView(coins: List<CoinItem>) {
+    private fun populateRecyclerView(coins: List<CoinItemDomainModel>) {
         binding.apply {
             if (coins.isEmpty()) {
                 showBadStateLayout()
             } else {
-                val coinArrayList: ArrayList<CoinItem> = ArrayList()
+                val coinArrayList: ArrayList<CoinItemDomainModel> = ArrayList()
                 for (i in coins.indices) {
                     val article = coins[i]
                     coinArrayList.add(article)
@@ -183,12 +183,12 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
                     }
 
                     btnLosers.isSelected -> {
-                        coinList = coins.sortedBy { it.price_change_percentage_24h }
+                        coinList = coins.sortedBy { it.priceChangePercentage24h }
                         rankingRecyclerAdapter.setCoinListItems(coinList)
                     }
 
                     btnWinners.isSelected -> {
-                        coinList = coins.sortedByDescending { it.price_change_percentage_24h }
+                        coinList = coins.sortedByDescending { it.priceChangePercentage24h }
                         rankingRecyclerAdapter.setCoinListItems(coinList)
                     }
                 }
@@ -197,7 +197,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         }
     }
 
-    override fun openCoinDetails(coin: CoinItem) {
+    override fun openCoinDetails(coin: CoinItemDomainModel) {
         openCoinDetailsActivity(coin)
     }
 }

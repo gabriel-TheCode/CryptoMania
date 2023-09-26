@@ -1,6 +1,6 @@
 package com.thecode.cryptomania.core.remote
 
-import com.thecode.cryptomania.core.domain.Coin
+import com.thecode.cryptomania.core.domain.CoinDomainModel
 import com.thecode.cryptomania.core.domain.ExchangeDomainModel
 import com.thecode.cryptomania.datasource.CoinGeckoApiRemoteService
 import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
@@ -10,9 +10,9 @@ import javax.inject.Inject
 
 interface AppRemoteDataSource {
 
-    suspend fun fetchCoins(currency: String): Coin
+    suspend fun fetchCoins(currency: String): CoinDomainModel
 
-    suspend fun fetchCoinById(coinId: String): Coin
+    suspend fun fetchCoinById(coinId: String): CoinDomainModel
 
     suspend fun fetchExchanges(): ExchangeDomainModel
 
@@ -31,11 +31,11 @@ class AppRemoteDataSourceImpl @Inject constructor(
 
 ) : AppRemoteDataSource {
 
-    override suspend fun fetchCoins(currency: String): Coin {
+    override suspend fun fetchCoins(currency: String): CoinDomainModel {
         return coinMapper.mapFromList(apiService.getAllCoins(currency))
     }
 
-    override suspend fun fetchCoinById(coinId: String): Coin {
+    override suspend fun fetchCoinById(coinId: String): CoinDomainModel {
         TODO("Not yet implemented")
     }
 

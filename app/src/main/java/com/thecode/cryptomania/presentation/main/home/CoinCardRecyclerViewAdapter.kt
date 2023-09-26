@@ -2,29 +2,26 @@ package com.thecode.cryptomania.presentation.main.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.core.domain.CoinItem
+import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.databinding.AdapterTopCryptoBinding
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
 import kotlin.math.min
 
 interface CoinCardOnClickListener {
-    fun openCoinDetails(coin: CoinItem)
+    fun openCoinDetails(coin: CoinItemDomainModel)
 }
 
 class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
         RecyclerView.Adapter<CoinCardRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterTopCryptoBinding
-    private var coinsList: List<CoinItem> = listOf()
+    private var coinsList: List<CoinItemDomainModel> = listOf()
     private val limit = 10
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
@@ -40,9 +37,9 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         val coin = coinsList[position]
         holder.tvCoinName.text = coin.name
-        holder.tvCoinPrice.text = coin.current_price.toString().addPrefix("$")
+        holder.tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
 
-        if (coin.price_change_percentage_24h > 0)
+        if (coin.priceChangePercentage24h > 0)
             holder.tvCoinPercentage.setTextColor(
                     ContextCompat.getColor(
                             holder.container.context,
@@ -54,7 +51,7 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
                         R.color.md_red_400
                 )
         )
-        val percent = String.format("%.2f", coin.price_change_percentage_24h)
+        val percent = String.format("%.2f", coin.priceChangePercentage24h)
         holder.tvCoinPercentage.text = percent.addSuffix("%")
 
         Glide.with(holder.itemView.context).load(coin.image)
@@ -68,7 +65,7 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
         }
     }
 
-    fun setCoinListItems(coinsList: List<CoinItem>) {
+    fun setCoinListItems(coinsList: List<CoinItemDomainModel>) {
         this.coinsList = emptyList()
         this.coinsList = coinsList
         notifyDataSetChanged()

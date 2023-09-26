@@ -1,28 +1,28 @@
 package com.thecode.cryptomania.datasource.network.mapper
 
 
-import com.thecode.cryptomania.core.domain.Coin
-import com.thecode.cryptomania.core.domain.CoinItem
+import com.thecode.cryptomania.core.domain.CoinDomainModel
+import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import javax.inject.Inject
 
 class CoinMapper @Inject constructor() :
-        EntityMapper<CoinObjectResponse, CoinItem> {
+        EntityMapper<CoinObjectResponse, CoinItemDomainModel> {
 
-    fun mapFromList(entities: List<CoinObjectResponse>): Coin {
-        return Coin(
+    fun mapFromList(entities: List<CoinObjectResponse>): CoinDomainModel {
+        return CoinDomainModel(
                 entities.map {
                     mapToDomain(it)
                 }
         )
     }
 
-    override fun mapToEntity(domainModel: CoinItem): CoinObjectResponse {
+    override fun mapToEntity(domainModel: CoinItemDomainModel): CoinObjectResponse {
         TODO("Not yet implemented")
     }
 
-    override fun mapToDomain(entity: CoinObjectResponse): CoinItem {
-        return CoinItem(
+    override fun mapToDomain(entity: CoinObjectResponse): CoinItemDomainModel {
+        return CoinItemDomainModel(
                 entity.id,
                 entity.symbol,
                 entity.name,

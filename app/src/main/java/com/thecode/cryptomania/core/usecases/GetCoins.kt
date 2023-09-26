@@ -1,6 +1,6 @@
 package com.thecode.cryptomania.core.usecases
 
-import com.thecode.cryptomania.core.domain.Coin
+import com.thecode.cryptomania.core.domain.CoinDomainModel
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.core.repositories.CoinsRepository
 import kotlinx.coroutines.Dispatchers
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class GetCoins @Inject constructor(
         private val repository: CoinsRepository
 ) {
-    suspend operator fun invoke(currency: String): Flow<DataState<Coin>> = flow {
+    suspend operator fun invoke(currency: String): Flow<DataState<CoinDomainModel>> = flow {
         emit(DataState.Loading)
         try {
             val data = repository.fetchCoins(currency)

@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.thecode.cryptomania.core.domain.Coin
+import com.thecode.cryptomania.core.domain.CoinDomainModel
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.core.domain.ExchangeDomainModel
 import com.thecode.cryptomania.core.usecases.GetCoins
@@ -21,8 +21,8 @@ class MarketViewModel @Inject constructor(
         private val getExchanges: GetExchanges
 ) : ViewModel() {
 
-    private val _coinState = MutableLiveData<DataState<Coin>>()
-    val coinState: LiveData<DataState<Coin>>
+    private val _coinState = MutableLiveData<DataState<CoinDomainModel>>()
+    val coinState: LiveData<DataState<CoinDomainModel>>
         get() = _coinState
 
     private val _exchangeState = MutableLiveData<DataState<ExchangeDomainModel>>()
