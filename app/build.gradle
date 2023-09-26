@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-kapt'
+    id 'com.google.dagger.hilt.android'
 }
 
 android {
@@ -48,7 +49,6 @@ android {
 
 dependencies {
 
-    def kotlin_version = '1.8.22'
     def coroutines_version = '1.7.3'
     def gson_converter_version = '2.9.0'
     def retrofit_version = '2.9.0'
@@ -57,7 +57,6 @@ dependencies {
     def gson_version = '2.10.1'
     def lifecycle_version = '2.6.1'
     def glide_version = '4.16.0'
-    def hilt_lifecycle_version = '1.0.0-alpha03'
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22"
     implementation 'androidx.core:core-ktx:1.10.1'
@@ -96,7 +95,7 @@ dependencies {
 
     // KOTLIN
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:kotlin_version"
-    implementation 'androidx.core:core-ktx:1.10.1'
+    implementation 'androidx.core:core-ktx:1.12.0'
     implementation "androidx.fragment:fragment-ktx:1.6.1"
 
     // COROUTINES
@@ -105,7 +104,6 @@ dependencies {
 
     // DI - HILT
     implementation "com.google.dagger:hilt-android:2.47"
-    implementation "androidx.hilt:hilt-lifecycle-viewmodel:$hilt_lifecycle_version"
     implementation "androidx.lifecycle:lifecycle-process:$lifecycle_version"
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     kapt "com.google.dagger:hilt-android-compiler:2.47"
