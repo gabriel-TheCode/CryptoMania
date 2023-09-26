@@ -1,7 +1,7 @@
 package com.thecode.cryptomania.core.remote
 
 import com.thecode.cryptomania.core.domain.Coin
-import com.thecode.cryptomania.core.domain.Exchange
+import com.thecode.cryptomania.core.domain.ExchangeDomainModel
 import com.thecode.cryptomania.datasource.CoinGeckoApiRemoteService
 import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
 import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
@@ -14,7 +14,7 @@ interface AppRemoteDataSource {
 
     suspend fun fetchCoinById(coinId: String): Coin
 
-    suspend fun fetchExchanges(): Exchange
+    suspend fun fetchExchanges(): ExchangeDomainModel
 
     suspend fun fetchMarketChartData(
             coinId: String,
@@ -39,7 +39,7 @@ class AppRemoteDataSourceImpl @Inject constructor(
         TODO("Not yet implemented")
     }
 
-    override suspend fun fetchExchanges(): Exchange {
+    override suspend fun fetchExchanges(): ExchangeDomainModel {
         return exchangeMapper.mapFromList(apiService.getAllExchanges())
     }
 

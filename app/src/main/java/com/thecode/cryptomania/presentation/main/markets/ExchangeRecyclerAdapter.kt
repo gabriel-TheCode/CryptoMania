@@ -2,24 +2,21 @@ package com.thecode.cryptomania.presentation.main.markets
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.core.domain.ExchangeItem
+import com.thecode.cryptomania.core.domain.ExchangeItemDomainModel
 import com.thecode.cryptomania.databinding.AdapterExchangeCryptoBinding
 
 interface ExchangeOnClickListener {
-	fun openExchangeDetails(exchange: ExchangeItem)
+	fun openExchangeDetails(exchange: ExchangeItemDomainModel)
 }
 
 class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener) :
 	RecyclerView.Adapter<ExchangeRecyclerViewAdapter.ExchangeViewHolder>() {
 	private lateinit var binding: AdapterExchangeCryptoBinding
-	var exchangesList: List<ExchangeItem> = listOf()
+	private var exchangesList: List<ExchangeItemDomainModel> = listOf()
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExchangeViewHolder {
 		binding = AdapterExchangeCryptoBinding.inflate(
 			LayoutInflater.from(parent.context),
@@ -54,7 +51,7 @@ class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener)
 		}
 	}
 
-	fun setExchangeListItems(exchangesList: ArrayList<ExchangeItem>) {
+	fun setExchangeListItems(exchangesList: ArrayList<ExchangeItemDomainModel>) {
 		this.exchangesList = emptyList()
 		this.exchangesList = exchangesList
 		notifyDataSetChanged()
@@ -62,12 +59,12 @@ class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener)
 
 	class ExchangeViewHolder(binding: AdapterExchangeCryptoBinding) :
 		RecyclerView.ViewHolder(binding.root) {
-		val container: ConstraintLayout = binding.layoutContainer
-		val tvExchangeName: TextView = binding.textName
-		val tvRank: TextView = binding.textRank
-		val tvYear: TextView = binding.textYear
-		val tvTrustScore: TextView = binding.textTrustScore
-		val tvLocation: TextView = binding.textLocation
-		val image: ImageView = binding.imgIcon
+		val container = binding.layoutContainer
+		val tvExchangeName = binding.textName
+		val tvRank = binding.textRank
+		val tvYear = binding.textYear
+		val tvTrustScore = binding.textTrustScore
+		val tvLocation = binding.textLocation
+		val image = binding.imgIcon
 	}
 }

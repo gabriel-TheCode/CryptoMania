@@ -1,7 +1,7 @@
 package com.thecode.cryptomania.core.di
 
 import com.thecode.cryptomania.core.domain.CoinItem
-import com.thecode.cryptomania.core.domain.ExchangeItem
+import com.thecode.cryptomania.core.domain.ExchangeItemDomainModel
 import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
 import com.thecode.cryptomania.datasource.network.mapper.EntityMapper
 import com.thecode.cryptomania.datasource.network.mapper.ExchangeMapper
@@ -27,7 +27,7 @@ object MapperModule {
 
     @Singleton
     @Provides
-    fun provideExchangeResponseMapper(): EntityMapper<ExchangeObjectResponse, ExchangeItem> {
+    fun provideExchangeResponseMapper(): EntityMapper<ExchangeObjectResponse, ExchangeItemDomainModel> {
         return ExchangeMapper()
     }
 

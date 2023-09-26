@@ -1,11 +1,11 @@
 package com.thecode.cryptomania.core.domain
 
 
-data class Exchange(
-        val exchanges: List<ExchangeItem>
+data class ExchangeDomainModel(
+        val exchanges: List<ExchangeItemDomainModel>
 )
 
-data class ExchangeItem(
+data class ExchangeItemDomainModel(
         val id: String,
         val name: String,
         var year_established: Int? = null,

@@ -1,7 +1,7 @@
 package com.thecode.cryptomania.core.usecases
 
 import com.thecode.cryptomania.core.domain.DataState
-import com.thecode.cryptomania.core.domain.Exchange
+import com.thecode.cryptomania.core.domain.ExchangeDomainModel
 import com.thecode.cryptomania.core.repositories.ExchangeRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 class GetExchanges @Inject constructor(
         private val repository: ExchangeRepository
 ) {
-    suspend operator fun invoke(): Flow<DataState<Exchange>> = flow {
+    suspend operator fun invoke(): Flow<DataState<ExchangeDomainModel>> = flow {
         emit(DataState.Loading)
         try {
             val data = repository.fetchExchanges()

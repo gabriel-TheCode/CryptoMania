@@ -18,7 +18,7 @@ import com.thecode.cryptomania.R
 import com.thecode.cryptomania.base.BaseFragment
 import com.thecode.cryptomania.core.domain.CoinItem
 import com.thecode.cryptomania.core.domain.DataState
-import com.thecode.cryptomania.core.domain.ExchangeItem
+import com.thecode.cryptomania.core.domain.ExchangeItemDomainModel
 import com.thecode.cryptomania.databinding.FragmentMarketsBinding
 import com.thecode.cryptomania.presentation.main.home.CoinCardOnClickListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -255,11 +255,11 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
         }
     }
 
-    private fun populateRecyclerViewExchange(exchanges: List<ExchangeItem>) {
+    private fun populateRecyclerViewExchange(exchanges: List<ExchangeItemDomainModel>) {
         if (exchanges.isEmpty()) {
             showBadStateLayout()
         } else {
-            val exchangeArrayList: ArrayList<ExchangeItem> = ArrayList()
+            val exchangeArrayList: ArrayList<ExchangeItemDomainModel> = ArrayList()
             for (i in exchanges.indices) {
                 val exchange = exchanges[i]
                 exchangeArrayList.add(exchange)
@@ -274,7 +274,7 @@ class MarketsFragment : BaseFragment(), CoinCardOnClickListener, ExchangeOnClick
         openCoinDetailsActivity(coin)
     }
 
-    override fun openExchangeDetails(exchange: ExchangeItem) {
+    override fun openExchangeDetails(exchange: ExchangeItemDomainModel) {
         openExchangeDetailsActivity(exchange)
     }
 

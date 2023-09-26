@@ -22,7 +22,6 @@ class HomeViewModel @Inject constructor(
     val coinState: LiveData<DataState<Coin>>
         get() = _coinState
 
-
     fun getCoins(currency: String) {
 
         viewModelScope.launch {

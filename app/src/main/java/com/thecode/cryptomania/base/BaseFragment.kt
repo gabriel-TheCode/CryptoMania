@@ -7,7 +7,7 @@ import com.thecode.aestheticdialogs.AestheticDialog
 import com.thecode.aestheticdialogs.DialogStyle
 import com.thecode.aestheticdialogs.DialogType
 import com.thecode.cryptomania.core.domain.CoinItem
-import com.thecode.cryptomania.core.domain.ExchangeItem
+import com.thecode.cryptomania.core.domain.ExchangeItemDomainModel
 import com.thecode.cryptomania.presentation.coindetails.CoinDetailsActivity
 
 open class BaseFragment : Fragment() {
@@ -55,7 +55,7 @@ open class BaseFragment : Fragment() {
         //requireActivity().startActivity(intent)
     }
 
-    fun openExchangeDetailsActivity(exchange: ExchangeItem) {
+    fun openExchangeDetailsActivity(exchange: ExchangeItemDomainModel) {
         startActivity(
                 Intent(
                         Intent.ACTION_VIEW,

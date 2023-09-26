@@ -1,16 +1,16 @@
 package com.thecode.cryptomania.datasource.network.mapper
 
 
-import com.thecode.cryptomania.core.domain.Exchange
-import com.thecode.cryptomania.core.domain.ExchangeItem
+import com.thecode.cryptomania.core.domain.ExchangeDomainModel
+import com.thecode.cryptomania.core.domain.ExchangeItemDomainModel
 import com.thecode.cryptomania.datasource.network.model.ExchangeObjectResponse
 import javax.inject.Inject
 
 class ExchangeMapper @Inject constructor() :
-        EntityMapper<ExchangeObjectResponse, ExchangeItem> {
+        EntityMapper<ExchangeObjectResponse, ExchangeItemDomainModel> {
 
-    fun mapFromList(entity: List<ExchangeObjectResponse>): Exchange {
-        return Exchange(
+    fun mapFromList(entity: List<ExchangeObjectResponse>): ExchangeDomainModel {
+        return ExchangeDomainModel(
                 entity.map {
                     mapToDomain(it)
                 }
@@ -18,8 +18,8 @@ class ExchangeMapper @Inject constructor() :
     }
 
 
-    override fun mapToDomain(entity: ExchangeObjectResponse): ExchangeItem {
-        return ExchangeItem(
+    override fun mapToDomain(entity: ExchangeObjectResponse): ExchangeItemDomainModel {
+        return ExchangeItemDomainModel(
                 entity.id,
                 entity.name,
                 entity.year_established,
@@ -35,7 +35,7 @@ class ExchangeMapper @Inject constructor() :
         )
     }
 
-    override fun mapToEntity(domainModel: ExchangeItem): ExchangeObjectResponse {
+    override fun mapToEntity(domainModel: ExchangeItemDomainModel): ExchangeObjectResponse {
         TODO("Not yet implemented")
     }
 }

@@ -22,7 +22,7 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
         RecyclerView.Adapter<RankingRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterRankingCryptoBinding
-    var coinsList: List<CoinItem> = listOf()
+    private var coinsList: List<CoinItem> = listOf()
     private val limit = 10
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
