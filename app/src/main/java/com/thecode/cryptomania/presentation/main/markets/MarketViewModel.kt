@@ -4,9 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.thecode.cryptomania.core.domain.Coin
+import com.thecode.cryptomania.core.domain.CoinDomainModel
 import com.thecode.cryptomania.core.domain.DataState
-import com.thecode.cryptomania.core.domain.Exchange
+import com.thecode.cryptomania.core.domain.ExchangeDomainModel
 import com.thecode.cryptomania.core.usecases.GetCoins
 import com.thecode.cryptomania.core.usecases.GetExchanges
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,16 +17,16 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MarketViewModel @Inject constructor(
-        private val getCoins: GetCoins,
-        private val getExchanges: GetExchanges
+    private val getCoins: GetCoins,
+    private val getExchanges: GetExchanges
 ) : ViewModel() {
 
-    private val _coinState = MutableLiveData<DataState<Coin>>()
-    val coinState: LiveData<DataState<Coin>>
+    private val _coinState = MutableLiveData<DataState<CoinDomainModel>>()
+    val coinState: LiveData<DataState<CoinDomainModel>>
         get() = _coinState
 
-    private val _exchangeState = MutableLiveData<DataState<Exchange>>()
-    val exchangeState: LiveData<DataState<Exchange>>
+    private val _exchangeState = MutableLiveData<DataState<ExchangeDomainModel>>()
+    val exchangeState: LiveData<DataState<ExchangeDomainModel>>
         get() = _exchangeState
 
     fun getCoins(currency: String) {

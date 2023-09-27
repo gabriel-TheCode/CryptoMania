@@ -7,13 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.core.usecases.GetMarketChart
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CoinDetailsViewModel @Inject constructor(
-        private val getMarketChart: GetMarketChart,
+    private val getMarketChart: GetMarketChart,
 ) : ViewModel() {
 
     private val _chartState = MutableLiveData<DataState<List<List<Number>>>>()

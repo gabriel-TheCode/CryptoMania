@@ -9,12 +9,12 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GetMarketChart @Inject constructor(
-        private val repository: MarketChartRepository
+    private val repository: MarketChartRepository
 ) {
     suspend operator fun invoke(
-            coinId: String,
-            currency: String,
-            days: Int
+        coinId: String,
+        currency: String,
+        days: Int
     ): Flow<DataState<List<List<Number>>>> = flow {
         emit(DataState.Loading)
         try {

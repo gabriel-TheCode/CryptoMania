@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.thecode.cryptomania.core.domain.Coin
+import com.thecode.cryptomania.core.domain.CoinDomainModel
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.core.usecases.GetCoins
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,16 +15,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-        private val getCoins: GetCoins
+    private val getCoins: GetCoins
 ) : ViewModel() {
 
-    private val _coinState = MutableLiveData<DataState<Coin>>()
-    val coinState: LiveData<DataState<Coin>>
+    private val _coinState = MutableLiveData<DataState<CoinDomainModel>>()
+    val coinState: LiveData<DataState<CoinDomainModel>>
         get() = _coinState
 
-
     fun getCoins(currency: String) {
-
         viewModelScope.launch {
             _coinState.value.let { _ ->
                 getCoins.invoke(currency).onEach {
@@ -33,5 +31,4 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 }
