@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.base.BaseFragment
-import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.FragmentHomeBinding
 import dagger.hilt.android.AndroidEntryPoint
@@ -28,19 +27,21 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
     private val binding get() = _binding!!
     private lateinit var coinCardRecyclerAdapter: CoinCardRecyclerViewAdapter
     private lateinit var rankingRecyclerAdapter: RankingRecyclerViewAdapter
-    private lateinit var coinList: List<CoinItemDomainModel>
+    private var coinList: List<CoinItemUiModel> = listOf()
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val view = binding.root
-        subscribeObservers()
         initViews()
-        initRecyclerViews()
+        subscribeObservers()
         fetchTopCryptoCurrency()
-        return view
+        return binding.root
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
     }
 
     override fun onDestroyView() {
@@ -49,15 +50,15 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
     }
 
     private fun fetchTopCryptoCurrency() {
-        viewModel.getCoins("usd")
+        viewModel.getCoins(getString(R.string.usd))
     }
 
     private fun showInternetConnectionErrorLayout() {
         binding.apply {
             if (coinCardRecyclerAdapter.itemCount > 0) {
                 showErrorDialog(
-                        getString(R.string.network_error),
-                        getString(R.string.check_internet)
+                    getString(R.string.network_error),
+                    getString(R.string.check_internet)
                 )
             } else {
                 layoutContent.isVisible = false
@@ -73,10 +74,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
     private fun showBadStateLayout() {
         binding.apply {
             if (coinCardRecyclerAdapter.itemCount > 0) {
-                showErrorDialog(
-                        getString(R.string.error),
-                        getString(R.string.service_unavailable)
-                )
+                showErrorDialog(getString(R.string.error), getString(R.string.service_unavailable))
             } else {
                 layoutContent.isVisible = false
                 included.apply {
@@ -97,18 +95,16 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
     private fun subscribeObservers() {
         viewModel.coinState.observe(
-                viewLifecycleOwner
+            viewLifecycleOwner
         ) {
             when (it) {
                 is DataState.Success -> {
                     hideBadStateLayout()
                     hideLoadingProgress()
-                    populateRecyclerView(it.data.coins)
+                    populateRecyclerView(it.data.coins.toUiModels())
                 }
 
-                is DataState.Loading -> {
-                    showLoadingProgress()
-                }
+                is DataState.Loading -> showLoadingProgress()
 
                 is DataState.Error -> {
                     hideLoadingProgress()
@@ -158,27 +154,26 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
                 }
             }
         }
+        initRecyclerViews()
     }
 
     private fun showToast(message: String) {
         Toast.makeText(requireActivity(), message, Toast.LENGTH_SHORT).show()
     }
 
-    private fun populateRecyclerView(coins: List<CoinItemDomainModel>) {
+    private fun populateRecyclerView(coins: List<CoinItemUiModel>) {
         binding.apply {
             if (coins.isEmpty()) {
                 showBadStateLayout()
             } else {
-                val coinArrayList: ArrayList<CoinItemDomainModel> = ArrayList()
-                for (i in coins.indices) {
-                    val article = coins[i]
-                    coinArrayList.add(article)
-                }
+                val coinArrayList: ArrayList<CoinItemUiModel> = arrayListOf()
+                coinArrayList.addAll(coins)
                 coinCardRecyclerAdapter.setCoinListItems(coinArrayList)
                 recyclerviewTopCrypto.scheduleLayoutAnimation()
 
                 when {
                     btnHot.isSelected -> {
+                        coinList = coins.sortedByDescending { it.marketCapChangePercentage24h }
                         rankingRecyclerAdapter.setCoinListItems(coinArrayList)
                     }
 
@@ -197,7 +192,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         }
     }
 
-    override fun openCoinDetails(coin: CoinItemDomainModel) {
+    override fun openCoinDetails(coin: CoinItemUiModel) {
         openCoinDetailsActivity(coin)
     }
 }

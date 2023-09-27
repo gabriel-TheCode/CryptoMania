@@ -17,17 +17,17 @@ interface AppRemoteDataSource {
     suspend fun fetchExchanges(): ExchangeDomainModel
 
     suspend fun fetchMarketChartData(
-            coinId: String,
-            currency: String,
-            days: Int
+        coinId: String,
+        currency: String,
+        days: Int
     ): List<List<Number>>
 }
 
 class AppRemoteDataSourceImpl @Inject constructor(
-        private val apiService: CoinGeckoApiRemoteService,
-        private val coinMapper: CoinMapper,
-        private val exchangeMapper: ExchangeMapper,
-        private val marketChartMapper: MarketChartMapper
+    private val apiService: CoinGeckoApiRemoteService,
+    private val coinMapper: CoinMapper,
+    private val exchangeMapper: ExchangeMapper,
+    private val marketChartMapper: MarketChartMapper
 
 ) : AppRemoteDataSource {
 
@@ -44,9 +44,9 @@ class AppRemoteDataSourceImpl @Inject constructor(
     }
 
     override suspend fun fetchMarketChartData(
-            coinId: String,
-            currency: String,
-            days: Int
+        coinId: String,
+        currency: String,
+        days: Int
     ): List<List<Number>> {
         return marketChartMapper.mapToDomain(apiService.getMarketChart(coinId, currency, days))
     }

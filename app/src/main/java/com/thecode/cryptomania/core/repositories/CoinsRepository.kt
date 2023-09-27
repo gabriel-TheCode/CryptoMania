@@ -6,8 +6,8 @@ import com.thecode.cryptomania.datasource.network.mapper.CoinMapper
 import javax.inject.Inject
 
 class CoinsRepository @Inject constructor(
-        private val networkDataSource: AppRemoteDataSourceImpl,
-        private val coinMapper: CoinMapper
+    private val networkDataSource: AppRemoteDataSourceImpl,
+    private val coinMapper: CoinMapper
 ) {
 
     suspend fun fetchCoins(currency: String): CoinDomainModel {

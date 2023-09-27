@@ -15,7 +15,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-        private val getCoins: GetCoins
+    private val getCoins: GetCoins
 ) : ViewModel() {
 
     private val _coinState = MutableLiveData<DataState<CoinDomainModel>>()
@@ -23,7 +23,6 @@ class HomeViewModel @Inject constructor(
         get() = _coinState
 
     fun getCoins(currency: String) {
-
         viewModelScope.launch {
             _coinState.value.let { _ ->
                 getCoins.invoke(currency).onEach {
@@ -32,5 +31,4 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
-
 }

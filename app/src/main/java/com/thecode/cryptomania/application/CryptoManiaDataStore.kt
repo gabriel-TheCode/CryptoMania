@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.preferencesDataStore
 import com.thecode.cryptomania.utils.AppConstants.PREFERENCE_NAME
 import com.thecode.cryptomania.utils.extensions.getValueFlow
+import com.thecode.cryptomania.utils.extensions.setValue
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -24,9 +25,7 @@ class CryptoManiaDataStore @Inject constructor(@ApplicationContext context: Cont
 
     suspend fun setOnboardingCompleted() {
         val dataStoreKey = booleanPreferencesKey(IS_ONBOARDING_COMPLETED)
-        dataStore.edit { preferences ->
-            preferences[dataStoreKey] = true
-        }
+        dataStore.setValue(dataStoreKey, true)
     }
 
     fun isOnboardingCompleted(): Flow<Boolean> {
