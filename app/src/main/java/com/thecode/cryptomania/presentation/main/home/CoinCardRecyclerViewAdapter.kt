@@ -37,21 +37,24 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
         val coin = coinsList[position]
         holder.tvCoinName.text = coin.name
         holder.tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
-
-        if (coin.priceChangePercentage24h > 0)
+        val percent = String.format("%.2f", coin.priceChangePercentage24h)
+        if (coin.priceChangePercentage24h > 0) {
             holder.tvCoinPercentage.setTextColor(
                 ContextCompat.getColor(
                     holder.container.context,
                     R.color.md_green_400
                 )
-            ) else holder.tvCoinPercentage.setTextColor(
-            ContextCompat.getColor(
-                holder.container.context,
-                R.color.md_red_400
             )
-        )
-        val percent = String.format("%.2f", coin.priceChangePercentage24h)
-        holder.tvCoinPercentage.text = percent.addSuffix("%")
+            holder.tvCoinPercentage.text = percent.addSuffix("%").addPrefix("+")
+        } else {
+            holder.tvCoinPercentage.setTextColor(
+                ContextCompat.getColor(
+                    holder.container.context,
+                    R.color.md_red_400
+                )
+            )
+            holder.tvCoinPercentage.text = percent.addSuffix("%")
+        }
 
         Glide.with(holder.itemView.context).load(coin.image)
             .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)

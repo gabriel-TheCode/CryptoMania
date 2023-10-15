@@ -20,15 +20,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun initViews() {
         binding.apply {
+            viewPager.apply {
+                offscreenPageLimit = 3
+                adapter = BottomNavPagerAdapter(this@MainActivity)
+                isUserInputEnabled = false
+                setPageTransformer(FadePageTransformer())
+            }
             bottomNavigationBar.setNavigationChangeListener { _, position ->
-                viewPager.apply {
-                    setCurrentItem(position, true)
-                    offscreenPageLimit = 3
-                    adapter = BottomNavPagerAdapter(this@MainActivity)
-                    isUserInputEnabled = false
-                    setPageTransformer(FadePageTransformer())
-
-                }
+                viewPager.setCurrentItem(position, true)
             }
         }
     }
