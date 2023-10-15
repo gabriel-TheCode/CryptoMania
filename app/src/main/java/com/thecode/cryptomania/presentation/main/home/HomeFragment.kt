@@ -34,14 +34,14 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        initViews()
-        subscribeObservers()
-        fetchTopCryptoCurrency()
         return binding.root
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViews()
+        subscribeObservers()
+        fetchTopCryptoCurrency()
     }
 
     override fun onDestroyView() {

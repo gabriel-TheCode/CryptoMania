@@ -11,6 +11,7 @@ import com.thecode.cryptomania.R
 import com.thecode.cryptomania.databinding.AdapterRankingCryptoBinding
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
+import com.thecode.cryptomania.utils.extensions.formatFloat
 import kotlin.math.min
 
 
@@ -38,6 +39,8 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
         val coin = coinsList[position]
         holder.tvCoinName.text = coin.name
         holder.tvCoinSymbol.text = coin.symbol
+        val percent = String.format("%.2f", coin.priceChangePercentage24h)
+
         if (coin.priceChangePercentage24h > 0) {
             holder.tvCoinPrice.setTextColor(
                 ContextCompat.getColor(
@@ -46,6 +49,7 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
                 )
             )
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_green)
+            holder.tvCoinPercentage.text = percent.addSuffix("%").addPrefix("+")
         } else {
             holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_red)
             holder.tvCoinPrice.setTextColor(
@@ -54,10 +58,9 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
                     R.color.md_red_400
                 )
             )
+            holder.tvCoinPercentage.text = percent.addSuffix("%")
         }
-        holder.tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
-        val percent = String.format("%.2f", coin.priceChangePercentage24h)
-        holder.tvCoinPercentage.text = percent.addSuffix("%")
+        holder.tvCoinPrice.text = coin.currentPrice.formatFloat().addPrefix("$")
 
         Glide.with(holder.itemView.context).load(coin.image)
             .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)

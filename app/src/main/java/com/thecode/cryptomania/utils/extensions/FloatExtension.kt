@@ -1,5 +1,6 @@
 package com.thecode.cryptomania.utils.extensions
 
+import java.text.DecimalFormat
 import kotlin.math.ln
 import kotlin.math.pow
 
@@ -11,4 +12,9 @@ fun Float.withNumberSuffix(): String {
         this / 1000.0.pow(exp.toDouble()),
         "kMBTPE"[exp - 1]
     )
+}
+
+fun Float.formatFloat(): String {
+    val decimalFormat = DecimalFormat("#.#####")
+    return decimalFormat.format(this)
 }

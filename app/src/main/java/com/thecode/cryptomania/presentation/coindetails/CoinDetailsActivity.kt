@@ -96,16 +96,17 @@ class CoinDetailsActivity : AppCompatActivity() {
                 lowPrice24hTextView.text = low24h.toString().addPrefix("$")
                 highPrice24hTextView.text = high24h.toString().addPrefix("$")
                 coinMarketCapTextView.text = marketCap.withNumberSuffix().addPrefix("$")
-                priceChange24hTextView.text = priceChangePercentage24h.toString().addSuffix("%")
-                marketCapChange24hTextView.text = marketCapChange24h.toString().addSuffix("%")
+                marketCapChange24hTextView.text = "%.0f".format(marketCapChange24h).addSuffix("$")
                 athTextView.text = ath.toString().addPrefix("$")
                 maxSupplyTextView.text = String.format("%.0f", maxSupply)
-
-                priceChangePercentage24h.run {
-                    if (this < 0) {
-                        binding.layoutPercent.setBackgroundResource(R.drawable.rounded_background_red)
-                    }
+                val priceChange = "%.2f".format(priceChangePercentage24h).addSuffix("%")
+                if (priceChangePercentage24h < 0) {
+                    textPriceChange24hTop.text = priceChange
+                    binding.layoutPercent.setBackgroundResource(R.drawable.rounded_background_red)
+                } else {
+                    textPriceChange24hTop.text = priceChange.addPrefix("+")
                 }
+                priceChange24hTextView.text = textPriceChange24hTop.text
             }
         }
     }
@@ -159,7 +160,7 @@ class CoinDetailsActivity : AppCompatActivity() {
     private fun populateChart(items: List<List<Number>>) {
         var timestamp: Timestamp?
         var price: Number
-        val seriesData: MutableList<DataEntry> = ArrayList()
+        val seriesData = mutableListOf<DataEntry>()
 
         if (items.isEmpty()) {
             Toast.makeText(
@@ -213,7 +214,16 @@ class CoinDetailsActivity : AppCompatActivity() {
         cartesian.legend().fontSize(13.0)
         cartesian.legend().padding(0.0, 0.0, 10.0, 0.0)
 
-        series.data(seriesData)
-        binding.layoutChart.setChart(cartesian)
+        binding.layoutChart.apply {
+            handler.run {
+                postDelayed({
+                    series.data(seriesData)
+                }, 500)
+
+                postDelayed({
+                    setChart(cartesian)
+                }, 500)
+            }
+        }
     }
 }
