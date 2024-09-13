@@ -27,19 +27,19 @@ class CoinMapper @Inject constructor() :
             entity.symbol,
             entity.name,
             entity.image,
-            entity.current_price,
-            entity.market_cap,
-            entity.market_cap_rank,
-            entity.fully_diluted_valuation,
-            entity.total_volume,
-            entity.high_24h,
-            entity.low_24h,
-            entity.price_change_24h,
-            entity.price_change_percentage_24h,
-            entity.market_cap_change_24h,
-            entity.market_cap_change_percentage_24h,
+            entity.currentPrice,
+            entity.marketCap,
+            entity.marketCapRank,
+            entity.fullyDilutedValuation,
+            entity.totalVolume,
+            entity.high24h,
+            entity.low24h,
+            entity.priceChange24h,
+            entity.priceChangePercentage24h,
+            entity.marketCapChange24h,
+            entity.marketCapChangePercentage24h,
             entity.ath,
-            entity.max_supply
+            entity.maxSupply
         )
     }
 }
