@@ -18,7 +18,7 @@ import com.thecode.cryptomania.utils.extensions.addSuffix
 import kotlin.math.min
 
 
-class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
+class RankingRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemDomainModel) -> Unit) :
     RecyclerView.Adapter<RankingRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterRankingCryptoBinding
@@ -39,38 +39,40 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
     }
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
-        val coin = coinsList[position]
-        holder.tvCoinName.text = coin.name
-        holder.tvCoinSymbol.text = coin.symbol
-        if (coin.priceChangePercentage24h > 0) {
-            holder.tvCoinPrice.setTextColor(
-                ContextCompat.getColor(
-                    holder.container.context,
-                    R.color.md_green_400
-                )
-            )
-            holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_green)
-        } else {
-            holder.layoutPercentage.setBackgroundResource(R.drawable.rounded_background_red)
-            holder.tvCoinPrice.setTextColor(
-                ContextCompat.getColor(
-                    holder.container.context,
-                    R.color.md_red_400
-                )
-            )
-        }
-        holder.tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
-        val percent = String.format("%.2f", coin.priceChangePercentage24h)
-        holder.tvCoinPercentage.text = percent.addSuffix("%")
+        holder.apply {
+            val coin = coinsList[position]
 
-        Glide.with(holder.itemView.context).load(coin.image)
-            .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-            .error(R.drawable.ic_baseline_monetization_on_gray_24)
-            .apply(RequestOptions().centerCrop())
-            .into(holder.image)
+            val (colorRes, backgroundRes, sign) = when {
+                coin.priceChangePercentage24h > 0 -> Triple(
+                    R.color.md_green_400,
+                    R.drawable.rounded_background_green,
+                    "+"
+                )
 
-        holder.container.setOnClickListener {
-            listener.openCoinDetails(coin)
+                else -> Triple(
+                    R.color.md_red_400,
+                    R.drawable.rounded_background_red,
+                    ""
+                )
+            }
+
+            tvCoinName.text = coin.name
+            tvCoinSymbol.text = coin.symbol
+            tvCoinPrice.setTextColor(ContextCompat.getColor(container.context, colorRes))
+            tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
+            layoutPercentage.setBackgroundResource(backgroundRes)
+            tvCoinPercentage.text =
+                String.format("%s%.2f", sign, coin.priceChangePercentage24h).addSuffix("%")
+
+            Glide.with(itemView.context).load(coin.image)
+                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+                .error(R.drawable.ic_baseline_monetization_on_gray_24)
+                .apply(RequestOptions().centerCrop())
+                .into(image)
+
+            container.setOnClickListener {
+                onOpenCoinDetails(coin)
+            }
         }
     }
 
@@ -82,7 +84,6 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
 
     class CoinViewHolder(binding: AdapterRankingCryptoBinding) :
         RecyclerView.ViewHolder(binding.root) {
-
         val container: RelativeLayout = binding.layoutContainer
         val tvCoinName: TextView = binding.textName
         val tvCoinSymbol: TextView = binding.textSymbol

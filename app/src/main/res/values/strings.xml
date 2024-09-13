@@ -52,5 +52,6 @@
     <string name="crypto_currency_fluctuation_chart">Crypto currency fluctuation chart.</string>
     <string name="market_chart_values">Market Chart values</string>
     <string name="usd">usd</string>
+    <string name="all_time_high">All Time High</string>
 
 </resources>

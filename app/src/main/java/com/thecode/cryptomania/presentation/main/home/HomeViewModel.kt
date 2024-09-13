@@ -23,7 +23,6 @@ class HomeViewModel @Inject constructor(
         get() = _coinState
 
     fun getCoins(currency: String) {
-
         viewModelScope.launch {
             _coinState.value.let { _ ->
                 getCoins.invoke(currency).onEach {

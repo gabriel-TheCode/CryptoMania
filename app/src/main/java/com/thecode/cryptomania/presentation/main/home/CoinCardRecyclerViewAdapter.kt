@@ -13,16 +13,12 @@ import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
 import kotlin.math.min
 
-interface CoinCardOnClickListener {
-    fun openCoinDetails(coin: CoinItemDomainModel)
-}
 
-class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
+class CoinCardRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemDomainModel) -> Unit) :
     RecyclerView.Adapter<CoinCardRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterTopCryptoBinding
     private var coinsList: List<CoinItemDomainModel> = listOf()
-    private val limit = 10
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         binding =
@@ -31,37 +27,42 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
     }
 
     override fun getItemCount(): Int {
-        return min(coinsList.size, limit)
+        return min(coinsList.size, MAX_COINS)
     }
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
-        val coin = coinsList[position]
-        holder.tvCoinName.text = coin.name
-        holder.tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
+        holder.apply {
+            val percent: String
+            val coin = coinsList[position]
 
-        if (coin.priceChangePercentage24h > 0)
-            holder.tvCoinPercentage.setTextColor(
-                ContextCompat.getColor(
-                    holder.container.context,
-                    R.color.md_green_400
+            if (coin.priceChangePercentage24h > 0) {
+                tvCoinPercentage.setTextColor(
+                    ContextCompat.getColor(
+                        holder.container.context, R.color.md_green_400
+                    )
                 )
-            ) else holder.tvCoinPercentage.setTextColor(
-            ContextCompat.getColor(
-                holder.container.context,
-                R.color.md_red_400
-            )
-        )
-        val percent = String.format("%.2f", coin.priceChangePercentage24h)
-        holder.tvCoinPercentage.text = percent.addSuffix("%")
+                percent = String.format("+%.2f", coin.priceChangePercentage24h)
+            } else {
+                tvCoinPercentage.setTextColor(
+                    ContextCompat.getColor(
+                        holder.container.context, R.color.md_red_400
+                    )
+                )
+                percent = String.format("%.2f", coin.priceChangePercentage24h)
+            }
 
-        Glide.with(holder.itemView.context).load(coin.image)
-            .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-            .error(R.drawable.ic_baseline_monetization_on_gray_24)
-            .apply(RequestOptions().centerCrop())
-            .into(holder.image)
+            tvCoinName.text = coin.name
+            tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
+            tvCoinPercentage.text = percent.addSuffix("%")
 
-        holder.container.setOnClickListener {
-            listener.openCoinDetails(coin)
+            Glide.with(holder.itemView.context).load(coin.image)
+                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+                .error(R.drawable.ic_baseline_monetization_on_gray_24)
+                .apply(RequestOptions().centerCrop()).into(holder.image)
+
+            container.setOnClickListener {
+                onOpenCoinDetails(coin)
+            }
         }
     }
 
@@ -77,5 +78,9 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
         val tvCoinPrice = binding.textPrice
         val tvCoinPercentage = binding.textPercentage
         val image = binding.iconCoin
+    }
+
+    companion object {
+        private const val MAX_COINS = 10
     }
 }
