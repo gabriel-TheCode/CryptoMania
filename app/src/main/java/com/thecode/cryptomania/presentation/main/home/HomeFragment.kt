@@ -30,9 +30,9 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
     private lateinit var rankingRecyclerAdapter: RankingRecyclerViewAdapter
     private lateinit var coinList: List<CoinItemDomainModel>
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val view = binding.root
@@ -56,8 +56,8 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         binding.apply {
             if (coinCardRecyclerAdapter.itemCount > 0) {
                 showErrorDialog(
-                        getString(R.string.network_error),
-                        getString(R.string.check_internet)
+                    getString(R.string.network_error),
+                    getString(R.string.check_internet)
                 )
             } else {
                 layoutContent.isVisible = false
@@ -74,8 +74,8 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
         binding.apply {
             if (coinCardRecyclerAdapter.itemCount > 0) {
                 showErrorDialog(
-                        getString(R.string.error),
-                        getString(R.string.service_unavailable)
+                    getString(R.string.error),
+                    getString(R.string.service_unavailable)
                 )
             } else {
                 layoutContent.isVisible = false
@@ -97,7 +97,7 @@ class HomeFragment : BaseFragment(), CoinCardOnClickListener {
 
     private fun subscribeObservers() {
         viewModel.coinState.observe(
-                viewLifecycleOwner
+            viewLifecycleOwner
         ) {
             when (it) {
                 is DataState.Success -> {

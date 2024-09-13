@@ -18,7 +18,7 @@ interface CoinCardOnClickListener {
 }
 
 class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
-        RecyclerView.Adapter<CoinCardRecyclerViewAdapter.CoinViewHolder>() {
+    RecyclerView.Adapter<CoinCardRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterTopCryptoBinding
     private var coinsList: List<CoinItemDomainModel> = listOf()
@@ -26,7 +26,7 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         binding =
-                AdapterTopCryptoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            AdapterTopCryptoBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return CoinViewHolder(binding)
     }
 
@@ -41,24 +41,24 @@ class CoinCardRecyclerViewAdapter(private val listener: CoinCardOnClickListener)
 
         if (coin.priceChangePercentage24h > 0)
             holder.tvCoinPercentage.setTextColor(
-                    ContextCompat.getColor(
-                            holder.container.context,
-                            R.color.md_green_400
-                    )
-            ) else holder.tvCoinPercentage.setTextColor(
                 ContextCompat.getColor(
-                        holder.container.context,
-                        R.color.md_red_400
+                    holder.container.context,
+                    R.color.md_green_400
                 )
+            ) else holder.tvCoinPercentage.setTextColor(
+            ContextCompat.getColor(
+                holder.container.context,
+                R.color.md_red_400
+            )
         )
         val percent = String.format("%.2f", coin.priceChangePercentage24h)
         holder.tvCoinPercentage.text = percent.addSuffix("%")
 
         Glide.with(holder.itemView.context).load(coin.image)
-                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-                .error(R.drawable.ic_baseline_monetization_on_gray_24)
-                .apply(RequestOptions().centerCrop())
-                .into(holder.image)
+            .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+            .error(R.drawable.ic_baseline_monetization_on_gray_24)
+            .apply(RequestOptions().centerCrop())
+            .into(holder.image)
 
         holder.container.setOnClickListener {
             listener.openCoinDetails(coin)

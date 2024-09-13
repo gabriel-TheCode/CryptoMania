@@ -15,7 +15,7 @@ class OnBoardingAdapter : RecyclerView.Adapter<OnBoardingAdapter.BaseViewHolder<
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BaseViewHolder<*> {
 
         binding =
-                FragmentOnboardingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            FragmentOnboardingBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return OnBoardingPagerViewHolder(binding.root)
     }
 
@@ -35,7 +35,7 @@ class OnBoardingAdapter : RecyclerView.Adapter<OnBoardingAdapter.BaseViewHolder<
     }
 
     inner class OnBoardingPagerViewHolder(itemView: View) :
-            BaseViewHolder<OnBoardingPart>(itemView) {
+        BaseViewHolder<OnBoardingPart>(itemView) {
         override fun bind(item: OnBoardingPart) {
             binding.imageOnboarding.setAnimation(item.image)
             binding.textOnboardingTitle.setText(item.title)

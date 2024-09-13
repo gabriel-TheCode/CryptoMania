@@ -14,18 +14,18 @@ open class BaseFragment : Fragment() {
 
     fun showErrorDialog(title: String, description: String) {
         AestheticDialog.Builder(requireActivity(), DialogStyle.RAINBOW, DialogType.ERROR)
-                .setTitle(title)
-                .setMessage(description)
-                .setDuration(2000)
-                .show()
+            .setTitle(title)
+            .setMessage(description)
+            .setDuration(2000)
+            .show()
     }
 
     fun showSuccessDialog(title: String, description: String) {
         AestheticDialog.Builder(requireActivity(), DialogStyle.RAINBOW, DialogType.SUCCESS)
-                .setTitle(title)
-                .setMessage(description)
-                .setDuration(2000)
-                .show()
+            .setTitle(title)
+            .setMessage(description)
+            .setDuration(2000)
+            .show()
     }
 
     fun openCoinDetailsActivity(coin: CoinItemDomainModel) {
@@ -57,10 +57,10 @@ open class BaseFragment : Fragment() {
 
     fun openExchangeDetailsActivity(exchange: ExchangeItemDomainModel) {
         startActivity(
-                Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse(exchange.url)
-                )
+            Intent(
+                Intent.ACTION_VIEW,
+                Uri.parse(exchange.url)
+            )
         )
     }
 }

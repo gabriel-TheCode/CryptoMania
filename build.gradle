@@ -6,21 +6,20 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
+        classpath 'com.android.tools.build:gradle:8.5.2'
         classpath 'org.jetbrains.kotlin:kotlin-gradle-plugin:1.8.22'
-        classpath "com.google.dagger:hilt-android-gradle-plugin:2.44"
+        classpath "com.google.dagger:hilt-android-gradle-plugin:2.51.1"
     }
 }
 
 allprojects {
     repositories {
         google()
-        jcenter()
         mavenCentral()
         maven { url "https://jitpack.io" }
     }
 }
 
 tasks.register('clean', Delete) {
-    delete rootProject.buildDir
+    delete rootProject.layout.buildDirectory
 }

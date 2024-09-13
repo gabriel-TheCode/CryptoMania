@@ -37,23 +37,23 @@ object NetworkModule {
     @Provides
     fun provideRetrofit(gson: Gson): Retrofit.Builder {
         return Retrofit.Builder()
-                .baseUrl(AppConstants.COINGECKOAPI_URL)
-                .addConverterFactory(GsonConverterFactory.create(gson))
-                .client(getOkHttpService())
+            .baseUrl(AppConstants.COINGECKOAPI_URL)
+            .addConverterFactory(GsonConverterFactory.create(gson))
+            .client(getOkHttpService())
     }
 
     @Singleton
     @Provides
     fun provideWhoService(retrofit: Retrofit.Builder): CoinGeckoApi {
         return retrofit
-                .build()
-                .create(CoinGeckoApi::class.java)
+            .build()
+            .create(CoinGeckoApi::class.java)
     }
 
     @Singleton
     @Provides
     fun provideInfotifyRemoteService(
-            api: CoinGeckoApi
+        api: CoinGeckoApi
     ): CoinGeckoApiRemoteService {
         return CoinGeckoApiRemoteServiceImpl(api)
     }
@@ -61,24 +61,24 @@ object NetworkModule {
     @Singleton
     @Provides
     fun provideRemoteDataSource(
-            coinGeckoRemoteService: CoinGeckoApiRemoteService,
-            coinMapper: CoinMapper,
-            exchangeMapper: ExchangeMapper,
-            marketChartMapper: MarketChartMapper
+        coinGeckoRemoteService: CoinGeckoApiRemoteService,
+        coinMapper: CoinMapper,
+        exchangeMapper: ExchangeMapper,
+        marketChartMapper: MarketChartMapper
     ): AppRemoteDataSourceImpl {
         return AppRemoteDataSourceImpl(
-                coinGeckoRemoteService,
-                coinMapper,
-                exchangeMapper,
-                marketChartMapper
+            coinGeckoRemoteService,
+            coinMapper,
+            exchangeMapper,
+            marketChartMapper
         )
     }
 
     private fun getOkHttpService(): OkHttpClient {
         val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
-                .connectTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.SECONDS)
-                .readTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.SECONDS)
-                .writeTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.SECONDS)
+            .connectTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.SECONDS)
+            .readTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.SECONDS)
+            .writeTimeout(REQUEST_TIMEOUT.toLong(), TimeUnit.SECONDS)
         if (BuildConfig.DEBUG) {
             val interceptor = HttpLoggingInterceptor()
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)

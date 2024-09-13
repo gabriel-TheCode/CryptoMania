@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
 class GetCoins @Inject constructor(
-        private val repository: CoinsRepository
+    private val repository: CoinsRepository
 ) {
     suspend operator fun invoke(currency: String): Flow<DataState<CoinDomainModel>> = flow {
         emit(DataState.Loading)
