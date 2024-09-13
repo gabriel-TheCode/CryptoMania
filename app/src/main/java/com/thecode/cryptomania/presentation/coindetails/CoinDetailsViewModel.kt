@@ -21,12 +21,9 @@ class CoinDetailsViewModel @Inject constructor(
 
     fun getMarketChart(coinId: String, currency: String, days: Int) {
         viewModelScope.launch {
-            _chartState.value.let { _ ->
-                getMarketChart.invoke(coinId, currency, days).collect {
-                    _chartState.value = it
-                }
+            getMarketChart.invoke(coinId, currency, days).collect {
+                _chartState.value = it
             }
         }
     }
-
 }

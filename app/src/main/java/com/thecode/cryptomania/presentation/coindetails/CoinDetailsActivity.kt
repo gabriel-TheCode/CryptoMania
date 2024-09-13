@@ -122,12 +122,18 @@ class CoinDetailsActivity : AppCompatActivity() {
             marketCapChange24hTextView.text = priceMCapChange24h.toString().addSuffix("%")
             athTextView.text = ath.toString().addPrefix("$")
             maxSupplyTextView.text = String.format("%.0f", maxSupply)
-        }
+            priceChangePercentage24h?.let { percentage ->
+                textPriceChange24hTop.text = percentage.toString().addSuffix("%").let {
+                    if (percentage < 0) it else it.addPrefix("+")
+                }
 
-
-        priceChangePercentage24h?.run {
-            if (this < 0) {
-                binding.layoutPercent.setBackgroundResource(R.drawable.rounded_background_red)
+                val backgroundResource = when {
+                    percentage < 0 -> R.drawable.rounded_background_red
+                    else -> R.drawable.rounded_background_green
+                }
+                layoutPercent.setBackgroundResource(backgroundResource)
+            } ?: run {
+                layoutPercent.setBackgroundResource(R.drawable.rounded_background_gray)
             }
         }
     }

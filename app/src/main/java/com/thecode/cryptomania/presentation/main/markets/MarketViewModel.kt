@@ -31,23 +31,18 @@ class MarketViewModel @Inject constructor(
 
     fun getCoins(currency: String) {
         viewModelScope.launch {
-            _coinState.value.let { _ ->
-                getCoins.invoke(currency).onEach {
-                    _coinState.value = it
-                }.launchIn(viewModelScope)
-            }
+            getCoins.invoke(currency).onEach {
+                _coinState.value = it
+            }.launchIn(viewModelScope)
         }
     }
 
 
     fun getExchanges() {
         viewModelScope.launch {
-            _exchangeState.value.let { _ ->
-                getExchanges.invoke().onEach {
-                    _exchangeState.value = it
-                }.launchIn(viewModelScope)
-            }
+            getExchanges.invoke().onEach {
+                _exchangeState.value = it
+            }.launchIn(viewModelScope)
         }
     }
-
 }

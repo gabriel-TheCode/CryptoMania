@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_height="match_parent"
     android:layout_width="match_parent"
+    android:layout_height="match_parent"
     tools:context=".presentation.coindetails.CoinDetailsActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -17,74 +16,72 @@
             android:layout_height="80dp"
             android:layout_margin="30dp"
             android:scaleType="fitXY"
-            app:layout_constraintTop_toTopOf="parent"
+            android:src="@drawable/ic_baseline_monetization_on_gray_24"
             app:layout_constraintStart_toStartOf="parent"
-            android:src="@drawable/ic_baseline_monetization_on_gray_24" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            app:layout_constraintTop_toTopOf="@id/coinIconImageView"
-            app:layout_constraintStart_toEndOf="@id/coinIconImageView">
+            app:layout_constraintStart_toEndOf="@id/coinIconImageView"
+            app:layout_constraintTop_toTopOf="@id/coinIconImageView">
 
             <TextView
                 android:id="@+id/coinNameTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/n_a"
-                android:gravity="center"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/ubuntu_medium"
-                android:textSize="16sp"
-                android:textColor="@color/dark_blue"/>
+                android:gravity="center"
+                android:text="@string/n_a"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/symbolTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/n_a"
-                android:textAllCaps="true"
-                android:gravity="center"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/ubuntu_regular"
-                android:textSize="16sp"
-                android:textColor="@color/dark_blue"/>
+                android:gravity="center"
+                android:text="@string/n_a"
+                android:textAllCaps="true"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/marketCapTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/market_cap"
-                android:gravity="center"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginStart="20dp"/>
+                android:gravity="center"
+                android:text="@string/market_cap" />
 
             <TextView
                 android:id="@+id/coinMarketCapTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/n_a"
-                android:gravity="center"
                 android:layout_marginStart="20dp"
-                android:textSize="16sp"
-                android:textColor="@color/dark_blue"/>
+                android:gravity="center"
+                android:text="@string/n_a"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp" />
 
         </LinearLayout>
-
 
         <TextView
             android:id="@+id/priceTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_margin="30dp"
+            android:fontFamily="@font/ubuntu_bold"
             android:text="@string/n_a"
             android:textColor="@color/dark_blue"
             android:textSize="26sp"
-            android:fontFamily="@font/ubuntu_bold"
-            android:layout_margin="30dp"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"/>
-
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <RelativeLayout
             android:id="@+id/layout_percent"
@@ -92,35 +89,34 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="30dp"
             android:layout_marginVertical="20dp"
-            app:layout_constraintTop_toBottomOf="@id/priceTextView"
+            android:background="@drawable/rounded_background_green"
             app:layout_constraintEnd_toEndOf="parent"
-            android:background="@drawable/rounded_background_green">
+            app:layout_constraintTop_toBottomOf="@id/priceTextView">
 
             <TextView
                 android:id="@+id/text_price_change24h_top"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/n_a"
-                android:textSize="12sp"
                 android:layout_margin="3dp"
-                android:textColor="@color/white"/>
+                android:text="@string/n_a"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
 
         </RelativeLayout>
-
 
         <TextView
             android:id="@+id/text_chart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/chart"
-            android:gravity="center"
-            android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/chart"
+            android:textColor="@color/dark_blue"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/dark_blue"
-            app:layout_constraintTop_toBottomOf="@id/coinIconImageView"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/coinIconImageView" />
 
         <nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup
             android:id="@+id/themedButtonGroup"
@@ -136,9 +132,9 @@
                 android:layout_height="40dp"
                 android:text="@string/day"
                 app:toggle_backgroundColor="@color/primaryCardBackgroundColor"
-                app:toggle_selectedBackgroundColor="#5e6fed"
                 app:toggle_iconGravity="center"
-                app:toggle_iconPadding="25dp"/>
+                app:toggle_iconPadding="25dp"
+                app:toggle_selectedBackgroundColor="#5e6fed" />
 
             <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                 android:id="@+id/btnWeek"
@@ -146,9 +142,9 @@
                 android:layout_height="40dp"
                 android:text="@string/week"
                 app:toggle_backgroundColor="@color/primaryCardBackgroundColor"
-                app:toggle_selectedBackgroundColor="#5e6fed"
                 app:toggle_iconGravity="center"
-                app:toggle_iconPadding="25dp"/>
+                app:toggle_iconPadding="25dp"
+                app:toggle_selectedBackgroundColor="#5e6fed" />
 
             <nl.bryanderidder.themedtogglebuttongroup.ThemedButton
                 android:id="@+id/btnMonth"
@@ -156,21 +152,20 @@
                 android:layout_height="40dp"
                 android:text="@string/month"
                 app:toggle_backgroundColor="@color/primaryCardBackgroundColor"
-                app:toggle_selectedBackgroundColor="#5e6fed"
                 app:toggle_iconGravity="center"
-                app:toggle_iconPadding="25dp"/>
+                app:toggle_iconPadding="25dp"
+                app:toggle_selectedBackgroundColor="#5e6fed" />
 
         </nl.bryanderidder.themedtogglebuttongroup.ThemedToggleButtonGroup>
 
-
         <com.anychart.AnyChartView
             android:id="@+id/layout_chart"
-            app:layout_constraintTop_toBottomOf="@id/themedButtonGroup"
             android:layout_width="match_parent"
             android:layout_height="400dp"
-            android:background="@drawable/rounded_background_red"
             android:layout_marginVertical="20dp"
-            android:orientation="vertical" />
+            android:background="@drawable/rounded_background_red"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@id/themedButtonGroup" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -179,9 +174,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
             <include
                 android:id="@+id/included"
-                layout="@layout/layout_bad_state"/>
+                layout="@layout/layout_bad_state" />
 
         </LinearLayout>
 
@@ -192,277 +188,267 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/text_stats"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/statistics"
-            android:gravity="center"
             android:layout_marginVertical="20dp"
             android:layout_marginStart="30dp"
+            android:gravity="center"
+            android:text="@string/statistics"
+            android:textColor="@color/dark_blue"
             android:textSize="16sp"
             android:textStyle="bold"
-            android:textColor="@color/dark_blue"
-            app:layout_constraintTop_toBottomOf="@id/layout_chart"
-            app:layout_constraintStart_toStartOf="parent"/>
-
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/layout_chart" />
 
         <GridLayout
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            app:layout_constraintTop_toBottomOf="@id/text_stats"
             android:layout_marginHorizontal="20dp"
-            android:columnCount="2">
+            android:columnCount="2"
+            app:layout_constraintTop_toBottomOf="@id/text_stats">
 
             <androidx.cardview.widget.CardView
-                app:cardCornerRadius="10dp"
-                android:layout_margin="10dp"
-                app:cardElevation="4dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent">
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:clickable="true"
                     android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/low_24h"
+                        android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
-                        android:fontFamily="@font/ubuntu_regular"/>
+                        android:text="@string/low_24h" />
 
                     <TextView
                         android:id="@+id/lowPrice24hTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/n_a"
-                        android:gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:textSize="18sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:gravity="center"
+                        android:text="@string/n_a"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp" />
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
-
             <androidx.cardview.widget.CardView
-                app:cardCornerRadius="10dp"
-                android:layout_margin="10dp"
-                app:cardElevation="4dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:clickable="true"
                     android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/high_24h"
+                        android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
-                        android:fontFamily="@font/ubuntu_regular"/>
+                        android:text="@string/high_24h" />
 
                     <TextView
                         android:id="@+id/highPrice24hTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/n_a"
-                        android:gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:textSize="18sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:gravity="center"
+                        android:text="@string/n_a"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                app:cardCornerRadius="10dp"
-                android:layout_margin="10dp"
-                app:cardElevation="4dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:clickable="true"
                     android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/market_cap_change_24h"
+                        android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
-                        android:fontFamily="@font/ubuntu_regular"/>
+                        android:text="@string/market_cap_change_24h" />
 
                     <TextView
                         android:id="@+id/marketCapChange24hTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/n_a"
-                        android:gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:textSize="18sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:gravity="center"
+                        android:text="@string/n_a"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                app:cardCornerRadius="10dp"
-                android:layout_margin="10dp"
-                app:cardElevation="4dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:clickable="true"
                     android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/price_change_24h"
+                        android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
-                        android:fontFamily="@font/ubuntu_regular"/>
+                        android:text="@string/price_change_24h" />
 
                     <TextView
                         android:id="@+id/priceChange24hTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="N/A"
-                        android:gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:textSize="18sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:gravity="center"
+                        android:text="@string/n_a"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp" />
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
-                app:cardCornerRadius="10dp"
-                android:layout_margin="10dp"
-                app:cardElevation="4dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:clickable="true"
                     android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="All Time High"
+                        android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
-                        android:fontFamily="@font/ubuntu_regular"/>
+                        android:text="@string/all_time_high" />
 
                     <TextView
                         android:id="@+id/athTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="N/A"
-                        android:gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:textSize="18sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:gravity="center"
+                        android:text="@string/n_a"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp" />
 
                 </LinearLayout>
-
 
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_price_percent_change24h"
-                app:cardCornerRadius="10dp"
-                android:layout_margin="10dp"
-                app:cardElevation="4dp"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
+                android:layout_columnWeight="1"
+                android:layout_margin="10dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="4dp"
                 app:layout_constraintTop_toTopOf="parent">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
                     android:clickable="true"
                     android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     android:gravity="center"
-                    android:foreground="?android:attr/selectableItemBackground">
+                    android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/max_supply"
+                        android:fontFamily="@font/ubuntu_regular"
                         android:gravity="center"
-                        android:fontFamily="@font/ubuntu_regular"/>
+                        android:text="@string/max_supply" />
 
                     <TextView
                         android:id="@+id/maxSupplyTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="@string/n_a"
-                        android:gravity="center"
                         android:fontFamily="@font/ubuntu_medium"
-                        android:textSize="18sp"
-                        android:textColor="@color/dark_blue"/>
+                        android:gravity="center"
+                        android:text="@string/n_a"
+                        android:textColor="@color/dark_blue"
+                        android:textSize="18sp" />
                 </LinearLayout>
 
-
             </androidx.cardview.widget.CardView>
-
 
         </GridLayout>
 
