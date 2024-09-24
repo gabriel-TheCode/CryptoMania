@@ -1,6 +1,6 @@
 package com.thecode.cryptomania.presentation.coindetails
 
-import android.os.Build
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -18,12 +18,13 @@ import com.anychart.graphics.vector.Stroke
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.base.BaseFragment.Companion.COIN_UI_MODEL
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.ActivityCoinDetailsBinding
 import com.thecode.cryptomania.presentation.main.home.CoinItemUiModel
+import com.thecode.cryptomania.presentation.main.markets.MarketsFragment.Companion.COIN_UI_MODEL
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
+import com.thecode.cryptomania.utils.extensions.supportsAndroid13
 import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 import dagger.hilt.android.AndroidEntryPoint
 import java.sql.Timestamp
@@ -33,23 +34,29 @@ class CoinDetailsActivity : AppCompatActivity() {
     private val viewModel: CoinDetailsViewModel by viewModels()
     private lateinit var binding: ActivityCoinDetailsBinding
     private var days: Int = 1
-    private var coin: CoinItemUiModel? = null
+    private var coinUiModel: CoinItemUiModel? = null
 
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCoinDetailsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        val view = binding.root
 
-        coin = if (supportsAndroid13()) {
-            intent.extras?.getParcelable(COIN_UI_MODEL, CoinItemUiModel::class.java)
-        } else {
-            intent.extras?.getParcelable(COIN_UI_MODEL)
-        }
-
+        setContentView(view)
         subscribeObservers()
+        getCoinData()
         initViews()
         setCoinData()
         fetchChart(days)
+    }
+
+    private fun getCoinData() {
+        coinUiModel = if (supportsAndroid13()) {
+            intent.extras?.getParcelable(COIN_UI_MODEL, CoinItemUiModel::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.extras?.getParcelable(COIN_UI_MODEL)
+        }
     }
 
     private fun initViews() {
@@ -80,39 +87,44 @@ class CoinDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun supportsAndroid13() = Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU
-
     private fun setCoinData() {
         binding.apply {
-            coin?.apply {
-                Glide.with(this@CoinDetailsActivity).load(image)
-                    .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
-                    .error(R.drawable.ic_baseline_monetization_on_gray_24)
-                    .apply(RequestOptions().centerCrop())
-                    .into(coinIconImageView)
+
+            Glide.with(this@CoinDetailsActivity).load(coinUiModel?.image)
+                .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
+                .error(R.drawable.ic_baseline_monetization_on_gray_24)
+                .apply(RequestOptions().centerCrop())
+                .into(coinIconImageView)
+
+            coinUiModel?.apply {
                 coinNameTextView.text = name
                 priceTextView.text = currentPrice.toString().addPrefix("$")
                 symbolTextView.text = symbol
                 lowPrice24hTextView.text = low24h.toString().addPrefix("$")
                 highPrice24hTextView.text = high24h.toString().addPrefix("$")
                 coinMarketCapTextView.text = marketCap.withNumberSuffix().addPrefix("$")
-                marketCapChange24hTextView.text = "%.0f".format(marketCapChange24h).addSuffix("$")
+                priceChange24hTextView.text = priceChangePercentage24h.toString().addSuffix("%")
+                marketCapChange24hTextView.text = marketCapChange24h.toString().addSuffix("%")
                 athTextView.text = ath.toString().addPrefix("$")
                 maxSupplyTextView.text = String.format("%.0f", maxSupply)
-                val priceChange = "%.2f".format(priceChangePercentage24h).addSuffix("%")
-                if (priceChangePercentage24h < 0) {
-                    textPriceChange24hTop.text = priceChange
-                    binding.layoutPercent.setBackgroundResource(R.drawable.rounded_background_red)
-                } else {
-                    textPriceChange24hTop.text = priceChange.addPrefix("+")
+                priceChangePercentage24h.let { percentage ->
+                    textPriceChange24hTop.text = percentage.toString().addSuffix("%").let {
+                        if (percentage < 0) it else it.addPrefix("+")
+                    }
+
+                    val backgroundResource = when {
+                        percentage < 0 -> R.drawable.rounded_background_red
+                        else -> R.drawable.rounded_background_green
+                    }
+                    layoutPercent.setBackgroundResource(backgroundResource)
                 }
-                priceChange24hTextView.text = textPriceChange24hTop.text
             }
+
         }
     }
 
     private fun fetchChart(days: Int) {
-        coin?.id?.let { viewModel.getMarketChart(it, getString(R.string.usd), days) }
+        coinUiModel?.id?.let { viewModel.getMarketChart(it, getString(R.string.usd), days) }
     }
 
     private fun subscribeObservers() {
@@ -160,7 +172,7 @@ class CoinDetailsActivity : AppCompatActivity() {
     private fun populateChart(items: List<List<Number>>) {
         var timestamp: Timestamp?
         var price: Number
-        val seriesData = mutableListOf<DataEntry>()
+        val seriesData: MutableList<DataEntry> = ArrayList()
 
         if (items.isEmpty()) {
             Toast.makeText(
@@ -199,7 +211,7 @@ class CoinDetailsActivity : AppCompatActivity() {
         cartesian.yAxis(0).title(getString(R.string.price_usd))
         cartesian.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
         val series: Line = cartesian.line(seriesData)
-        series.name(coin?.name)
+        series.name(coinUiModel?.name)
         series.hovered().markers().enabled(true)
         series.hovered().markers()
             .type(MarkerType.CIRCLE)
@@ -214,16 +226,7 @@ class CoinDetailsActivity : AppCompatActivity() {
         cartesian.legend().fontSize(13.0)
         cartesian.legend().padding(0.0, 0.0, 10.0, 0.0)
 
-        binding.layoutChart.apply {
-            handler.run {
-                postDelayed({
-                    series.data(seriesData)
-                }, 500)
-
-                postDelayed({
-                    setChart(cartesian)
-                }, 500)
-            }
-        }
+        series.data(seriesData)
+        binding.layoutChart.setChart(cartesian)
     }
 }

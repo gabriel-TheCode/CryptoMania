@@ -9,6 +9,7 @@ import com.thecode.cryptomania.datasource.network.mapper.MarketChartMapper
 import com.thecode.cryptomania.datasource.network.model.CoinObjectResponse
 import com.thecode.cryptomania.datasource.network.model.ExchangeObjectResponse
 import com.thecode.cryptomania.datasource.network.model.MarketChartObjectResponse
+import com.thecode.cryptomania.presentation.main.home.CoinItemDomainToUiModelMapper
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -35,5 +36,11 @@ object MapperModule {
     @Provides
     fun provideMarketChartResponseMapper(): EntityMapper<MarketChartObjectResponse, List<List<Number>>> {
         return MarketChartMapper()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCoinUiModelMapper(): CoinItemDomainToUiModelMapper {
+        return CoinItemDomainToUiModelMapper()
     }
 }

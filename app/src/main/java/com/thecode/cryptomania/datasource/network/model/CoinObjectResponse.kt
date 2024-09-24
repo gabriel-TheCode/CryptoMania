@@ -18,42 +18,42 @@ class CoinObjectResponse(
     val image: String,
 
     @SerializedName("current_price")
-    val current_price: Float,
+    val currentPrice: Float,
 
     @SerializedName("market_cap")
-    val market_cap: Float,
+    val marketCap: Float,
 
     @SerializedName("market_cap_rank")
-    val market_cap_rank: Int,
+    val marketCapRank: Int,
 
     @SerializedName("fully_diluted_valuation")
-    var fully_diluted_valuation: Float? = null,
+    var fullyDilutedValuation: Float? = null,
 
     @SerializedName("total_volume")
-    val total_volume: Float,
+    val totalVolume: Float,
 
     @SerializedName("high_24h")
-    val high_24h: Float,
+    val high24h: Float,
 
     @SerializedName("low_24h")
-    val low_24h: Float,
+    val low24h: Float,
 
     @SerializedName("price_change_24h")
-    val price_change_24h: Float,
+    val priceChange24h: Float,
 
     @SerializedName("price_change_percentage_24h")
-    val price_change_percentage_24h: Float,
+    val priceChangePercentage24h: Float,
 
     @SerializedName("market_cap_change_24h")
-    val market_cap_change_24h: Float,
+    val marketCapChange24h: Float,
 
     @SerializedName("market_cap_change_percentage_24h")
-    val market_cap_change_percentage_24h: Float,
+    val marketCapChangePercentage24h: Float,
 
     @SerializedName("ath")
     val ath: Float,
 
     @SerializedName("max_supply")
-    val max_supply: Float,
+    val maxSupply: Float,
 
     )

@@ -11,16 +11,17 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.databinding.AdapterMarketCryptoBinding
-import com.thecode.cryptomania.presentation.main.home.CoinCardOnClickListener
 import com.thecode.cryptomania.presentation.main.home.CoinItemUiModel
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
 import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 
-class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
+class MarketRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemUiModel) -> Unit) :
     RecyclerView.Adapter<MarketRecyclerViewAdapter.CoinViewHolder>() {
+
     private lateinit var binding: AdapterMarketCryptoBinding
     private var coinsList: List<CoinItemUiModel> = listOf()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         binding = AdapterMarketCryptoBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -36,29 +37,29 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
 
     override fun onBindViewHolder(holder: CoinViewHolder, position: Int) {
         val coin = coinsList[position]
+
         holder.apply {
-            tvCoinName.text = coin.symbol
-            tvMarketCap.text = coin.marketCap.withNumberSuffix().addPrefix("$")
-            if (coin.priceChangePercentage24h > 0) {
-                tvCoinPrice.setTextColor(
-                    ContextCompat.getColor(
-                        holder.container.context,
-                        R.color.md_green_400
-                    )
+            val (colorRes, backgroundRes, sign) = when {
+                coin.priceChangePercentage24h > 0 -> Triple(
+                    R.color.md_green_400,
+                    R.drawable.rounded_background_green,
+                    "+"
                 )
-                layoutPercentage.setBackgroundResource(R.drawable.rounded_background_green)
-            } else {
-                layoutPercentage.setBackgroundResource(R.drawable.rounded_background_red)
-                tvCoinPrice.setTextColor(
-                    ContextCompat.getColor(
-                        holder.container.context,
-                        R.color.md_red_400
-                    )
+
+                else -> Triple(
+                    R.color.md_red_400,
+                    R.drawable.rounded_background_red,
+                    ""
                 )
             }
+
+            tvCoinName.text = coin.symbol
+            tvMarketCap.text = coin.marketCap.withNumberSuffix().addPrefix("$")
+            tvCoinPrice.setTextColor(ContextCompat.getColor(container.context, colorRes))
             tvCoinPrice.text = coin.currentPrice.toString().addPrefix("$")
-            val percent = String.format("%.2f", coin.priceChangePercentage24h)
-            tvCoinPercentage.text = percent.addSuffix("%")
+            layoutPercentage.setBackgroundResource(backgroundRes)
+            tvCoinPercentage.text =
+                String.format("%s%.2f", sign, coin.priceChangePercentage24h).addSuffix("%")
 
             Glide.with(holder.itemView.context).load(coin.image)
                 .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
@@ -67,12 +68,12 @@ class MarketRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
                 .into(image)
 
             container.setOnClickListener {
-                listener.openCoinDetails(coin)
+                onOpenCoinDetails(coin)
             }
         }
     }
 
-    fun setCoinListItems(coinsList: ArrayList<CoinItemUiModel>) {
+    fun setCoinListItems(coinsList: List<CoinItemUiModel>) {
         this.coinsList = emptyList()
         this.coinsList = coinsList
         notifyDataSetChanged()

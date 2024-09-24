@@ -26,7 +26,7 @@ interface CoinGeckoApiRemoteService {
     //endregion
 }
 
-class CoinGeckoApiRemoteServiceImpl constructor(
+class CoinGeckoApiRemoteServiceImpl(
     private val coinGeckoApi: CoinGeckoApi
 ) : CoinGeckoApiRemoteService {
 

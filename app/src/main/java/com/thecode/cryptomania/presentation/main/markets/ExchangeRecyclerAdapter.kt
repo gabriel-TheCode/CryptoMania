@@ -9,14 +9,13 @@ import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.ExchangeItemDomainModel
 import com.thecode.cryptomania.databinding.AdapterExchangeCryptoBinding
 
-interface ExchangeOnClickListener {
-    fun openExchangeDetails(exchange: ExchangeItemDomainModel)
-}
 
-class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener) :
+class ExchangeRecyclerViewAdapter(private val onOpenExchangeDetails: (coin: ExchangeItemDomainModel) -> Unit) :
     RecyclerView.Adapter<ExchangeRecyclerViewAdapter.ExchangeViewHolder>() {
+
     private lateinit var binding: AdapterExchangeCryptoBinding
     private var exchangesList: List<ExchangeItemDomainModel> = listOf()
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ExchangeViewHolder {
         binding = AdapterExchangeCryptoBinding.inflate(
             LayoutInflater.from(parent.context),
@@ -46,12 +45,12 @@ class ExchangeRecyclerViewAdapter(private val listener: ExchangeOnClickListener)
                 .into(image)
 
             container.setOnClickListener {
-                listener.openExchangeDetails(exchange)
+                onOpenExchangeDetails(exchange)
             }
         }
     }
 
-    fun setExchangeListItems(exchangesList: ArrayList<ExchangeItemDomainModel>) {
+    fun setExchangeListItems(exchangesList: List<ExchangeItemDomainModel>) {
         this.exchangesList = emptyList()
         this.exchangesList = exchangesList
         notifyDataSetChanged()

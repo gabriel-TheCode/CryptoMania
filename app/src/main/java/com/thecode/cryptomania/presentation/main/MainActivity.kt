@@ -10,25 +10,38 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private lateinit var pagerAdapter: BottomNavPagerAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+
         initViews()
+        setUpPager()
+        setContentView(binding.root)
     }
 
     private fun initViews() {
         binding.apply {
-            viewPager.apply {
-                offscreenPageLimit = 3
-                adapter = BottomNavPagerAdapter(this@MainActivity)
-                isUserInputEnabled = false
-                setPageTransformer(FadePageTransformer())
-            }
             bottomNavigationBar.setNavigationChangeListener { _, position ->
-                viewPager.setCurrentItem(position, true)
+                viewPager.setCurrentItem(
+                    position,
+                    true
+                )
             }
+            pagerAdapter = BottomNavPagerAdapter(this@MainActivity)
         }
+
+    }
+
+    private fun setUpPager() {
+        binding.viewPager.apply {
+            offscreenPageLimit = 3
+            adapter = pagerAdapter
+            isUserInputEnabled = false
+            setPageTransformer(FadePageTransformer())
+        }
+
     }
 }

@@ -18,20 +18,37 @@ class OnboardingActivity : AppCompatActivity() {
     private val onBoardingAdapter = OnBoardingAdapter()
     private lateinit var binding: ActivityOnboardingBinding
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityOnboardingBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
-        setUpViews()
+        setContentView(binding.root)
+
+        initViews()
         setUpObserver()
+
         viewModel.getOnBoardingSlide()
     }
 
-    private fun setUpViews() {
+    private fun initViews() {
         binding.apply {
+            viewPager.offscreenPageLimit = 1
+            viewPager.adapter = onBoardingAdapter
+            TabLayoutMediator(pageIndicator, viewPager) { _, _ -> }.attach()
+            viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+                override fun onPageSelected(position: Int) {
+                    super.onPageSelected(position)
+                    if (position == 2) {
+                        btnNextStep.text = getText(R.string.finish)
+                    } else {
+                        btnNextStep.text = getText(R.string.next)
+                    }
+                }
+            })
+
             btnNextStep.setOnClickListener {
                 if (getNextItem() > getAdapterSize()) {
+                    viewModel.setOnboardingCompleted()
                     launchMainScreen()
                 } else {
                     viewPager.setCurrentItem(getNextItem(), true)
@@ -41,23 +58,6 @@ class OnboardingActivity : AppCompatActivity() {
             textSkip.setOnClickListener {
                 viewPager.currentItem = getAdapterSize()
             }
-        }
-        setUpPager()
-    }
-
-    private fun setUpPager() {
-        binding.apply {
-            viewPager.apply {
-                adapter = onBoardingAdapter
-                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
-                    override fun onPageSelected(position: Int) {
-                        super.onPageSelected(position)
-                        btnNextStep.text =
-                            if (position == 2) getString(R.string.finish) else getString(R.string.next)
-                    }
-                })
-            }
-            TabLayoutMediator(pageIndicator, viewPager) { _, _ -> }.attach()
         }
     }
 
@@ -72,8 +72,8 @@ class OnboardingActivity : AppCompatActivity() {
     }
 
     private fun launchMainScreen() {
-        viewModel.setOnboardingCompleted()
         val intent = Intent(applicationContext, OnboardingFinishActivity::class.java)
+        overridePendingTransition(R.anim.enter_from_left, R.anim.exit_from_right)
         startActivity(intent)
         finishAffinity()
     }
