@@ -10,17 +10,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.databinding.AdapterMarketCryptoBinding
+import com.thecode.cryptomania.presentation.main.home.CoinItemUiModel
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
 import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 
-class MarketRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemDomainModel) -> Unit) :
+class MarketRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemUiModel) -> Unit) :
     RecyclerView.Adapter<MarketRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterMarketCryptoBinding
-    private var coinsList: List<CoinItemDomainModel> = listOf()
+    private var coinsList: List<CoinItemUiModel> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         binding = AdapterMarketCryptoBinding.inflate(
@@ -73,7 +73,7 @@ class MarketRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemDo
         }
     }
 
-    fun setCoinListItems(coinsList: ArrayList<CoinItemDomainModel>) {
+    fun setCoinListItems(coinsList: List<CoinItemUiModel>) {
         this.coinsList = emptyList()
         this.coinsList = coinsList
         notifyDataSetChanged()

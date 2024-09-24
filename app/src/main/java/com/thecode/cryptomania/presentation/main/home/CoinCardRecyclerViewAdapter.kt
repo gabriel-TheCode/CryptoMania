@@ -7,18 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.databinding.AdapterTopCryptoBinding
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
 import kotlin.math.min
 
 
-class CoinCardRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemDomainModel) -> Unit) :
+class CoinCardRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemUiModel) -> Unit) :
     RecyclerView.Adapter<CoinCardRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterTopCryptoBinding
-    private var coinsList: List<CoinItemDomainModel> = listOf()
+    private var coinsList: List<CoinItemUiModel> = listOf()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
         binding =
@@ -66,7 +65,7 @@ class CoinCardRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItem
         }
     }
 
-    fun setCoinListItems(coinsList: List<CoinItemDomainModel>) {
+    fun setCoinListItems(coinsList: List<CoinItemUiModel>) {
         this.coinsList = emptyList()
         this.coinsList = coinsList
         notifyDataSetChanged()

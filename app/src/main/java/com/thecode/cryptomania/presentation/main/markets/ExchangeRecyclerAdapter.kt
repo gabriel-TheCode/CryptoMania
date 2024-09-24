@@ -50,7 +50,7 @@ class ExchangeRecyclerViewAdapter(private val onOpenExchangeDetails: (coin: Exch
         }
     }
 
-    fun setExchangeListItems(exchangesList: ArrayList<ExchangeItemDomainModel>) {
+    fun setExchangeListItems(exchangesList: List<ExchangeItemDomainModel>) {
         this.exchangesList = emptyList()
         this.exchangesList = exchangesList
         notifyDataSetChanged()
