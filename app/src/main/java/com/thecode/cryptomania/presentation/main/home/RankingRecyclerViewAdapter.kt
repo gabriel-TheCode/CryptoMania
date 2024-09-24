@@ -11,18 +11,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.databinding.AdapterRankingCryptoBinding
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
 import kotlin.math.min
 
 
-class RankingRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemDomainModel) -> Unit) :
+class RankingRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemUiModel) -> Unit) :
     RecyclerView.Adapter<RankingRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterRankingCryptoBinding
-    private var coinsList: List<CoinItemDomainModel> = listOf()
+    private var coinsList: List<CoinItemUiModel> = listOf()
     private val limit = 10
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CoinViewHolder {
@@ -76,7 +75,7 @@ class RankingRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemD
         }
     }
 
-    fun setCoinListItems(coinsList: List<CoinItemDomainModel>) {
+    fun setCoinListItems(coinsList: List<CoinItemUiModel>) {
         this.coinsList = emptyList()
         this.coinsList = coinsList
         notifyDataSetChanged()

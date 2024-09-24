@@ -20,8 +20,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.ActivityCoinDetailsBinding
+import com.thecode.cryptomania.presentation.main.home.CoinItemUiModel
+import com.thecode.cryptomania.presentation.main.markets.MarketsFragment.Companion.COIN_UI_MODEL
 import com.thecode.cryptomania.utils.extensions.addPrefix
 import com.thecode.cryptomania.utils.extensions.addSuffix
+import com.thecode.cryptomania.utils.extensions.supportsAndroid13
 import com.thecode.cryptomania.utils.extensions.withNumberSuffix
 import dagger.hilt.android.AndroidEntryPoint
 import java.sql.Timestamp
@@ -30,20 +33,8 @@ import java.sql.Timestamp
 class CoinDetailsActivity : AppCompatActivity() {
     private val viewModel: CoinDetailsViewModel by viewModels()
     private lateinit var binding: ActivityCoinDetailsBinding
-    private lateinit var id: String
-    private lateinit var name: String
-    private lateinit var symbol: String
-    private lateinit var image: String
-    private var currentPrice: Float? = 0F
-    private var high24h: Float? = 0F
-    private var low24h: Float? = 0F
-    private var marketCap: Float? = 0F
-    private var totalVolume: Float? = 0F
-    private var priceChangePercentage24h: Float? = 0F
-    private var priceMCapChange24h: Float? = 0F
-    private var ath: Float? = 0F
-    private var maxSupply: Float? = 0F
     private var days: Int = 1
+    private var coinUiModel: CoinItemUiModel? = null
 
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,6 +48,15 @@ class CoinDetailsActivity : AppCompatActivity() {
         initViews()
         setCoinData()
         fetchChart(days)
+    }
+
+    private fun getCoinData() {
+        coinUiModel = if (supportsAndroid13()) {
+            intent.extras?.getParcelable(COIN_UI_MODEL, CoinItemUiModel::class.java)
+        } else {
+            @Suppress("DEPRECATION")
+            intent.extras?.getParcelable(COIN_UI_MODEL)
+        }
     }
 
     private fun initViews() {
@@ -87,59 +87,44 @@ class CoinDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun getCoinData() {
-        // RECEIVE OUR DATA
-        val i = intent
-        id = i.extras?.getString("id").toString()
-        name = i.extras?.getString("name").toString()
-        symbol = i.extras?.getString("symbol").toString()
-        image = i.extras?.getString("image").toString()
-        currentPrice = i.extras?.getFloat("currentPrice")
-        high24h = i.extras?.getFloat("high24h")
-        low24h = i.extras?.getFloat("low24h")
-        marketCap = i.extras?.getFloat("marketCap")
-        totalVolume = i.extras?.getFloat("totalVolume")
-        priceChangePercentage24h = i.extras?.getFloat("priceChangePercentage24h")
-        priceMCapChange24h = i.extras?.getFloat("priceMcapChangePercentage24h")
-        ath = i.extras?.getFloat("ath")
-        maxSupply = i.extras?.getFloat("maxSupply")
-    }
-
     private fun setCoinData() {
         binding.apply {
-            Glide.with(this@CoinDetailsActivity).load(image)
+
+            Glide.with(this@CoinDetailsActivity).load(coinUiModel?.image)
                 .placeholder(R.drawable.ic_baseline_monetization_on_gray_24)
                 .error(R.drawable.ic_baseline_monetization_on_gray_24)
                 .apply(RequestOptions().centerCrop())
                 .into(coinIconImageView)
-            coinNameTextView.text = name
-            priceTextView.text = currentPrice.toString().addPrefix("$")
-            symbolTextView.text = symbol
-            lowPrice24hTextView.text = low24h.toString().addPrefix("$")
-            highPrice24hTextView.text = high24h.toString().addPrefix("$")
-            coinMarketCapTextView.text = marketCap?.withNumberSuffix()?.addPrefix("$") ?: "N/A"
-            priceChange24hTextView.text = priceChangePercentage24h.toString().addSuffix("%")
-            marketCapChange24hTextView.text = priceMCapChange24h.toString().addSuffix("%")
-            athTextView.text = ath.toString().addPrefix("$")
-            maxSupplyTextView.text = String.format("%.0f", maxSupply)
-            priceChangePercentage24h?.let { percentage ->
-                textPriceChange24hTop.text = percentage.toString().addSuffix("%").let {
-                    if (percentage < 0) it else it.addPrefix("+")
-                }
 
-                val backgroundResource = when {
-                    percentage < 0 -> R.drawable.rounded_background_red
-                    else -> R.drawable.rounded_background_green
+            coinUiModel?.apply {
+                coinNameTextView.text = name
+                priceTextView.text = currentPrice.toString().addPrefix("$")
+                symbolTextView.text = symbol
+                lowPrice24hTextView.text = low24h.toString().addPrefix("$")
+                highPrice24hTextView.text = high24h.toString().addPrefix("$")
+                coinMarketCapTextView.text = marketCap.withNumberSuffix().addPrefix("$")
+                priceChange24hTextView.text = priceChangePercentage24h.toString().addSuffix("%")
+                marketCapChange24hTextView.text = marketCapChange24h.toString().addSuffix("%")
+                athTextView.text = ath.toString().addPrefix("$")
+                maxSupplyTextView.text = String.format("%.0f", maxSupply)
+                priceChangePercentage24h.let { percentage ->
+                    textPriceChange24hTop.text = percentage.toString().addSuffix("%").let {
+                        if (percentage < 0) it else it.addPrefix("+")
+                    }
+
+                    val backgroundResource = when {
+                        percentage < 0 -> R.drawable.rounded_background_red
+                        else -> R.drawable.rounded_background_green
+                    }
+                    layoutPercent.setBackgroundResource(backgroundResource)
                 }
-                layoutPercent.setBackgroundResource(backgroundResource)
-            } ?: run {
-                layoutPercent.setBackgroundResource(R.drawable.rounded_background_gray)
             }
+
         }
     }
 
     private fun fetchChart(days: Int) {
-        viewModel.getMarketChart(id, getString(R.string.usd), days)
+        coinUiModel?.id?.let { viewModel.getMarketChart(it, getString(R.string.usd), days) }
     }
 
     private fun subscribeObservers() {
@@ -226,7 +211,7 @@ class CoinDetailsActivity : AppCompatActivity() {
         cartesian.yAxis(0).title(getString(R.string.price_usd))
         cartesian.xAxis(0).labels().padding(5.0, 5.0, 5.0, 5.0)
         val series: Line = cartesian.line(seriesData)
-        series.name(name)
+        series.name(coinUiModel?.name)
         series.hovered().markers().enabled(true)
         series.hovered().markers()
             .type(MarkerType.CIRCLE)

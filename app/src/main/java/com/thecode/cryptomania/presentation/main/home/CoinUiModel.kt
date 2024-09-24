@@ -1,10 +1,8 @@
 package com.thecode.cryptomania.presentation.main.home
 
-import kotlinx.android.parcel.Parcelize
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
 
-data class CoinUiModel(
-    val coins: List<CoinItemUiModel>
-)
 
 @Parcelize
 data class CoinItemUiModel(
@@ -25,4 +23,4 @@ data class CoinItemUiModel(
     val marketCapChangePercentage24h: Float,
     val ath: Float,
     val maxSupply: Float
-)
+) : Parcelable

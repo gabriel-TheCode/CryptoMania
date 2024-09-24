@@ -1,25 +1,27 @@
 package com.thecode.cryptomania.presentation.main.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.base.BaseFragment
-import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.databinding.FragmentHomeBinding
 import com.thecode.cryptomania.utils.AppConstants.DEFAULT_CURRENCY
+import com.thecode.cryptomania.utils.NavigationManager
+import com.thecode.cryptomania.utils.showErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter
 
 
 @AndroidEntryPoint
-class HomeFragment : BaseFragment() {
+class HomeFragment : Fragment() {
 
     private val viewModel: HomeViewModel by viewModels()
 
@@ -56,6 +58,7 @@ class HomeFragment : BaseFragment() {
         binding.apply {
             if (coinCardRecyclerAdapter.itemCount > 0) {
                 showErrorDialog(
+                    requireActivity(),
                     getString(R.string.network_error),
                     getString(R.string.check_internet)
                 )
@@ -74,6 +77,7 @@ class HomeFragment : BaseFragment() {
         binding.apply {
             if (coinCardRecyclerAdapter.itemCount > 0) {
                 showErrorDialog(
+                    requireActivity(),
                     getString(R.string.error),
                     getString(R.string.service_unavailable)
                 )
@@ -103,7 +107,7 @@ class HomeFragment : BaseFragment() {
                 is DataState.Success -> {
                     hideBadStateLayout()
                     hideLoadingProgress()
-                    populateRecyclerView(it.data.coins)
+                    populateRecyclerView(it.data)
                 }
 
                 is DataState.Loading -> {
@@ -128,11 +132,11 @@ class HomeFragment : BaseFragment() {
 
     private fun initRecyclerViews() {
         coinCardRecyclerAdapter = CoinCardRecyclerViewAdapter(onOpenCoinDetails = {
-            openCoinDetails(it)
+            openCoinDetails(requireActivity(), it)
         })
 
         rankingRecyclerAdapter = RankingRecyclerViewAdapter(onOpenCoinDetails = {
-            openCoinDetails(it)
+            openCoinDetails(requireActivity(), it)
         })
 
         binding.apply {
@@ -165,7 +169,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun populateRecyclerView(coins: List<CoinItemDomainModel>) {
+    private fun populateRecyclerView(coins: List<CoinItemUiModel>) {
         binding.apply {
             if (coins.isEmpty()) {
                 showBadStateLayout()
@@ -193,7 +197,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private fun openCoinDetails(coin: CoinItemDomainModel) {
-        openCoinDetailsActivity(coin)
+    private fun openCoinDetails(context: Context, coin: CoinItemUiModel) {
+        NavigationManager().openCoinDetails(context, coin)
     }
 }

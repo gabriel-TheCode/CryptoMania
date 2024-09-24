@@ -17,14 +17,11 @@ class SplashViewModel @Inject constructor(
     val state: LiveData<Boolean>
         get() = _state
 
-    fun isOnboardingCompleted(): Boolean {
+    fun getOnboardingStatus() {
         viewModelScope.launch {
-            _state.value.let { _ ->
-                isOnboardingCompleted.invoke().collect {
-                    _state.value = it
-                }
+            isOnboardingCompleted.invoke().collect {
+                _state.value = it
             }
         }
-        return _state.value == true
     }
 }

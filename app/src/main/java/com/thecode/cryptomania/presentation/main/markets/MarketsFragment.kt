@@ -6,22 +6,24 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.view.isVisible
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.thecode.cryptomania.R
-import com.thecode.cryptomania.base.BaseFragment
-import com.thecode.cryptomania.core.domain.CoinItemDomainModel
 import com.thecode.cryptomania.core.domain.DataState
 import com.thecode.cryptomania.core.domain.ExchangeItemDomainModel
 import com.thecode.cryptomania.databinding.FragmentMarketsBinding
+import com.thecode.cryptomania.presentation.main.home.CoinItemUiModel
 import com.thecode.cryptomania.utils.AppConstants.DEFAULT_CURRENCY
+import com.thecode.cryptomania.utils.NavigationManager
+import com.thecode.cryptomania.utils.showErrorDialog
 import dagger.hilt.android.AndroidEntryPoint
 import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 
 
 @AndroidEntryPoint
-class MarketsFragment : BaseFragment() {
+class MarketsFragment : Fragment() {
 
     // ViewModel
     private val viewModel: MarketViewModel by viewModels()
@@ -70,6 +72,7 @@ class MarketsFragment : BaseFragment() {
         binding.apply {
             if (marketRecyclerAdapter.itemCount > 0 || exchangeRecyclerAdapter.itemCount > 0) {
                 showErrorDialog(
+                    requireActivity(),
                     getString(R.string.network_error),
                     getString(R.string.check_internet)
                 )
@@ -86,6 +89,7 @@ class MarketsFragment : BaseFragment() {
     private fun showBadStateLayout() {
         if (marketRecyclerAdapter.itemCount > 0 || exchangeRecyclerAdapter.itemCount > 0) {
             showErrorDialog(
+                requireActivity(),
                 getString(R.string.error),
                 getString(R.string.service_unavailable)
             )
@@ -117,7 +121,7 @@ class MarketsFragment : BaseFragment() {
                         hideBadStateLayout()
                         hideLoadingProgress()
                         showRecyclerViewMarket(true)
-                        populateRecyclerViewMarket(it.data.coins)
+                        populateRecyclerViewMarket(it.data)
                     }
 
                     is DataState.Loading -> {
@@ -179,7 +183,7 @@ class MarketsFragment : BaseFragment() {
         binding.apply {
             //region Crypto Market
             marketRecyclerAdapter = MarketRecyclerViewAdapter(onOpenCoinDetails = {
-                openCoinDetails(it)
+                NavigationManager().openCoinDetails(requireActivity(), it)
             })
             recyclerviewCryptoMarkets.apply {
                 layoutManager = LinearLayoutManager(activity)
@@ -195,7 +199,7 @@ class MarketsFragment : BaseFragment() {
 
             //region Exchanges
             exchangeRecyclerAdapter = ExchangeRecyclerViewAdapter(onOpenExchangeDetails = {
-                openExchangeDetails(it)
+                NavigationManager().openExchangeDetailsActivity(requireActivity(), it)
             })
             binding.recyclerviewCryptoExchanges.apply {
                 layoutManager = LinearLayoutManager(activity)
@@ -231,17 +235,12 @@ class MarketsFragment : BaseFragment() {
 
     }
 
-    private fun populateRecyclerViewMarket(coins: List<CoinItemDomainModel>) {
+    private fun populateRecyclerViewMarket(coins: List<CoinItemUiModel>) {
         if (coins.isEmpty()) {
             showBadStateLayout()
         } else {
-            val coinArrayList: ArrayList<CoinItemDomainModel> = ArrayList()
-            for (i in coins.indices) {
-                val coin = coins[i]
-                coinArrayList.add(coin)
-                marketRecyclerAdapter.setCoinListItems(coinArrayList)
-                binding.recyclerviewCryptoMarkets.scheduleLayoutAnimation()
-            }
+            marketRecyclerAdapter.setCoinListItems(coins)
+            binding.recyclerviewCryptoMarkets.scheduleLayoutAnimation()
         }
     }
 
@@ -249,24 +248,13 @@ class MarketsFragment : BaseFragment() {
         if (exchanges.isEmpty()) {
             showBadStateLayout()
         } else {
-            val exchangeArrayList: ArrayList<ExchangeItemDomainModel> = ArrayList()
-            for (i in exchanges.indices) {
-                val exchange = exchanges[i]
-                exchangeArrayList.add(exchange)
-                exchangeRecyclerAdapter.setExchangeListItems(exchangeArrayList)
-                binding.recyclerviewCryptoMarkets.scheduleLayoutAnimation()
-            }
+            exchangeRecyclerAdapter.setExchangeListItems(exchanges)
+            binding.recyclerviewCryptoMarkets.scheduleLayoutAnimation()
         }
     }
 
-
-    fun openCoinDetails(coin: CoinItemDomainModel) {
-        openCoinDetailsActivity(coin)
+    companion object {
+        const val COIN_UI_MODEL = "coinUiModel"
     }
-
-    fun openExchangeDetails(exchange: ExchangeItemDomainModel) {
-        openExchangeDetailsActivity(exchange)
-    }
-
 
 }
