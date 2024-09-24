@@ -15,7 +15,7 @@ import com.thecode.cryptomania.utils.extensions.formatFloat
 import kotlin.math.min
 
 
-class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) :
+class RankingRecyclerViewAdapter(private val onOpenCoinDetails: (coin: CoinItemUiModel) -> Unit) :
     RecyclerView.Adapter<RankingRecyclerViewAdapter.CoinViewHolder>() {
 
     private lateinit var binding: AdapterRankingCryptoBinding
@@ -69,7 +69,7 @@ class RankingRecyclerViewAdapter(private val listener: CoinCardOnClickListener) 
             .into(holder.image)
 
         holder.container.setOnClickListener {
-            listener.openCoinDetails(coin)
+            onOpenCoinDetails(coin)
         }
     }
 

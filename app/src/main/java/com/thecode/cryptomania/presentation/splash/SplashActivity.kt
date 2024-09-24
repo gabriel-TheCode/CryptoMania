@@ -6,8 +6,6 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.LinearInterpolator
 import android.view.animation.RotateAnimation
-import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.thecode.cryptomania.R
@@ -15,38 +13,26 @@ import com.thecode.cryptomania.databinding.ActivitySplashBinding
 import com.thecode.cryptomania.presentation.main.MainActivity
 import com.thecode.cryptomania.presentation.onboarding.OnboardingActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class SplashActivity : AppCompatActivity() {
 
     private val viewModel: SplashViewModel by viewModels()
-    private val activityScope = CoroutineScope(Dispatchers.Main)
 
     private lateinit var binding: ActivitySplashBinding
-    private lateinit var logo: ImageView
-    private lateinit var layoutImage: LinearLayout
-    private lateinit var layouTitle: LinearLayout
-    private lateinit var upToDown: Animation
-    private lateinit var downToUp: Animation
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySplashBinding.inflate(layoutInflater)
-        val view = binding.root
-        setContentView(view)
+        setContentView(binding.root)
 
-        logo = binding.imageLogo
-        layoutImage = binding.layoutImageContent
-        layouTitle = binding.layoutText
-        downToUp = AnimationUtils.loadAnimation(this, R.anim.down_to_up)
-        upToDown = AnimationUtils.loadAnimation(this, R.anim.up_to_down)
+        setUpObserver()
+        setUpAnimation()
+    }
 
-        layoutImage.animation = upToDown
-        layouTitle.animation = downToUp
-
+    private fun setUpAnimation() {
+        binding.layoutImageContent.animation = AnimationUtils.loadAnimation(this, R.anim.up_to_down)
+        binding.layoutText.animation = AnimationUtils.loadAnimation(this, R.anim.down_to_up)
 
         val rotate = RotateAnimation(
             0f,
@@ -58,18 +44,28 @@ class SplashActivity : AppCompatActivity() {
         )
         rotate.duration = 3000
         rotate.interpolator = LinearInterpolator()
-        logo.startAnimation(rotate)
+        binding.imageLogo.startAnimation(rotate)
+        rotate.setAnimationListener(object : Animation.AnimationListener {
+            override fun onAnimationStart(animation: Animation?) = Unit
 
-        activityScope.launch {
-            delay(4500)
-            val intent: Intent = if (viewModel.isOnboardingCompleted()) {
-                Intent(applicationContext, OnboardingActivity::class.java)
-            } else {
+            override fun onAnimationRepeat(animation: Animation?) = Unit
+
+            override fun onAnimationEnd(animation: Animation?) {
+                viewModel.getOnboardingStatus()
+            }
+        })
+    }
+
+    private fun setUpObserver() {
+        viewModel.state.observe(this) { isOnboardingCompleted ->
+            intent = if (isOnboardingCompleted == true) {
                 Intent(applicationContext, MainActivity::class.java)
+            } else {
+                Intent(applicationContext, OnboardingActivity::class.java)
             }
             finish()
             startActivity(intent)
-
         }
     }
+
 }
