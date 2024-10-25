@@ -1,9 +1,15 @@
 # CryptoMania
- A cryptocurrency data aggregator that tracks price, volume, social stats.
+
+A cryptocurrency data aggregator that tracks price, volume, social stats.
 
 [![forthebadge](https://forthebadge.com/images/badges/built-for-android.svg)](https://android.com)
 [![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://gabrielthecode.com)
 
+ <a href="https://play.google.com/store/apps/details?id=com.thecode.cryptomania">
+    <img alt="Get it on Google Play"
+        height="80"
+        src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
+</a>
 
 <a name="description"></a>
 
@@ -25,7 +31,8 @@ Design & implement an Android application based on [CoinGeckoAPI](https://coinge
 ## Specifications
 
 - [x] Splashcreen with custom animation
-- [x] Retrieve cryto currencies data, exchanges, Market cap &amp; rank, prices, and exchange volumes from [CoinGecko API](https://coingecko.com/en/api).
+- [x] Retrieve cryto currencies data, exchanges, Market cap &amp; rank, prices, and exchange volumes
+  from [CoinGecko API](https://coingecko.com/en/api).
 - [x] Market chart
 - [x] Clean design
 - [x] Descriptive Git history
@@ -53,7 +60,6 @@ Design & implement an Android application based on [CoinGeckoAPI](https://coinge
 - [RecyclerView Animators](https://github.com/wasabeef/recyclerview-animators)
 - [AnyChart](https://github.com/AnyChart/AnyChart-Android)
 
-
 <a name="requirements"></a>
 
 ## Requirements
@@ -71,7 +77,8 @@ Design & implement an Android application based on [CoinGeckoAPI](https://coinge
 
 ## Contribute
 
-Let's develop with collaborations. We would love to have contributions by raising issues and opening PRs. Filing an issue before PR is must.
+Let's develop with collaborations. We would love to have contributions by raising issues and opening
+PRs. Filing an issue before PR is must.
 See [Contributing Guidelines](CONTRIBUTING.md).
 
 <a name="license"></a>

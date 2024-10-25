@@ -35,25 +35,23 @@ class MarketViewModel @Inject constructor(
 
     fun getCoins(currency: String) {
         viewModelScope.launch {
-            _coinState.value.let { _ ->
-                getCoins.invoke(currency).onEach { dataState ->
-                    val uiDataState = when (dataState) {
-                        is DataState.Success -> {
-                            val uiModelList =
-                                coinItemDomainToUiModelMapper.toList(dataState.data.coins)
-                            DataState.Success(uiModelList)
-                        }
-
-                        is DataState.Error -> {
-                            DataState.Error(dataState.exception)
-                        }
-
-                        is DataState.Loading -> {
-                            DataState.Loading
-                        }
+            getCoins.invoke(currency).collect { dataState ->
+                val uiDataState = when (dataState) {
+                    is DataState.Success -> {
+                        val uiModelList =
+                            coinItemDomainToUiModelMapper.toList(dataState.data.coins)
+                        DataState.Success(uiModelList)
                     }
-                    _coinState.value = uiDataState
-                }.launchIn(viewModelScope)
+
+                    is DataState.Error -> {
+                        DataState.Error(dataState.exception)
+                    }
+
+                    is DataState.Loading -> {
+                        DataState.Loading
+                    }
+                }
+                _coinState.value = uiDataState
             }
         }
     }
