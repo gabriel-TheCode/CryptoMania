@@ -33,8 +33,8 @@ class MarketsFragment : Fragment() {
     private val binding get() = _binding!!
 
     // Views
-    lateinit var marketRecyclerAdapter: MarketRecyclerViewAdapter
-    lateinit var exchangeRecyclerAdapter: ExchangeRecyclerViewAdapter
+    private lateinit var marketRecyclerAdapter: MarketRecyclerViewAdapter
+    private lateinit var exchangeRecyclerAdapter: ExchangeRecyclerViewAdapter
 
 
     override fun onCreateView(
@@ -114,32 +114,31 @@ class MarketsFragment : Fragment() {
 
     private fun subscribeObservers() {
         viewModel.coinState.observe(
-            viewLifecycleOwner,
-            {
-                when (it) {
-                    is DataState.Success -> {
-                        hideBadStateLayout()
-                        hideLoadingProgress()
-                        showRecyclerViewMarket(true)
-                        populateRecyclerViewMarket(it.data)
-                    }
+            viewLifecycleOwner
+        ) {
+            when (it) {
+                is DataState.Success -> {
+                    hideBadStateLayout()
+                    hideLoadingProgress()
+                    showRecyclerViewMarket(true)
+                    populateRecyclerViewMarket(it.data)
+                }
 
-                    is DataState.Loading -> {
-                        showLoadingProgress()
-                    }
+                is DataState.Loading -> {
+                    showLoadingProgress()
+                }
 
-                    is DataState.Error -> {
-                        hideLoadingProgress()
-                        showInternetConnectionErrorLayout()
-                        Toast.makeText(
-                            activity,
-                            getString(R.string.internet_connection_error),
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+                is DataState.Error -> {
+                    hideLoadingProgress()
+                    showInternetConnectionErrorLayout()
+                    Toast.makeText(
+                        activity,
+                        getString(R.string.internet_connection_error),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
-        )
+        }
 
         viewModel.exchangeState.observe(
             viewLifecycleOwner,

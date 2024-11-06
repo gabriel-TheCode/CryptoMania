@@ -52,5 +52,8 @@
     <string name="market_chart_values">Market Chart values</string>
     <string name="usd">usd</string>
     <string name="all_time_high">All Time High</string>
+    <string name="connect_wallet">Connect to a wallet</string>
+    <string name="create_wallet">Create a wallet</string>
+    <string name="perform_wallet_actions">Perform operations on your private wallet here</string>
 
 </resources>

@@ -1,72 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="200dp"
-        android:background="@drawable/header_background"
-        android:orientation="vertical">
 
-        <TextView
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/wallet"
-            android:textStyle="bold"
-            android:textSize="26sp"
-            android:textColor="@color/primaryBackgroundColor"
-            android:layout_marginStart="30dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginTop="30dp"/>
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="30dp"
-            android:textColor="@color/white"
-            android:text="@string/wallet_description"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:background="@drawable/header_background"
+                android:orientation="vertical">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="30dp"
+                    android:layout_marginTop="30dp"
+                    android:layout_marginEnd="20dp"
+                    android:text="@string/wallet"
+                    android:textColor="@color/primaryBackgroundColor"
+                    android:textSize="26sp"
+                    android:textStyle="bold" />
 
-    <com.airbnb.lottie.LottieAnimationView
-        android:id="@+id/image_onboarding"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_margin="30dp"
-        android:layout_gravity="center"
-        android:scaleType="centerCrop"
-        app:lottie_rawRes="@raw/wallet_money_added"
-        app:lottie_loop="true"
-        app:lottie_autoPlay="true"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="30dp"
+                    android:text="@string/wallet_description"
+                    android:textColor="@color/white" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/wallet"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:textColor="@color/colorPrimaryDark"/>
+            </LinearLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/coming_soon"
-        android:textSize="16sp"
-        android:layout_gravity="center"
-        android:textColor="@color/dark_blue"/>
+            <com.airbnb.lottie.LottieAnimationView
+                android:id="@+id/image_onboarding"
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center"
+                android:layout_margin="30dp"
+                android:scaleType="centerCrop"
+                app:lottie_autoPlay="true"
+                app:lottie_loop="true"
+                app:lottie_rawRes="@raw/wallet_money_added" />
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="50dp"
-        android:layout_margin="30dp"
-        android:background="@drawable/btn_blue_selector"
-        android:text="@string/join_the_whitelist"
-        android:textColor="@color/md_white_1000"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/wallet"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="@string/perform_wallet_actions"
+                android:textColor="@color/dark_blue"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/btn_create_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/btn_blue_selector"
+                android:text="@string/create_wallet"
+                android:textColor="@color/md_white_1000" />
+
+            <Button
+                android:id="@+id/btn_connect_wallet"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginVertical="16dp"
+                android:layout_marginHorizontal="30dp"
+                android:background="@drawable/btn_blue_selector"
+                android:text="@string/connect_wallet"
+                android:textColor="@color/md_white_1000" />
+        </LinearLayout>
+    </ScrollView>
+
 
 </LinearLayout>
