@@ -10,6 +10,8 @@ top of the free [CoinGecko API](https://www.coingecko.com/en/api).
   <img alt="Get it on Google Play" height="64" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
 
+<img alt="CryptoMania 2.0: market, coin details in dark mode, Hot filter" src="docs/cryptomania.png" />
+
 ## Features
 
 - **Market overview** – total market cap, 24h volume, BTC/ETH dominance, top movers (biggest 24h
@@ -24,6 +26,11 @@ top of the free [CoinGecko API](https://www.coingecko.com/en/api).
   "Add to watchlist" menu (also exposed to TalkBack as a custom action); works for coins outside
   the top 250 too.
 - **Exchanges** – ranked by trust score, 24h volume estimated in USD.
+- **Animated splash** – crypto coins rain down, swirl into a vortex, turn gold and merge into
+  the CryptoMania logo, then the splash opens onto the app as an expanding circle (tap to skip).
+- **Fluid navigation** – detail screens slide over the list with a parallax and slide back out
+  (also driven by the predictive back gesture); tabs fade over the previous page, and the bottom
+  bar slides away instead of vanishing. The page underneath always stays drawn, so nothing flashes.
 - **Onboarding** – the original CryptoMania intro (Lottie animations) rebuilt in Compose.
 - **Offline-first** – everything already downloaded stays browsable in airplane mode, when rate
   limited, or when CoinGecko is down; a pill on the header wave tells how old the data is.
@@ -31,6 +38,20 @@ top of the free [CoinGecko API](https://www.coingecko.com/en/api).
   a two-pane coin screen on wide windows, landscape-aware onboarding.
 - **Themes & accessibility** – light/dark/system, color-blind friendly mode (blue/orange instead of
   green/red), arrows and signs on every change, TalkBack descriptions for rows and charts.
+
+## Visuals
+
+<img alt="Animated splash screen" src="docs/splash.gif" width="260" align="right" />
+
+The splash is one Compose `Canvas` (`AnimatedSplash`) driven by a single clock read at draw time:
+no recomposition per frame. The system splash window is plain brand blue and is dropped as soon
+as the app draws, so the animation starts on screen instead of behind it; it plays once per
+launch, while the market loads underneath, and finishes at once when animations are disabled.
+
+Play Store assets live in [`docs/playstore`](docs/playstore): eight 1080×1920 phone screenshots
+and the 1024×500 feature graphic.
+
+<br clear="right" />
 
 ## Architecture
 
@@ -166,7 +187,7 @@ chart range, watchlist long-press, search, onboarding).
 - Exchange volume in USD is an estimate (BTC volume × cached BTC price).
 - Robolectric UI tests run on SDK 35 because SDK 36+ sandboxes require JDK 21.
 - No baseline profile module yet.
-- The Play Store listing image (512 px PNG) still has to be exported from the new vector icon.
+- The Play Store hi-res icon (512 px PNG) still has to be exported from the new vector icon.
 - Full Material 3 Expressive (`MaterialExpressiveTheme`, `LoadingIndicator`) needs material3
   1.5.0-alpha, which pulls Compose core to alpha; the app stays on stable and uses the Expressive
   navigation bar and spring motion available today.

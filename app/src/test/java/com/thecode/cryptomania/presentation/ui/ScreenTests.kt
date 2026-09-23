@@ -3,6 +3,7 @@ package com.thecode.cryptomania.presentation.ui
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.junit4.v2.createComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -24,6 +25,7 @@ import com.thecode.cryptomania.presentation.feature.coin.CoinDetailScreen
 import com.thecode.cryptomania.presentation.feature.coin.CoinDetailUiState
 import com.thecode.cryptomania.presentation.feature.market.MarketContent
 import com.thecode.cryptomania.presentation.feature.onboarding.OnboardingScreen
+import com.thecode.cryptomania.presentation.feature.splash.AnimatedSplash
 import com.thecode.cryptomania.presentation.feature.market.MarketIntent
 import com.thecode.cryptomania.presentation.feature.market.MarketScreen
 import com.thecode.cryptomania.presentation.feature.market.MarketUiState
@@ -215,5 +217,23 @@ class OnboardingScreenTest {
         compose.onNodeWithText("Get started").performClick()
 
         assertTrue(finished)
+    }
+}
+
+@RunWith(RobolectricTestRunner::class)
+class AnimatedSplashTest {
+    @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun splashFinishesOnItsOwnAndCanBeSkipped() {
+        var finished = 0
+        compose.mainClock.autoAdvance = false
+        compose.setContent { CryptoManiaTheme { AnimatedSplash(onFinished = { finished++ }) } }
+
+        compose.mainClock.advanceTimeBy(1_000)
+        assertEquals(0, finished)
+        compose.onNodeWithContentDescription("CryptoMania").performClick() // Skip to the reveal.
+        compose.mainClock.advanceTimeBy(800)
+        assertEquals(1, finished)
     }
 }
