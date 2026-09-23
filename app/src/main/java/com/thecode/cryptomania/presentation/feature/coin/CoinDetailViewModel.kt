@@ -24,7 +24,8 @@ import com.thecode.cryptomania.presentation.util.Formatters
 import com.thecode.cryptomania.presentation.util.ScreenContent
 import com.thecode.cryptomania.presentation.util.SyncStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import com.thecode.cryptomania.di.DefaultDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -111,6 +112,7 @@ class CoinDetailViewModel @Inject constructor(
     private val detailsRepository: CoinDetailsRepository,
     private val watchlistRepository: WatchlistRepository,
     networkMonitor: NetworkMonitor,
+    @param:DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     val coinId: String = checkNotNull(savedStateHandle[COIN_ID_ARG]) { "Missing coinId argument" }
@@ -126,13 +128,13 @@ class CoinDetailViewModel @Inject constructor(
         marketRepository.observeCoin(coinId),
         detailsRepository.observeProfile(coinId),
     ) { coin, profile -> coin?.toContent(profile) }
-        .flowOn(Dispatchers.Default)
+        .flowOn(defaultDispatcher)
 
     private val chart = range.flatMapLatest { selected ->
         detailsRepository.observePriceHistory(coinId, selected).map { selected to it }
     }.combine(chartError) { (selected, cached), error ->
         chartState(selected, cached, error?.takeIf { it.first == selected }?.second)
-    }.flowOn(Dispatchers.Default)
+    }.flowOn(defaultDispatcher)
 
     private val syncInputs = combine(networkMonitor.isOnline, coinError, chartError) { online, coinErr, chartErr ->
         Triple(online, coinErr, chartErr?.second)

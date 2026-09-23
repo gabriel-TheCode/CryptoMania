@@ -61,8 +61,6 @@
     <string name="market_dominance_eth">ETH %1$s</string>
     <string name="market_dominance_other">Others %1$s</string>
     <string name="market_movers">Top movers · 24h</string>
-    <string name="market_gainers">Gainers</string>
-    <string name="market_losers">Losers</string>
     <string name="filter_all">All</string>
     <string name="filter_watchlist">Watchlist</string>
     <string name="filter_gainers">Gainers</string>
@@ -76,18 +74,14 @@
     <string name="watchlist_empty_message">Tap the star on any coin to follow it here.</string>
     <string name="filter_empty_title">Nothing to show</string>
     <string name="filter_empty_message">No coin matches this filter right now.</string>
-    <string name="market_empty_title">No market data yet</string>
-    <string name="market_empty_message">Market data will appear once it has been downloaded.</string>
     <string name="cd_coin_row">%1$s, %2$s, price %3$s, %4$s in 24 hours</string>
     <string name="cd_change_up">up %1$s</string>
     <string name="cd_change_down">down %1$s</string>
     <string name="cd_change_flat">unchanged</string>
-    <string name="cd_sparkline">Seven day trend</string>
 
     <!-- Search -->
     <string name="search_recent">Recent searches</string>
     <string name="search_top_coins">Top coins</string>
-    <string name="search_in_market">In your market list</string>
     <string name="search_more_results">More on CoinGecko</string>
     <string name="search_no_results_title">No results for “%1$s”</string>
     <string name="search_no_results_message">Check the spelling or try the ticker symbol.</string>
@@ -124,10 +118,7 @@
     <string name="stat_high">High</string>
     <string name="stat_circulating">Circulating supply</string>
     <string name="stat_max_supply">Max supply</string>
-    <string name="stat_total_supply">Total supply</string>
-    <string name="stat_supply_of_max">%1$s of max supply in circulation</string>
     <string name="stat_ath">All-time high</string>
-    <string name="stat_ath_detail">%1$s from ATH · %2$s</string>
     <string name="stat_change_1h">1h</string>
     <string name="stat_change_24h">24h</string>
     <string name="stat_change_7d">7d</string>
@@ -144,7 +135,6 @@
     <string name="exchanges_subtitle">Ranked by CoinGecko trust score</string>
     <string name="exchange_trust">Trust %1$d/10</string>
     <string name="exchange_volume">%1$s · 24h</string>
-    <string name="exchange_established">Since %1$d</string>
     <string name="exchanges_empty_title">No exchanges</string>
     <string name="exchanges_empty_message">Exchange data will appear once it has been downloaded.</string>
     <string name="cd_exchange_row">%1$s, trust score %2$s out of 10, volume %3$s. Opens website.</string>

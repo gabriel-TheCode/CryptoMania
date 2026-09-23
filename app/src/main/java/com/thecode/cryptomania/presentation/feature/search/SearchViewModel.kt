@@ -13,7 +13,8 @@ import com.thecode.cryptomania.presentation.model.CoinRowUi
 import com.thecode.cryptomania.presentation.model.toRowUi
 import com.thecode.cryptomania.presentation.util.Formatters
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import com.thecode.cryptomania.di.DefaultDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.Channel
@@ -75,6 +76,7 @@ class SearchViewModel @Inject constructor(
     private val marketRepository: MarketRepository,
     private val settingsRepository: SettingsRepository,
     private val rankLocalSearch: RankLocalSearchUseCase,
+    @param:DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val formatters = Formatters()
@@ -91,7 +93,7 @@ class SearchViewModel @Inject constructor(
 
     private val localResults = combine(query.debounce(LOCAL_DEBOUNCE_MS), cachedCoins) { q, coins ->
         q to rankLocalSearch(coins, q).map { it.toRowUi(formatters, isWatched = false) }
-    }.flowOn(Dispatchers.Default)
+    }.flowOn(defaultDispatcher)
         .shareIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), replay = 1)
 
     /**
@@ -125,7 +127,7 @@ class SearchViewModel @Inject constructor(
 
     private val suggestions = cachedCoins.map { coins ->
         coins.take(SUGGESTIONS).map { it.toRowUi(formatters, isWatched = false) }
-    }.flowOn(Dispatchers.Default)
+    }.flowOn(defaultDispatcher)
 
     val state: StateFlow<SearchUiState> = combine(
         query,

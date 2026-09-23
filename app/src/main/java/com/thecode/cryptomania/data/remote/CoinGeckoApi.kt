@@ -6,6 +6,11 @@ import com.thecode.cryptomania.data.remote.dto.ExchangeDto
 import com.thecode.cryptomania.data.remote.dto.GlobalResponseDto
 import com.thecode.cryptomania.data.remote.dto.MarketChartDto
 import com.thecode.cryptomania.data.remote.dto.SearchResponseDto
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import retrofit2.Retrofit
+import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -58,5 +63,18 @@ interface CoinGeckoApi {
     companion object {
         const val BASE_URL = "https://api.coingecko.com/api/v3/"
         const val API_KEY_HEADER = "x-cg-demo-api-key"
+
+        private val json = Json {
+            ignoreUnknownKeys = true
+            coerceInputValues = true
+            explicitNulls = false
+        }
+
+        fun create(client: OkHttpClient, baseUrl: String = BASE_URL): CoinGeckoApi = Retrofit.Builder()
+            .baseUrl(baseUrl)
+            .client(client)
+            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
+            .build()
+            .create(CoinGeckoApi::class.java)
     }
 }

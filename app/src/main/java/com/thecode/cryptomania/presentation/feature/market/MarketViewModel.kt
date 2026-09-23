@@ -18,7 +18,8 @@ import com.thecode.cryptomania.presentation.util.Formatters
 import com.thecode.cryptomania.presentation.util.ScreenContent
 import com.thecode.cryptomania.presentation.util.SyncStatus
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
+import com.thecode.cryptomania.di.DefaultDispatcher
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -74,6 +75,7 @@ class MarketViewModel @Inject constructor(
     observeMarketOverview: ObserveMarketOverviewUseCase,
     private val marketRepository: MarketRepository,
     networkMonitor: NetworkMonitor,
+    @param:DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
 
     private val formatters = Formatters()
@@ -83,7 +85,7 @@ class MarketViewModel @Inject constructor(
 
     private val content = combine(observeMarketOverview(), filter) { overview, filter ->
         overview?.toContent(filter)
-    }.flowOn(Dispatchers.Default)
+    }.flowOn(defaultDispatcher)
 
     val state: StateFlow<MarketUiState> = combine(
         content,

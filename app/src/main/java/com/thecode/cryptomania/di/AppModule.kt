@@ -29,15 +29,12 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
-import kotlinx.serialization.json.Json
-import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
-import retrofit2.Retrofit
-import retrofit2.converter.kotlinx.serialization.asConverterFactory
 import java.time.Clock
 import java.util.concurrent.TimeUnit
 import javax.inject.Qualifier
@@ -47,6 +44,11 @@ import javax.inject.Singleton
 @Retention(AnnotationRetention.BINARY)
 annotation class ApplicationScope
 
+/** Dispatcher for CPU-bound mapping work; injected so tests can run it on virtual time. */
+@Qualifier
+@Retention(AnnotationRetention.BINARY)
+annotation class DefaultDispatcher
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -54,6 +56,10 @@ object AppModule {
     @Provides
     @Singleton
     fun provideClock(): Clock = Clock.systemUTC()
+
+    @Provides
+    @DefaultDispatcher
+    fun provideDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
 
     @Provides
     @Singleton
@@ -88,19 +94,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideCoinGeckoApi(client: OkHttpClient): CoinGeckoApi {
-        val json = Json {
-            ignoreUnknownKeys = true
-            coerceInputValues = true
-            explicitNulls = false
-        }
-        return Retrofit.Builder()
-            .baseUrl(CoinGeckoApi.BASE_URL)
-            .client(client)
-            .addConverterFactory(json.asConverterFactory("application/json".toMediaType()))
-            .build()
-            .create(CoinGeckoApi::class.java)
-    }
+    fun provideCoinGeckoApi(client: OkHttpClient): CoinGeckoApi = CoinGeckoApi.create(client)
 
     @Provides
     @Singleton

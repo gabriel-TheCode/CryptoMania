@@ -49,6 +49,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
@@ -173,7 +174,7 @@ fun <T> SegmentedSelector(
         val indicatorOffset by animateDpAsState(segmentWidth * selectedIndex, Motion.spatial(), label = "segment")
         Box(
             Modifier
-                .offset(x = indicatorOffset)
+                .offset { IntOffset(indicatorOffset.roundToPx(), 0) }
                 .width(segmentWidth)
                 .fillMaxHeight()
                 .clip(CircleShape)
