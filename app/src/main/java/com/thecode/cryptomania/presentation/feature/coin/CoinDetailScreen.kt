@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.thecode.cryptomania.presentation.feature.coin
 
 import androidx.compose.animation.AnimatedContent
@@ -33,6 +35,7 @@ import androidx.compose.material.icons.automirrored.rounded.OpenInNew
 import androidx.compose.material.icons.automirrored.rounded.ShowChart
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarBorder
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
@@ -115,7 +118,7 @@ fun CoinDetailScreen(
                             contentDescription = stringResource(
                                 if (state.isWatched) R.string.coin_remove_watchlist else R.string.coin_add_watchlist,
                             ),
-                            tint = if (state.isWatched) CryptoManiaTheme.colors.warning else CryptoManiaTheme.colors.textSecondary,
+                            tint = if (state.isWatched) CryptoManiaTheme.colors.warning else CryptoManiaTheme.colors.onWave,
                         )
                     }
                 }

@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -58,6 +59,7 @@ import com.thecode.cryptomania.presentation.designsystem.component.CryptoListIte
 import com.thecode.cryptomania.presentation.designsystem.component.CryptoManiaSearchBar
 import com.thecode.cryptomania.presentation.designsystem.component.EmptyState
 import com.thecode.cryptomania.presentation.designsystem.component.SectionHeader
+import com.thecode.cryptomania.presentation.designsystem.component.WaveSurface
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
 import com.thecode.cryptomania.presentation.util.shortRes
 
@@ -106,10 +108,11 @@ fun SearchScreen(
             .fillMaxSize()
             .imePadding(),
     ) {
+        WaveSurface(height = 64.dp + 26.dp) {
         Row(
             Modifier
-                .windowInsetsPadding(WindowInsets.statusBars)
-                .padding(start = spacing.xs, end = spacing.lg, top = spacing.sm, bottom = spacing.sm),
+                .height(64.dp)
+                .padding(start = spacing.xs, end = spacing.lg),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             IconButton(onClick = onBack) {
@@ -125,6 +128,7 @@ fun SearchScreen(
                 focusRequester = focusRequester,
                 modifier = Modifier.testTag("search_field"),
             )
+        }
         }
         LazyColumn(
             modifier = Modifier

@@ -40,6 +40,7 @@ import com.thecode.cryptomania.presentation.designsystem.theme.Motion
 import com.thecode.cryptomania.presentation.feature.coin.CoinDetailRoute
 import com.thecode.cryptomania.presentation.feature.exchanges.ExchangesRoute
 import com.thecode.cryptomania.presentation.feature.market.MarketRoute
+import com.thecode.cryptomania.presentation.feature.onboarding.OnboardingRoute
 import com.thecode.cryptomania.presentation.feature.search.SearchRoute
 import com.thecode.cryptomania.presentation.feature.settings.SettingsRoute
 import kotlinx.serialization.Serializable
@@ -52,6 +53,7 @@ import kotlin.reflect.KClass
 @Serializable data object SettingsDestination
 @Serializable data object SearchDestination
 @Serializable data class CoinDestination(val coinId: String)
+@Serializable data object OnboardingDestination
 
 private enum class TopLevel(
     val route: Any,
@@ -66,7 +68,10 @@ private enum class TopLevel(
 }
 
 @Composable
-fun CryptoManiaNavigation(navController: NavHostController = rememberNavController()) {
+fun CryptoManiaNavigation(
+    showOnboarding: Boolean,
+    navController: NavHostController = rememberNavController(),
+) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val destination = backStackEntry?.destination
     val current = TopLevel.entries.firstOrNull { destination?.hasRoute(it.routeClass) == true }
@@ -75,7 +80,7 @@ fun CryptoManiaNavigation(navController: NavHostController = rememberNavControll
 
     NavigationSuiteScaffold(
         // Detail and search screens are full-screen; the bar/rail only frames top-level tabs.
-        layoutType = if (current != null || destination == null) adaptiveType else NavigationSuiteType.None,
+        layoutType = if (current != null) adaptiveType else NavigationSuiteType.None,
         containerColor = colors.background,
         contentColor = colors.textPrimary,
         navigationSuiteColors = NavigationSuiteDefaults.colors(
@@ -96,10 +101,17 @@ fun CryptoManiaNavigation(navController: NavHostController = rememberNavControll
     ) {
         NavHost(
             navController = navController,
-            startDestination = MarketDestination,
+            startDestination = if (showOnboarding) OnboardingDestination else MarketDestination,
             enterTransition = { fadeIn(tween(Motion.MEDIUM)) },
             exitTransition = { fadeOut(tween(Motion.SHORT)) },
         ) {
+            composable<OnboardingDestination> {
+                OnboardingRoute(
+                    onFinished = {
+                        navController.navigate(MarketDestination) { popUpTo(OnboardingDestination) { inclusive = true } }
+                    },
+                )
+            }
             composable<MarketDestination> {
                 MarketRoute(
                     onOpenCoin = { navController.navigate(CoinDestination(it)) },

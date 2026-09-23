@@ -23,6 +23,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.dropShadow
+import androidx.compose.ui.graphics.shadow.Shadow
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -32,8 +35,8 @@ import com.thecode.cryptomania.R
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
 
 /**
- * Flat card: separated from the background by tone and a hairline, not by shadows,
- * which keeps dense financial screens calm.
+ * Raised card with a soft, brand-tinted drop shadow (Compose `dropShadow`, drawn by the
+ * render node, so it follows the rounded shape exactly and costs no extra layout).
  */
 @Composable
 fun CryptoManiaCard(
@@ -42,70 +45,28 @@ fun CryptoManiaCard(
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val colors = CryptoManiaTheme.colors
-    val border = BorderStroke(1.dp, colors.divider)
+    val shape = MaterialTheme.shapes.medium
+    // Light theme: soft tinted shadow, no outline. Dark theme: shadows barely read, so a hairline separates.
+    val border = if (colors.isDark) BorderStroke(1.dp, colors.divider) else null
+    val elevated = modifier.dropShadow(shape, Shadow(radius = 18.dp, color = colors.shadow, offset = DpOffset(0.dp, 6.dp)))
     val body: @Composable () -> Unit = { Column(Modifier.padding(CryptoManiaTheme.spacing.lg), content = content) }
     if (onClick != null) {
         Surface(
             onClick = onClick,
-            modifier = modifier,
-            shape = MaterialTheme.shapes.medium,
+            modifier = elevated,
+            shape = shape,
             color = colors.surfaceRaised,
             border = border,
             content = body,
         )
     } else {
         Surface(
-            modifier = modifier,
-            shape = MaterialTheme.shapes.medium,
+            modifier = elevated,
+            shape = shape,
             color = colors.surfaceRaised,
             border = border,
             content = body,
         )
-    }
-}
-
-@Composable
-fun CryptoManiaTopBar(
-    title: String,
-    modifier: Modifier = Modifier,
-    subtitle: String? = null,
-    onBack: (() -> Unit)? = null,
-    actions: @Composable RowScope.() -> Unit = {},
-) {
-    val spacing = CryptoManiaTheme.spacing
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .windowInsetsPadding(WindowInsets.statusBars)
-            .heightIn(min = 64.dp)
-            .padding(start = if (onBack == null) spacing.lg else spacing.xs, end = spacing.xs),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        if (onBack != null) {
-            IconButton(onClick = onBack) {
-                Icon(Icons.AutoMirrored.Rounded.ArrowBack, contentDescription = stringResource(R.string.action_back))
-            }
-        }
-        Column(Modifier.weight(1f)) {
-            Text(
-                text = title,
-                style = if (onBack == null) MaterialTheme.typography.headlineMedium else MaterialTheme.typography.titleLarge,
-                color = CryptoManiaTheme.colors.textPrimary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                modifier = Modifier.semantics { heading() },
-            )
-            if (subtitle != null) {
-                Text(
-                    text = subtitle,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = CryptoManiaTheme.colors.textSecondary,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                )
-            }
-        }
-        Row(verticalAlignment = Alignment.CenterVertically, content = actions)
     }
 }
 
@@ -124,7 +85,7 @@ fun SectionHeader(
     ) {
         Text(
             text = title,
-            style = MaterialTheme.typography.titleMedium,
+            style = MaterialTheme.typography.titleLarge,
             color = CryptoManiaTheme.colors.textPrimary,
             modifier = Modifier.semantics { heading() },
         )

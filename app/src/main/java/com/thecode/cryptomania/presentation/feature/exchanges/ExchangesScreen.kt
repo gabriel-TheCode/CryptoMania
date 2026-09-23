@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.thecode.cryptomania.presentation.feature.exchanges
 
 import androidx.compose.foundation.background
@@ -21,9 +23,12 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountBalance
 import androidx.compose.material.icons.rounded.VerifiedUser
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -66,8 +71,14 @@ fun ExchangesRoute(viewModel: ExchangesViewModel = hiltViewModel()) {
 @Composable
 fun ExchangesScreen(state: ExchangesUiState, onIntent: (ExchangesIntent) -> Unit) {
     val uriHandler = LocalUriHandler.current
-    Column(Modifier.fillMaxSize()) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Column(
+        Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) {
         CryptoManiaTopBar(
+            scrollBehavior = scrollBehavior,
             title = stringResource(R.string.exchanges_title),
             subtitle = stringResource(R.string.exchanges_subtitle),
         )

@@ -10,6 +10,7 @@ import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,23 +47,27 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
-            val settings by viewModel.settings.collectAsStateWithLifecycle()
-            val current = settings ?: UserSettings()
+            val loaded by viewModel.settings.collectAsStateWithLifecycle()
+            // The splash stays up until preferences are read, so nothing is composed before that.
+            val current = loaded ?: return@setContent
             val darkTheme = when (current.theme) {
                 ThemePreference.System -> isSystemInDarkTheme()
                 ThemePreference.Light -> false
                 ThemePreference.Dark -> true
             }
-            // System bar icons follow the in-app theme, not only the system setting.
+            // Every screen draws the brand wave behind the status bar, so its icons are always light;
+            // the navigation bar follows the in-app theme.
             DisposableEffect(darkTheme) {
                 enableEdgeToEdge(
-                    statusBarStyle = SystemBarStyle.auto(Color.TRANSPARENT, Color.TRANSPARENT) { darkTheme },
+                    statusBarStyle = SystemBarStyle.dark(Color.TRANSPARENT),
                     navigationBarStyle = SystemBarStyle.auto(LIGHT_SCRIM, DARK_SCRIM) { darkTheme },
                 )
                 onDispose {}
             }
             CryptoManiaTheme(darkTheme = darkTheme, colorBlindFriendly = current.colorBlindFriendly) {
-                CryptoManiaNavigation()
+                // Decided once: finishing onboarding navigates away rather than rebuilding the graph.
+                val showOnboarding = remember { !current.onboardingCompleted }
+                CryptoManiaNavigation(showOnboarding = showOnboarding)
             }
         }
     }

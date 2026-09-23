@@ -19,6 +19,7 @@ serialization = "1.11.0"
 retrofit = "3.0.0"
 okhttp = "5.5.0"
 coil = "3.6.3"
+lottie = "6.7.1"
 
 junit = "4.13.2"
 robolectric = "4.17"
@@ -64,6 +65,7 @@ okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver3", version
 
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil" }
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottie" }
 
 junit = { module = "junit:junit", version.ref = "junit" }
 robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }

@@ -64,6 +64,7 @@ interface SettingsRepository {
 
     suspend fun setTheme(theme: ThemePreference)
     suspend fun setColorBlindFriendly(enabled: Boolean)
+    suspend fun setOnboardingCompleted()
     suspend fun addRecentSearch(query: String)
     suspend fun clearRecentSearches()
 }

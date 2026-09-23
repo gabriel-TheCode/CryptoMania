@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.thecode.cryptomania.presentation.feature.settings
 
 import androidx.compose.foundation.clickable
@@ -17,6 +19,7 @@ import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.OpenInNew
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -24,6 +27,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -71,8 +76,14 @@ fun SettingsScreen(state: SettingsUiState, onIntent: (SettingsIntent) -> Unit) {
     val spacing = CryptoManiaTheme.spacing
     val colors = CryptoManiaTheme.colors
     val uriHandler = LocalUriHandler.current
-    Column(Modifier.fillMaxSize()) {
-        CryptoManiaTopBar(title = stringResource(R.string.settings_title))
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Column(
+        Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) {
+        CryptoManiaTopBar(
+            scrollBehavior = scrollBehavior,title = stringResource(R.string.settings_title))
         Column(
             Modifier
                 .fillMaxSize()

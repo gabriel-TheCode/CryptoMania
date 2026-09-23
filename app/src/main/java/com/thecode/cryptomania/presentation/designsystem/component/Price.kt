@@ -1,6 +1,12 @@
 package com.thecode.cryptomania.presentation.designsystem.component
 
+import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,15 +23,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.text
+import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
@@ -59,8 +69,9 @@ fun ChangeUi.accessibilityLabel(): String = when (trend) {
 }
 
 /**
- * Price that briefly tints toward the direction of a new tick, then settles back.
- * Communicates "this just changed" without any layout movement.
+ * Price ticker: when the value changes, only the characters that differ roll vertically
+ * (up for a rise, down for a fall) and the text briefly tints toward the direction.
+ * Unchanged digits stay still, so the eye goes straight to what moved.
  */
 @Composable
 fun CryptoPrice(
@@ -71,22 +82,43 @@ fun CryptoPrice(
     color: Color = CryptoManiaTheme.colors.textPrimary,
 ) {
     var previous by remember { mutableStateOf(value) }
-    var flash by remember { mutableStateOf(Trend.Flat) }
+    var direction by remember { mutableStateOf(Trend.Flat) }
     LaunchedEffect(value) {
         val old = previous
         previous = value
         if (old != null && value != null && old != value) {
-            flash = if (value > old) Trend.Up else Trend.Down
+            direction = if (value > old) Trend.Up else Trend.Down
             delay(FLASH_MILLIS)
-            flash = Trend.Flat
+            direction = Trend.Flat
         }
     }
     val tint by animateColorAsState(
-        targetValue = if (flash == Trend.Flat) color else flash.contentColor(),
+        targetValue = if (direction == Trend.Flat) color else direction.contentColor(),
         animationSpec = Motion.effects(),
         label = "priceTint",
     )
-    Text(text = text, style = style, color = tint, maxLines = 1, overflow = TextOverflow.Ellipsis, modifier = modifier)
+    // Read before the effect updates `previous`, so the roll direction is right on the first frame.
+    val old = previous
+    val rising = old == null || value == null || value >= old
+    // Exposed as one text node: TalkBack reads the price, not individual characters.
+    Row(modifier.clipToBounds().clearAndSetSemantics { this.text = AnnotatedString(text) }) {
+        // Keyed from the end so digits keep their column when the length changes.
+        text.forEachIndexed { index, char ->
+            key(text.length - index) {
+                AnimatedContent(
+                    targetState = char,
+                    transitionSpec = {
+                        val sign = if (rising) 1 else -1
+                        (slideInVertically(Motion.spatial()) { it * sign } + fadeIn(Motion.effects())) togetherWith
+                            (slideOutVertically(Motion.spatial()) { -it * sign } + fadeOut(Motion.effects()))
+                    },
+                    label = "tickerChar",
+                ) { target ->
+                    Text(target.toString(), style = style, color = tint, maxLines = 1)
+                }
+            }
+        }
+    }
 }
 
 enum class BadgeStyle { Filled, Plain }

@@ -1,11 +1,13 @@
 package com.thecode.cryptomania.presentation.designsystem.component
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -14,8 +16,11 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -26,6 +31,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
+import com.thecode.cryptomania.presentation.designsystem.theme.Motion
+import kotlinx.coroutines.delay
 import com.thecode.cryptomania.presentation.model.CoinRowUi
 
 /**
@@ -130,5 +137,33 @@ fun MoverCard(
         Text(coin.price, style = MaterialTheme.typography.titleMedium, color = CryptoManiaTheme.colors.textPrimary, maxLines = 1)
         Spacer(Modifier.size(CryptoManiaTheme.spacing.xs))
         PriceChangeBadge(coin.change24h)
+        Spacer(Modifier.size(CryptoManiaTheme.spacing.sm))
+        Sparkline(
+            values = coin.sparkline,
+            color = coin.sparklineTrend.contentColor(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(32.dp),
+        )
     }
 }
+
+/**
+ * One-time staggered entrance for the first rows of a list: fade and rise, ~35 ms apart.
+ * Rows composed later (scrolling) appear instantly, so the effect never slows browsing.
+ */
+@Composable
+fun Modifier.staggeredEntrance(index: Int, enabled: Boolean): Modifier {
+    if (!enabled || index >= MAX_STAGGERED) return this
+    val progress = remember { Animatable(0f) }
+    LaunchedEffect(Unit) {
+        delay(index * 35L)
+        progress.animateTo(1f, Motion.spatial())
+    }
+    return graphicsLayer {
+        alpha = progress.value
+        translationY = (1f - progress.value) * 24.dp.toPx()
+    }
+}
+
+private const val MAX_STAGGERED = 12

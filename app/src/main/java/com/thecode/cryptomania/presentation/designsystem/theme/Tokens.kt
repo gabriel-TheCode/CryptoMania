@@ -1,5 +1,6 @@
 package com.thecode.cryptomania.presentation.designsystem.theme
 
+import com.thecode.cryptomania.R
 import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Easing
 import androidx.compose.animation.core.SpringSpec
@@ -9,6 +10,7 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Dp
@@ -69,11 +71,21 @@ val CryptoManiaShapes = Shapes(
 )
 
 /**
- * System sans-serif with tabular figures everywhere: prices in a list line up digit by digit
- * and do not jitter horizontally when they update.
+ * Two typefaces carried over from CryptoMania 1.x:
+ * - **Baloo** (rounded, friendly) gives the brand its voice in headlines and titles;
+ * - **Ubuntu** carries everything else. Its digits are tabular by default, so prices in a
+ *   list line up and never jitter horizontally when they update. Baloo digits are
+ *   proportional, which is why it is never used for figures.
  */
-private fun style(size: Int, weight: FontWeight, lineHeight: Int, tracking: Double = 0.0) = TextStyle(
-    fontFamily = FontFamily.Default,
+val Baloo = FontFamily(Font(R.font.baloo_medium, FontWeight.Medium))
+val Ubuntu = FontFamily(
+    Font(R.font.ubuntu_regular, FontWeight.Normal),
+    Font(R.font.ubuntu_medium, FontWeight.Medium),
+    Font(R.font.ubuntu_bold, FontWeight.Bold),
+)
+
+private fun style(family: FontFamily, size: Int, weight: FontWeight, lineHeight: Int, tracking: Double = 0.0) = TextStyle(
+    fontFamily = family,
     fontWeight = weight,
     fontSize = size.sp,
     lineHeight = lineHeight.sp,
@@ -82,19 +94,21 @@ private fun style(size: Int, weight: FontWeight, lineHeight: Int, tracking: Doub
 )
 
 val CryptoManiaTypography = Typography(
-    displayLarge = style(40, FontWeight.SemiBold, 48, -0.02),
-    displayMedium = style(34, FontWeight.SemiBold, 42, -0.02),
-    displaySmall = style(28, FontWeight.SemiBold, 36, -0.015),
-    headlineLarge = style(26, FontWeight.SemiBold, 32, -0.01),
-    headlineMedium = style(22, FontWeight.SemiBold, 28, -0.01),
-    headlineSmall = style(20, FontWeight.SemiBold, 26),
-    titleLarge = style(18, FontWeight.SemiBold, 24),
-    titleMedium = style(16, FontWeight.SemiBold, 22),
-    titleSmall = style(14, FontWeight.Medium, 20),
-    bodyLarge = style(16, FontWeight.Normal, 24),
-    bodyMedium = style(14, FontWeight.Normal, 20),
-    bodySmall = style(12, FontWeight.Normal, 16),
-    labelLarge = style(14, FontWeight.Medium, 20),
-    labelMedium = style(12, FontWeight.Medium, 16, 0.01),
-    labelSmall = style(11, FontWeight.Medium, 14, 0.02),
+    // Figures: hero price, total market cap.
+    displayLarge = style(Ubuntu, 40, FontWeight.Bold, 48, -0.02),
+    displayMedium = style(Ubuntu, 34, FontWeight.Bold, 42, -0.02),
+    displaySmall = style(Ubuntu, 28, FontWeight.Bold, 36, -0.015),
+    // Words: screen titles, onboarding, section headers.
+    headlineLarge = style(Baloo, 30, FontWeight.Medium, 36),
+    headlineMedium = style(Baloo, 26, FontWeight.Medium, 32),
+    headlineSmall = style(Baloo, 22, FontWeight.Medium, 28),
+    titleLarge = style(Baloo, 20, FontWeight.Medium, 26),
+    titleMedium = style(Ubuntu, 16, FontWeight.Medium, 22),
+    titleSmall = style(Ubuntu, 14, FontWeight.Medium, 20),
+    bodyLarge = style(Ubuntu, 16, FontWeight.Normal, 24),
+    bodyMedium = style(Ubuntu, 14, FontWeight.Normal, 20),
+    bodySmall = style(Ubuntu, 12, FontWeight.Normal, 16),
+    labelLarge = style(Ubuntu, 14, FontWeight.Medium, 20),
+    labelMedium = style(Ubuntu, 12, FontWeight.Medium, 16, 0.01),
+    labelSmall = style(Ubuntu, 11, FontWeight.Medium, 14, 0.02),
 )

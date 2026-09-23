@@ -33,6 +33,12 @@ data class CryptoManiaColors(
     val warningContainer: Color,
     val skeleton: Color,
     val skeletonHighlight: Color,
+    /** Brand wave gradient (the CryptoMania 1.x header, redrawn). Always dark enough for white content. */
+    val waveStart: Color,
+    val waveEnd: Color,
+    val onWave: Color,
+    /** Soft, tinted card shadow. */
+    val shadow: Color,
 )
 
 private val InkDark = CryptoManiaColors(
@@ -58,6 +64,10 @@ private val InkDark = CryptoManiaColors(
     warningContainer = Color(0xFF362A11),
     skeleton = Color(0xFF171C27),
     skeletonHighlight = Color(0xFF222938),
+    waveStart = Color(0xFF16307A),
+    waveEnd = Color(0xFF2D5BD8),
+    onWave = Color(0xFFFFFFFF),
+    shadow = Color(0x99000000),
 )
 
 private val PaperLight = CryptoManiaColors(
@@ -84,6 +94,10 @@ private val PaperLight = CryptoManiaColors(
     warningContainer = Color(0xFFFCF0DA),
     skeleton = Color(0xFFE9ECF2),
     skeletonHighlight = Color(0xFFF5F6F9),
+    waveStart = Color(0xFF1F55D6),
+    waveEnd = Color(0xFF4D86FF),
+    onWave = Color(0xFFFFFFFF),
+    shadow = Color(0x2E1B3F99),
 )
 
 /** Blue/orange replaces green/red for users with red–green color vision deficiency. */

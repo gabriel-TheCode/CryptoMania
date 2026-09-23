@@ -112,6 +112,9 @@ class FakeSettingsRepository : SettingsRepository {
     override suspend fun setColorBlindFriendly(enabled: Boolean) {
         settings.value = settings.value.copy(colorBlindFriendly = enabled)
     }
+    override suspend fun setOnboardingCompleted() {
+        settings.value = settings.value.copy(onboardingCompleted = true)
+    }
     override suspend fun addRecentSearch(query: String) {
         recentSearches.value = listOf(query) + recentSearches.value.filterNot { it == query }
     }

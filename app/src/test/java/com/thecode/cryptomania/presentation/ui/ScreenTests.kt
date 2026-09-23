@@ -22,6 +22,7 @@ import com.thecode.cryptomania.presentation.feature.coin.CoinDetailIntent
 import com.thecode.cryptomania.presentation.feature.coin.CoinDetailScreen
 import com.thecode.cryptomania.presentation.feature.coin.CoinDetailUiState
 import com.thecode.cryptomania.presentation.feature.market.MarketContent
+import com.thecode.cryptomania.presentation.feature.onboarding.OnboardingScreen
 import com.thecode.cryptomania.presentation.feature.market.MarketIntent
 import com.thecode.cryptomania.presentation.feature.market.MarketScreen
 import com.thecode.cryptomania.presentation.feature.market.MarketUiState
@@ -136,7 +137,7 @@ class CoinDetailScreenTest {
         show(CoinDetailUiState(content = ScreenContent.Ready(content), chart = ChartUiState.Failed(AppError.NetworkUnavailable)))
         compose.onNodeWithText("Chart unavailable").assertIsDisplayed()
         compose.onNodeWithText("$84,456.00").assertIsDisplayed()
-        compose.onNodeWithText("Try again").performClick()
+        compose.onNodeWithText("Try again").performScrollTo().performClick()
         assertEquals(CoinDetailIntent.Retry, intents.last())
     }
 
@@ -178,5 +179,24 @@ class SearchScreenTest {
     fun emptyResultsExplainThemselves() {
         show(SearchUiState(query = "zzzz", remote = RemoteResults.Loaded(emptyList())))
         compose.onNodeWithText("No results for “zzzz”").assertIsDisplayed()
+    }
+}
+
+@RunWith(RobolectricTestRunner::class)
+class OnboardingScreenTest {
+    @get:Rule val compose = createComposeRule()
+
+    @Test
+    fun skipLeadsToWelcomeAndGetStartedFinishes() {
+        var finished = false
+        compose.setContent { CryptoManiaTheme { OnboardingScreen(onFinish = { finished = true }) } }
+
+        compose.onNodeWithText("Hey! Let’s enter Crypto Mania").assertIsDisplayed()
+        compose.onNodeWithText("Skip").performClick()
+        compose.waitForIdle()
+        compose.onNodeWithText("Welcome to Crypto Mania!").assertIsDisplayed()
+        compose.onNodeWithText("Get started").performClick()
+
+        assertTrue(finished)
     }
 }

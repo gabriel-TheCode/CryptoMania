@@ -10,6 +10,20 @@
     <string name="action_search">Search</string>
     <string name="action_clear">Clear</string>
 
+    <!-- Onboarding (CryptoMania 1.x copy, updated to what the app really does) -->
+    <string name="onboarding_skip">Skip</string>
+    <string name="onboarding_next">Next</string>
+    <string name="onboarding_get_started">Get started</string>
+    <string name="title_onboarding_1">Hey! Let’s enter Crypto Mania</string>
+    <string name="description_onboarding_1">A cryptocurrency companion that aggregates and reports recently traded prices for thousands of cryptocurrencies traded on hundreds of platforms around the world.</string>
+    <string name="title_onboarding_2">Fast, simple and intuitive</string>
+    <string name="description_onboarding_2">Compare coins at a glance, explore interactive price charts and keep browsing your data even when you are offline.</string>
+    <string name="title_onboarding_3">Better than a broker</string>
+    <string name="description_onboarding_3">Market cap &amp; rank, prices, exchange volumes and trust scores. Follow your favourite coins with your watchlist.</string>
+    <string name="title_onboarding_finish">Welcome to Crypto Mania!</string>
+    <string name="description_onboarding_finish">Powered by CoinGecko, the world’s largest independent cryptocurrency data aggregator.</string>
+    <string name="cd_onboarding_page">Page %1$d of %2$d</string>
+
     <!-- Status -->
     <string name="status_offline">Offline · showing data from %1$s</string>
     <string name="status_offline_no_time">You are offline</string>

@@ -32,6 +32,7 @@ class DataStoreSettingsRepository @Inject constructor(
             theme = prefs[THEME]?.let { name -> ThemePreference.entries.firstOrNull { it.name == name } }
                 ?: ThemePreference.System,
             colorBlindFriendly = prefs[COLOR_BLIND] ?: false,
+            onboardingCompleted = prefs[ONBOARDING_COMPLETED] ?: false,
         )
     }.distinctUntilChanged()
 
@@ -45,6 +46,10 @@ class DataStoreSettingsRepository @Inject constructor(
 
     override suspend fun setColorBlindFriendly(enabled: Boolean) {
         dataStore.edit { it[COLOR_BLIND] = enabled }
+    }
+
+    override suspend fun setOnboardingCompleted() {
+        dataStore.edit { it[ONBOARDING_COMPLETED] = true }
     }
 
     override suspend fun addRecentSearch(query: String) {
@@ -67,6 +72,7 @@ class DataStoreSettingsRepository @Inject constructor(
         val THEME = stringPreferencesKey("theme")
         val COLOR_BLIND = booleanPreferencesKey("color_blind_friendly")
         val RECENT_SEARCHES = stringPreferencesKey("recent_searches")
+        val ONBOARDING_COMPLETED = booleanPreferencesKey("onboarding_completed")
         const val SEPARATOR = '\n'
         const val MAX_RECENT_SEARCHES = 8
     }

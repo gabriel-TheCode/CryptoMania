@@ -1,3 +1,5 @@
+@file:OptIn(ExperimentalMaterial3Api::class)
+
 package com.thecode.cryptomania.presentation.feature.market
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
@@ -27,12 +30,18 @@ import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material.icons.rounded.Tune
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -60,6 +69,8 @@ import com.thecode.cryptomania.presentation.designsystem.component.PriceChangeBa
 import com.thecode.cryptomania.presentation.designsystem.component.SectionHeader
 import com.thecode.cryptomania.presentation.designsystem.component.SegmentedBar
 import com.thecode.cryptomania.presentation.designsystem.component.SkeletonBlock
+import com.thecode.cryptomania.presentation.designsystem.component.staggeredEntrance
+import kotlinx.coroutines.delay
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
 import com.thecode.cryptomania.presentation.util.ScreenContent
 import com.thecode.cryptomania.presentation.util.rememberRelativeTime
@@ -86,9 +97,15 @@ fun MarketScreen(
     onOpenSearch: () -> Unit,
 ) {
     val content = state.content
-    Column(Modifier.fillMaxSize()) {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Column(
+        Modifier
+            .fillMaxSize()
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
+    ) {
         CryptoManiaTopBar(
-            title = stringResource(R.string.market_title),
+            scrollBehavior = scrollBehavior,
+            title = stringResource(R.string.app_name),
             subtitle = (content as? ScreenContent.Ready)?.data?.fetchedAt?.let {
                 stringResource(R.string.status_updated, rememberRelativeTime(it))
             },
@@ -133,6 +150,12 @@ private fun MarketList(
     BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         val expanded = maxWidth >= 720.dp
         val listState = rememberLazyListState()
+        // Entrance animation plays once per screen visit, on the first rows only.
+        val animateEntrance = rememberSaveable { mutableStateOf(true) }
+        LaunchedEffect(Unit) {
+            delay(800)
+            animateEntrance.value = false
+        }
         LazyColumn(
             state = listState,
             modifier = Modifier
@@ -190,12 +213,14 @@ private fun MarketList(
                     }
                 }
             }
-            items(content.coins, key = { it.id }, contentType = { "coin" }) { coin ->
+            itemsIndexed(content.coins, key = { _, coin -> coin.id }, contentType = { _, _ -> "coin" }) { index, coin ->
                 CryptoListItem(
                     coin = coin,
                     onClick = { onOpenCoin(coin.id) },
                     expanded = expanded,
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier
+                        .animateItem()
+                        .staggeredEntrance(index, animateEntrance.value),
                 )
                 HorizontalDivider(Modifier.padding(start = 80.dp, end = spacing.lg), color = colors.divider)
             }
