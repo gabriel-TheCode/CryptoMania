@@ -1,12 +1,13 @@
 package com.thecode.cryptomania.presentation.navigation
 
 import androidx.annotation.StringRes
-import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.material.icons.Icons
@@ -21,8 +22,10 @@ import androidx.compose.material3.adaptive.currentWindowAdaptiveInfoV2
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteDefaults
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldDefaults
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
+import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffoldValue
+import androidx.compose.material3.adaptive.navigationsuite.rememberNavigationSuiteScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -77,10 +80,17 @@ fun CryptoManiaNavigation(
     val current = TopLevel.entries.firstOrNull { destination?.hasRoute(it.routeClass) == true }
     val colors = CryptoManiaTheme.colors
     val adaptiveType = NavigationSuiteScaffoldDefaults.navigationSuiteType(currentWindowAdaptiveInfoV2())
+    // Detail and search screens are full-screen; the bar/rail only frames top-level tabs and
+    // slides away (rather than vanishing) while a detail screen slides in.
+    val suiteState = rememberNavigationSuiteScaffoldState(
+        if (showOnboarding) NavigationSuiteScaffoldValue.Hidden else NavigationSuiteScaffoldValue.Visible,
+    )
+    val showSuite = current != null
+    LaunchedEffect(showSuite) { if (showSuite) suiteState.show() else suiteState.hide() }
 
     NavigationSuiteScaffold(
-        // Detail and search screens are full-screen; the bar/rail only frames top-level tabs.
-        layoutType = if (current != null) adaptiveType else NavigationSuiteType.None,
+        layoutType = adaptiveType,
+        state = suiteState,
         containerColor = colors.background,
         contentColor = colors.textPrimary,
         navigationSuiteColors = NavigationSuiteDefaults.colors(
@@ -102,8 +112,12 @@ fun CryptoManiaNavigation(
         NavHost(
             navController = navController,
             startDestination = if (showOnboarding) OnboardingDestination else MarketDestination,
-            enterTransition = { fadeIn(tween(Motion.MEDIUM)) },
-            exitTransition = { fadeOut(tween(Motion.SHORT)) },
+            // Screens are opaque, so the screen underneath always stays fully drawn while the
+            // other one moves or fades over it: no blank frame between two pages.
+            enterTransition = { fadeThroughEnter() },
+            exitTransition = { if (targetState.isDetail()) parallaxExit() else ExitTransition.KeepUntilTransitionsFinished },
+            popEnterTransition = { if (initialState.isDetail()) parallaxPopEnter() else EnterTransition.None },
+            popExitTransition = { fadeThroughExit() },
         ) {
             composable<OnboardingDestination> {
                 OnboardingRoute(
@@ -145,8 +159,32 @@ private fun NavHostController.navigateToTopLevel(route: Any) = navigate(route) {
     restoreState = true
 }
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.pushEnter(): EnterTransition =
-    slideInHorizontally(tween(Motion.MEDIUM, easing = Motion.Emphasized)) { it / 6 } + fadeIn(tween(Motion.MEDIUM))
+private fun NavBackStackEntry.isDetail() =
+    destination.hasRoute(CoinDestination::class) || destination.hasRoute(SearchDestination::class)
 
-private fun AnimatedContentTransitionScope<NavBackStackEntry>.popExit(): ExitTransition =
-    slideOutHorizontally(tween(Motion.MEDIUM, easing = Motion.Emphasized)) { it / 6 } + fadeOut(tween(Motion.SHORT))
+// Detail screens slide in over the current one, which drifts back a little (parallax); going
+// back plays it in reverse. Predictive back scrubs these same transitions with the gesture.
+private const val PUSH_DURATION = 400
+private const val PARALLAX = 4
+private const val FADE_DURATION = 350
+
+private fun pushEnter(): EnterTransition =
+    slideInHorizontally(tween(PUSH_DURATION, easing = Motion.Emphasized)) { it }
+
+private fun parallaxExit(): ExitTransition =
+    slideOutHorizontally(tween(PUSH_DURATION, easing = Motion.Emphasized)) { -it / PARALLAX }
+
+private fun parallaxPopEnter(): EnterTransition =
+    slideInHorizontally(tween(PUSH_DURATION, easing = Motion.Emphasized)) { -it / PARALLAX }
+
+private fun popExit(): ExitTransition =
+    slideOutHorizontally(tween(PUSH_DURATION, easing = Motion.Emphasized)) { it }
+
+// Top-level pages fade and settle in over the previous page, which stays put underneath.
+private fun fadeThroughEnter(): EnterTransition =
+    fadeIn(tween(FADE_DURATION, easing = Motion.Emphasized)) +
+        scaleIn(tween(FADE_DURATION, easing = Motion.Emphasized), initialScale = 0.97f)
+
+private fun fadeThroughExit(): ExitTransition =
+    fadeOut(tween(FADE_DURATION, easing = Motion.Emphasized)) +
+        scaleOut(tween(FADE_DURATION, easing = Motion.Emphasized), targetScale = 0.97f)
