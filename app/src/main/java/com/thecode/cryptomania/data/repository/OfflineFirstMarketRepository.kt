@@ -2,6 +2,8 @@ package com.thecode.cryptomania.data.repository
 
 import com.thecode.cryptomania.data.local.dao.CoinDao
 import com.thecode.cryptomania.data.local.dao.GlobalMarketDao
+import com.thecode.cryptomania.data.local.dao.TrendingDao
+import com.thecode.cryptomania.data.local.entity.TrendingEntity
 import com.thecode.cryptomania.data.mapper.toDomain
 import com.thecode.cryptomania.data.mapper.toEntity
 import com.thecode.cryptomania.data.network.RequestCoordinator
@@ -34,6 +36,7 @@ class OfflineFirstMarketRepository @Inject constructor(
     private val api: CoinGeckoApi,
     private val coinDao: CoinDao,
     private val globalMarketDao: GlobalMarketDao,
+    private val trendingDao: TrendingDao,
     private val coordinator: RequestCoordinator,
     private val clock: Clock,
 ) : MarketRepository {
@@ -64,11 +67,24 @@ class OfflineFirstMarketRepository @Inject constructor(
     override fun observeCoins(ids: Set<String>): Flow<List<Coin>> =
         if (ids.isEmpty()) flowOf(emptyList()) else coinDao.observeByIds(ids).map { list -> list.map { it.toDomain() } }
 
+    override fun observeTrendingIds(): Flow<List<String>> = trendingDao.observeIds().distinctUntilChanged()
+
     override suspend fun refreshMarket(force: Boolean): Outcome<Unit> = coroutineScope {
         val global = async { refreshGlobal(force) }
+        val trending = async { refreshTrending(force) }
         val coins = refreshTopCoins(force)
         global.await()
+        trending.await()
+        if (coins is Outcome.Success) refreshUnlistedTrackedCoins()
         coins
+    }
+
+    private suspend fun refreshTrending(force: Boolean): Outcome<Unit> {
+        if (!CachePolicy.shouldRefresh(trendingDao.fetchedAt(), CachePolicy.TRENDING_TTL, force, clock)) return Done
+        return coordinator.execute(KEY_TRENDING) {
+            val now = clock.millis()
+            trendingDao.replaceAll(api.trending().coins.mapIndexed { index, dto -> TrendingEntity(dto.item.id, index, now) })
+        }
     }
 
     private suspend fun refreshTopCoins(force: Boolean): Outcome<Unit> {
@@ -81,13 +97,12 @@ class OfflineFirstMarketRepository @Inject constructor(
                 orphanCutoffMillis = now - CachePolicy.EVICTION_AGE.toMillis(),
             )
         }
-        if (outcome is Outcome.Success) refreshUnlistedWatchedCoins()
         return outcome
     }
 
-    /** Watched coins outside the top list are refreshed in a single batched request. */
-    private suspend fun refreshUnlistedWatchedCoins() {
-        val ids = coinDao.unlistedWatchedIds().take(MAX_IDS_PER_REQUEST)
+    /** Watched and trending coins outside the top list are refreshed in a single batched request. */
+    private suspend fun refreshUnlistedTrackedCoins() {
+        val ids = coinDao.unlistedTrackedIds().take(MAX_IDS_PER_REQUEST)
         if (ids.isEmpty()) return
         coordinator.execute(KEY_WATCHED) {
             val now = clock.millis()
@@ -131,7 +146,8 @@ class OfflineFirstMarketRepository @Inject constructor(
 
     private companion object {
         const val KEY_MARKETS = "markets"
-        const val KEY_WATCHED = "markets:watched"
+        const val KEY_WATCHED = "markets:tracked"
+        const val KEY_TRENDING = "trending"
         const val KEY_GLOBAL = "global"
         const val KEY_COIN = "coin:"
         const val KEY_SEARCH = "search:"

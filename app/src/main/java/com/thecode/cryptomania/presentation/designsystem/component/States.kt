@@ -1,16 +1,11 @@
 package com.thecode.cryptomania.presentation.designsystem.component
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.RepeatMode
 import androidx.compose.animation.core.animateFloat
 import androidx.compose.animation.core.infiniteRepeatable
 import androidx.compose.animation.core.rememberInfiniteTransition
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -40,9 +35,6 @@ import androidx.compose.material3.pulltorefresh.PullToRefreshDefaults
 import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -172,59 +164,51 @@ fun ErrorState(
 }
 
 /**
- * Slim banner describing data freshness. Hidden when everything is up to date; never a
- * dialog, never blocks content.
+ * Freshness pill shown on the wave when data is offline or could not be refreshed. Never a
+ * dialog, never covers content; hidden entirely when everything is up to date.
  */
 @Composable
 fun NetworkStatusIndicator(status: SyncStatus, modifier: Modifier = Modifier) {
-    // Keep rendering the last visible status while the banner animates out.
-    var shown by remember { mutableStateOf(status) }
-    if (status !is SyncStatus.UpToDate) shown = status
-    AnimatedVisibility(
-        visible = status !is SyncStatus.UpToDate,
-        enter = expandVertically() + fadeIn(),
-        exit = shrinkVertically() + fadeOut(),
-        modifier = modifier,
-    ) {
-        val colors = CryptoManiaTheme.colors
-        val (icon, text) = when (val current = shown) {
-            is SyncStatus.Offline -> Icons.Rounded.CloudOff to if (current.dataFrom != null) {
-                stringResource(R.string.status_offline, rememberRelativeTime(current.dataFrom))
+    val colors = CryptoManiaTheme.colors
+    val (icon, text) = when (status) {
+        SyncStatus.UpToDate -> return
+        is SyncStatus.Offline -> Icons.Rounded.CloudOff to if (status.dataFrom != null) {
+            stringResource(R.string.status_offline, rememberRelativeTime(status.dataFrom))
+        } else {
+            stringResource(R.string.status_offline_no_time)
+        }
+        is SyncStatus.Degraded -> {
+            val reason = stringResource(status.error.shortRes())
+            val icon = if (status.error == AppError.RateLimited) Icons.Rounded.HourglassTop else Icons.Rounded.ErrorOutline
+            icon to if (status.dataFrom != null) {
+                stringResource(R.string.status_stale, reason, rememberRelativeTime(status.dataFrom))
             } else {
-                stringResource(R.string.status_offline_no_time)
+                reason
             }
-            is SyncStatus.Degraded -> {
-                val reason = stringResource(current.error.shortRes())
-                val icon = if (current.error == AppError.RateLimited) Icons.Rounded.HourglassTop else Icons.Rounded.ErrorOutline
-                icon to if (current.dataFrom != null) {
-                    stringResource(R.string.status_stale, reason, rememberRelativeTime(current.dataFrom))
-                } else {
-                    reason
-                }
-            }
-            SyncStatus.UpToDate -> Icons.Rounded.CloudOff to ""
         }
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .background(colors.warningContainer)
-                .padding(horizontal = CryptoManiaTheme.spacing.lg, vertical = CryptoManiaTheme.spacing.sm)
-                .semantics { liveRegion = LiveRegionMode.Polite },
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(CryptoManiaTheme.spacing.sm),
-        ) {
-            Icon(icon, contentDescription = null, tint = colors.warning, modifier = Modifier.size(16.dp))
-            Text(text, style = MaterialTheme.typography.labelMedium, color = colors.textPrimary)
-        }
+    }
+    Row(
+        modifier = modifier
+            .clip(CircleShape)
+            .background(colors.onWave.copy(alpha = 0.16f))
+            .padding(horizontal = CryptoManiaTheme.spacing.md, vertical = 6.dp)
+            .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(CryptoManiaTheme.spacing.sm),
+    ) {
+        Icon(icon, contentDescription = null, tint = colors.onWave, modifier = Modifier.size(16.dp))
+        Text(text, style = MaterialTheme.typography.labelMedium, color = colors.onWave, maxLines = 1)
     }
 }
 
+/** Pull-to-refresh whose indicator appears below the wave header ([indicatorTopPadding]). */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CryptoManiaPullToRefresh(
     isRefreshing: Boolean,
     onRefresh: () -> Unit,
     modifier: Modifier = Modifier,
+    indicatorTopPadding: Dp = 0.dp,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val state = rememberPullToRefreshState()
@@ -238,7 +222,9 @@ fun CryptoManiaPullToRefresh(
             PullToRefreshDefaults.Indicator(
                 state = state,
                 isRefreshing = isRefreshing,
-                modifier = Modifier.align(Alignment.TopCenter),
+                modifier = Modifier
+                    .align(Alignment.TopCenter)
+                    .padding(top = indicatorTopPadding),
                 containerColor = colors.surfaceRaised,
                 color = colors.brand,
             )

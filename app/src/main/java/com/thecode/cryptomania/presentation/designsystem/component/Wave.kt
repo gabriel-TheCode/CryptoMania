@@ -1,11 +1,21 @@
 package com.thecode.cryptomania.presentation.designsystem.component
 
-import androidx.compose.animation.core.Animatable
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,9 +33,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
@@ -36,6 +45,7 @@ import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.platform.LocalDensity
@@ -51,7 +61,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
-import com.thecode.cryptomania.presentation.designsystem.theme.Motion
+import com.thecode.cryptomania.presentation.util.SyncStatus
+import kotlin.math.PI
+import kotlin.math.cos
+import kotlin.math.sin
 
 /**
  * The CryptoMania 1.x header wave, taken verbatim from its 375×94 vector and rescaled to any
@@ -66,6 +79,9 @@ private const val WAVE_PATH =
         "-35.023,-6.36h-0.342c-13.353,0 -23.858,5.765 -34.018,11.34C237.978,89.05 228.958,94 218.175,94Z"
 private const val VIEWPORT_WIDTH = 375f
 private const val VIEWPORT_HEIGHT = 94f
+
+/** Height reserved for the wavy edge below the bar content. */
+val WaveEdgeHeight: Dp = 28.dp
 
 private val wavePath: Path by lazy { PathParser().parsePathString(WAVE_PATH).toPath() }
 
@@ -85,49 +101,68 @@ class WaveShape(private val mirrored: Boolean = false) : Shape {
 }
 
 /**
- * Two stacked waves: a translucent mirrored one behind for depth, the brand gradient in front.
- * On first appearance the back layer glides into place, once, as a quiet signature motion.
+ * Two layered waves in slow, continuous motion, like liquid: the translucent back layer sways
+ * and breathes, the gradient front layer drifts gently against it. Both layers are drawn wider
+ * than the screen on each side, so swaying never reveals an edge. A single phase value drives
+ * everything and is read only while drawing: no recomposition, no layout, one path per layer.
+ * With animations disabled in system settings the waves simply stay still.
  */
 @Composable
 fun WaveBackground(modifier: Modifier = Modifier) {
     val colors = CryptoManiaTheme.colors
-    val settle = remember { Animatable(0f) }
-    LaunchedEffect(Unit) { settle.animateTo(1f, Motion.spatial()) }
+    val phase by rememberInfiniteTransition(label = "wave").animateFloat(
+        initialValue = 0f,
+        targetValue = (2 * PI).toFloat(),
+        animationSpec = infiniteRepeatable(tween(durationMillis = 9_000, easing = LinearEasing)),
+        label = "wavePhase",
+    )
     Box(
         modifier.drawWithCache {
-            val front = WaveShape().createOutline(size, layoutDirection, this) as Outline.Generic
-            val back = WaveShape(mirrored = true).createOutline(size.copy(height = size.height * 1.08f), layoutDirection, this) as Outline.Generic
-            val gradient = Brush.linearGradient(listOf(colors.waveStart, colors.waveEnd), end = Offset(size.width, size.height))
-            val drift = 36.dp.toPx()
+            val overscan = 48.dp.toPx()
+            val wide = Size(size.width + overscan * 2, size.height)
+            val front = (WaveShape().createOutline(wide, layoutDirection, this) as Outline.Generic).path
+            val back = (WaveShape(mirrored = true).createOutline(wide.copy(height = size.height * 1.1f), layoutDirection, this) as Outline.Generic).path
+            val gradient = Brush.linearGradient(listOf(colors.waveStart, colors.waveEnd), end = Offset(wide.width, size.height))
+            val backColor = colors.waveEnd.copy(alpha = 0.35f)
             onDrawBehind {
-                translate(left = (1f - settle.value) * -drift) {
-                    drawPath(back.path, colors.waveEnd.copy(alpha = 0.35f))
+                val p = phase
+                translate(left = -overscan + sin(p) * overscan * 0.75f) {
+                    scale(scaleX = 1f, scaleY = 1f + 0.05f * sin(p + 1.3f), pivot = Offset.Zero) { drawPath(back, backColor) }
                 }
-                drawPath(front.path, gradient)
+                translate(left = -overscan + sin(p + PI.toFloat()) * overscan * 0.3f) {
+                    scale(scaleX = 1f, scaleY = 1f + 0.025f * cos(p), pivot = Offset.Zero) { drawPath(front, gradient) }
+                }
             }
         },
     )
 }
 
-/** Wave that extends behind the status bar, with content laid out below it. */
+/** Wave that extends behind the status bar; content sits below the status bar, above the edge. */
 @Composable
 fun WaveSurface(
     modifier: Modifier = Modifier,
-    height: Dp,
     content: @Composable BoxScope.() -> Unit,
 ) {
     val statusBar = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
-    Box(modifier.fillMaxWidth().height(statusBar + height)) {
+    Box(modifier.fillMaxWidth()) {
         WaveBackground(Modifier.matchParentSize())
         CompositionLocalProvider(LocalContentColor provides CryptoManiaTheme.colors.onWave) {
-            Box(Modifier.padding(top = statusBar).fillMaxWidth(), content = content)
+            Box(
+                Modifier
+                    .padding(top = statusBar, bottom = WaveEdgeHeight)
+                    .fillMaxWidth(),
+                content = content,
+            )
         }
     }
 }
 
 /**
- * Brand top bar drawn on the wave. With a [scrollBehavior] it starts expanded (large Baloo
- * title plus subtitle) and collapses into a compact bar as content scrolls.
+ * Brand top bar drawn on the wave, meant for a Scaffold `topBar` slot: the wave is drawn over
+ * the content, so lists scroll *under* it and show through the curve, with no hard edge.
+ *
+ * With a [scrollBehavior] it starts expanded (large title) and collapses into a compact
+ * bar as content scrolls. Data freshness problems appear as a pill on the wave ([status]).
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -136,27 +171,25 @@ fun CryptoManiaTopBar(
     modifier: Modifier = Modifier,
     subtitle: String? = null,
     onBack: (() -> Unit)? = null,
+    status: SyncStatus = SyncStatus.UpToDate,
     scrollBehavior: TopAppBarScrollBehavior? = null,
-    expandedExtra: Dp = if (scrollBehavior != null) 36.dp else 0.dp,
+    expandedExtra: Dp = if (scrollBehavior != null) 32.dp else 0.dp,
     actions: @Composable RowScope.() -> Unit = {},
 ) {
     val colors = CryptoManiaTheme.colors
     val spacing = CryptoManiaTheme.spacing
-    val barHeight = 64.dp
-    val edge = 26.dp
     val extraPx = with(LocalDensity.current) { expandedExtra.toPx() }
     if (scrollBehavior != null) SideEffect { scrollBehavior.state.heightOffsetLimit = -extraPx }
     // Without a scroll behavior the bar is simply compact.
     val collapsed = scrollBehavior?.state?.collapsedFraction ?: 1f
-    val extra = lerp(expandedExtra, 0.dp, collapsed)
     val titleStyle = lerp(MaterialTheme.typography.headlineLarge, MaterialTheme.typography.titleLarge, collapsed)
 
-    WaveSurface(modifier = modifier, height = barHeight + extra + edge) {
+    WaveSurface(modifier = modifier) {
         Column(Modifier.fillMaxWidth()) {
             Row(
                 Modifier
                     .fillMaxWidth()
-                    .height(barHeight + extra)
+                    .height(64.dp + lerp(expandedExtra, 0.dp, collapsed))
                     .padding(start = if (onBack == null) spacing.lg else spacing.xs, end = spacing.xs),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -175,15 +208,27 @@ fun CryptoManiaTopBar(
                         modifier = Modifier.semantics { heading() },
                     )
                     if (subtitle != null) {
+                        Spacer(Modifier.height(2.dp))
                         Text(
                             subtitle,
                             style = MaterialTheme.typography.labelMedium,
-                            color = colors.onWave.copy(alpha = 0.78f),
+                            color = colors.onWave.copy(alpha = 0.8f),
                             maxLines = 1,
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, content = actions)
+            }
+            AnimatedVisibility(
+                visible = status !is SyncStatus.UpToDate,
+                enter = expandVertically() + fadeIn(),
+                exit = shrinkVertically() + fadeOut(),
+            ) {
+                Column {
+                    NetworkStatusIndicator(status, Modifier.padding(horizontal = spacing.lg))
+                    Spacer(Modifier.height(spacing.xs))
+                }
             }
         }
     }

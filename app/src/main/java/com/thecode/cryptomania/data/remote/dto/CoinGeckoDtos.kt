@@ -80,6 +80,15 @@ data class ExchangeDto(
 )
 
 @Serializable
+data class TrendingResponseDto(val coins: List<TrendingCoinDto> = emptyList())
+
+@Serializable
+data class TrendingCoinDto(val item: TrendingItemDto)
+
+@Serializable
+data class TrendingItemDto(val id: String)
+
+@Serializable
 data class SearchResponseDto(val coins: List<SearchCoinDto> = emptyList())
 
 @Serializable

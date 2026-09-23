@@ -27,6 +27,8 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
@@ -53,7 +55,6 @@ import com.thecode.cryptomania.presentation.designsystem.component.CryptoManiaPu
 import com.thecode.cryptomania.presentation.designsystem.component.CryptoManiaTopBar
 import com.thecode.cryptomania.presentation.designsystem.component.EmptyState
 import com.thecode.cryptomania.presentation.designsystem.component.ErrorState
-import com.thecode.cryptomania.presentation.designsystem.component.NetworkStatusIndicator
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
 import com.thecode.cryptomania.presentation.util.Formatters
 import com.thecode.cryptomania.presentation.util.ScreenContent
@@ -72,29 +73,33 @@ fun ExchangesRoute(viewModel: ExchangesViewModel = hiltViewModel()) {
 fun ExchangesScreen(state: ExchangesUiState, onIntent: (ExchangesIntent) -> Unit) {
     val uriHandler = LocalUriHandler.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Column(
-        Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) {
-        CryptoManiaTopBar(
-            scrollBehavior = scrollBehavior,
-            title = stringResource(R.string.exchanges_title),
-            subtitle = stringResource(R.string.exchanges_subtitle),
-        )
-        NetworkStatusIndicator(state.syncStatus)
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        containerColor = CryptoManiaTheme.colors.background,
+        contentWindowInsets = WindowInsets(0),
+        topBar = {
+            CryptoManiaTopBar(
+                scrollBehavior = scrollBehavior,
+                title = stringResource(R.string.exchanges_title),
+                subtitle = stringResource(R.string.exchanges_subtitle),
+                status = state.syncStatus,
+            )
+        },
+    ) { padding ->
+        val top = padding.calculateTopPadding()
         when (val content = state.content) {
-            ScreenContent.Loading -> Column { repeat(10) { CoinRowSkeleton() } }
-            is ScreenContent.Failed -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            ScreenContent.Loading -> Column(Modifier.padding(top = top)) { repeat(10) { CoinRowSkeleton() } }
+            is ScreenContent.Failed -> Box(Modifier.fillMaxSize().padding(top = top), contentAlignment = Alignment.Center) {
                 ErrorState(content.error, onRetry = { onIntent(ExchangesIntent.Refresh) })
             }
             is ScreenContent.Ready -> CryptoManiaPullToRefresh(
                 isRefreshing = state.isRefreshing,
                 onRefresh = { onIntent(ExchangesIntent.Refresh) },
+                indicatorTopPadding = top,
                 modifier = Modifier.fillMaxSize(),
             ) {
                 if (content.data.exchanges.isEmpty()) {
-                    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                    Box(Modifier.fillMaxSize().padding(top = top), contentAlignment = Alignment.Center) {
                         EmptyState(
                             icon = Icons.Rounded.AccountBalance,
                             title = stringResource(R.string.exchanges_empty_title),
@@ -108,7 +113,7 @@ fun ExchangesScreen(state: ExchangesUiState, onIntent: (ExchangesIntent) -> Unit
                                 .widthIn(max = CryptoManiaTheme.sizes.maxContentWidth)
                                 .fillMaxSize()
                                 .testTag("exchange_list"),
-                            contentPadding = PaddingValues(bottom = CryptoManiaTheme.spacing.xxl),
+                            contentPadding = PaddingValues(top = top, bottom = CryptoManiaTheme.spacing.xxl),
                         ) {
                             items(content.data.exchanges, key = { it.id }, contentType = { "exchange" }) { exchange ->
                                 ExchangeRow(

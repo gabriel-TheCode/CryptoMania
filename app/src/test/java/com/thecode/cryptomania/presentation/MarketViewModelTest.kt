@@ -35,6 +35,7 @@ class MarketViewModelTest {
     private fun viewModel() = MarketViewModel(
         ObserveMarketOverviewUseCase(market, watchlist),
         market,
+        watchlist,
         network,
         mainDispatcher.dispatcher,
     )

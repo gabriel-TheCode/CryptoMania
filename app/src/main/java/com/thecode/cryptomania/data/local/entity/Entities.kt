@@ -85,6 +85,14 @@ data class ExchangeEntity(
     val fetchedAtMillis: Long,
 )
 
+/** Ordered ids of CoinGecko trending coins ("Hot"). Market data lives in [CoinEntity]. */
+@Entity(tableName = "trending")
+data class TrendingEntity(
+    @PrimaryKey val coinId: String,
+    val position: Int,
+    val fetchedAtMillis: Long,
+)
+
 @Entity(tableName = "watchlist")
 data class WatchlistEntity(
     @PrimaryKey val coinId: String,

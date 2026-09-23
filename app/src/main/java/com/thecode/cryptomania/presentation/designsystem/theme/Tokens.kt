@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.LineHeightStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.em
@@ -71,13 +72,10 @@ val CryptoManiaShapes = Shapes(
 )
 
 /**
- * Two typefaces carried over from CryptoMania 1.x:
- * - **Baloo** (rounded, friendly) gives the brand its voice in headlines and titles;
- * - **Ubuntu** carries everything else. Its digits are tabular by default, so prices in a
- *   list line up and never jitter horizontally when they update. Baloo digits are
- *   proportional, which is why it is never used for figures.
+ * Ubuntu, carried over from CryptoMania 1.x: a humanist face with character for headlines,
+ * and tabular digits by default, so prices in a list line up and never jitter horizontally
+ * when they update.
  */
-val Baloo = FontFamily(Font(R.font.baloo_medium, FontWeight.Medium))
 val Ubuntu = FontFamily(
     Font(R.font.ubuntu_regular, FontWeight.Normal),
     Font(R.font.ubuntu_medium, FontWeight.Medium),
@@ -85,6 +83,8 @@ val Ubuntu = FontFamily(
 )
 
 private fun style(family: FontFamily, size: Int, weight: FontWeight, lineHeight: Int, tracking: Double = 0.0) = TextStyle(
+    // Trimmed line boxes keep a subtitle snug under a title.
+    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.Both),
     fontFamily = family,
     fontWeight = weight,
     fontSize = size.sp,
@@ -99,10 +99,10 @@ val CryptoManiaTypography = Typography(
     displayMedium = style(Ubuntu, 34, FontWeight.Bold, 42, -0.02),
     displaySmall = style(Ubuntu, 28, FontWeight.Bold, 36, -0.015),
     // Words: screen titles, onboarding, section headers.
-    headlineLarge = style(Baloo, 30, FontWeight.Medium, 36),
-    headlineMedium = style(Baloo, 26, FontWeight.Medium, 32),
-    headlineSmall = style(Baloo, 22, FontWeight.Medium, 28),
-    titleLarge = style(Baloo, 20, FontWeight.Medium, 26),
+    headlineLarge = style(Ubuntu, 30, FontWeight.Bold, 36, -0.01),
+    headlineMedium = style(Ubuntu, 26, FontWeight.Bold, 32, -0.01),
+    headlineSmall = style(Ubuntu, 22, FontWeight.Bold, 28),
+    titleLarge = style(Ubuntu, 20, FontWeight.Bold, 26),
     titleMedium = style(Ubuntu, 16, FontWeight.Medium, 22),
     titleSmall = style(Ubuntu, 14, FontWeight.Medium, 20),
     bodyLarge = style(Ubuntu, 16, FontWeight.Normal, 24),

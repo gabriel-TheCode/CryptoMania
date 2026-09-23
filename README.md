@@ -9,8 +9,9 @@ top of the free [CoinGecko API](https://www.coingecko.com/en/api).
 
 ## Features
 
-- **Market overview** – total market cap, 24h volume, BTC/ETH dominance, top movers, and the top
-  250 coins with 7-day sparklines. Filters (All · Watchlist · Gainers · Losers) run locally.
+- **Market overview** – total market cap, 24h volume, BTC/ETH dominance, top movers (biggest 24h
+  moves), and the top 250 coins with 7-day sparklines. Filters: All · **Hot** (CoinGecko trending
+  coins) · Watchlist · Gainers · Losers, with a directional page transition.
 - **Coin details** – price that rolls digit by digit on updates, interactive chart (1D · 1W · 1M ·
   3M · 1Y) with drag/long-press scrubbing and haptics, performance, 24h range, supply, all-time high,
   description, categories and website.
@@ -69,6 +70,7 @@ server-side, history capped at 365 days) shaped the data layer:
 | Top 250 coins + sparkline + 1h/24h/7d | `/coins/markets` (1 call) | 2 min |
 | Watched coins outside the top 250 | `/coins/markets?ids=…` (1 batched call) | with the market |
 | Global cap/volume/dominance | `/global` | 5 min |
+| Hot (trending coins) | `/search/trending` (+ same batched `ids` call) | 15 min |
 | Price history | `/coins/{id}/market_chart` | 5 min (1D) → 12 h (1Y) |
 | Description, links, categories | `/coins/{id}` (heavy sections disabled) | 24 h |
 | Exchanges | `/exchanges` | 1 h |
@@ -95,10 +97,11 @@ marks the period open, high/low are labelled, and TalkBack reads a summary of th
 
 ## Design system
 
-Semantic color tokens (dark/light + color-blind variants), **Baloo** for headlines and **Ubuntu**
-(tabular digits) for text and figures — both carried over from CryptoMania 1.x — spacing/size tokens,
-Material 3 Expressive spring motion, and the original **wave header**, redrawn as an adaptive
-Compose `Shape` from the 1.x vector. Components: `CryptoManiaTopBar`, `CryptoManiaCard` (soft
+Semantic color tokens (dark/light + color-blind variants), **Ubuntu** carried over from
+CryptoMania 1.x (bold headlines, tabular digits for figures), spacing/size tokens, Material 3
+Expressive spring motion, and the original **wave header**, redrawn as an adaptive Compose `Shape`
+from the 1.x vector: two layers in slow liquid motion, drawn over the content so lists scroll under
+it. The launcher icon, splash and onboarding use a new vector mark: two stylized gold coins. Components: `CryptoManiaTopBar`, `CryptoManiaCard` (soft
 tinted shadows), `CryptoPrice` (rolling ticker), `PriceChangeBadge`, `MarketStat`, `CryptoListItem`,
 `MoverCard`, `Sparkline`, `CryptoManiaSearchBar`, `CryptoManiaFilterChip`, `SegmentedSelector`
 (time ranges), `PriceChart`, skeletons, `ErrorState`, `EmptyState`, `NetworkStatusIndicator`,

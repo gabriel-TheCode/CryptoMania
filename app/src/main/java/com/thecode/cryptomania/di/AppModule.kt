@@ -111,6 +111,7 @@ object AppModule {
     @Provides fun provideCoinProfileDao(db: CryptoManiaDatabase) = db.coinProfileDao()
     @Provides fun provideExchangeDao(db: CryptoManiaDatabase) = db.exchangeDao()
     @Provides fun provideWatchlistDao(db: CryptoManiaDatabase) = db.watchlistDao()
+    @Provides fun provideTrendingDao(db: CryptoManiaDatabase) = db.trendingDao()
 
     @Provides
     @Singleton

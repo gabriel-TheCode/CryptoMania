@@ -10,6 +10,7 @@ import androidx.compose.ui.test.performScrollTo
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
+import androidx.compose.ui.test.longClick
 import com.thecode.cryptomania.domain.model.AppError
 import com.thecode.cryptomania.domain.model.ChartRange
 import com.thecode.cryptomania.domain.model.PricePoint
@@ -67,6 +68,22 @@ class MarketScreenTest {
         show(ready)
         compose.onNode(hasContentDescription("Bitcoin", substring = true)).assertIsDisplayed().performClick()
         assertEquals(listOf("bitcoin"), opened)
+    }
+
+    @Test
+    fun longPressAddsToWatchlistWithoutOpeningTheCoin() {
+        show(ready)
+        compose.onNode(hasContentDescription("Bitcoin", substring = true)).performTouchInput { longClick() }
+        compose.onNodeWithText("Add to watchlist").performClick()
+        assertEquals(MarketIntent.ToggleWatchlist("bitcoin"), intents.last())
+        assertTrue(opened.isEmpty())
+    }
+
+    @Test
+    fun emptyFilterHidesTableHeader() {
+        show(ready.copy(content = ScreenContent.Ready(MarketContent(null, emptyList(), emptyList(), Instant.now())), filter = MarketFilter.Watchlist))
+        compose.onNodeWithText("Your watchlist is empty").assertIsDisplayed()
+        compose.onNodeWithText("Asset").assertDoesNotExist()
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.thecode.cryptomania.presentation.feature.onboarding
 import androidx.annotation.RawRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.SizeTransform
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloat
@@ -37,7 +38,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -48,15 +48,12 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
@@ -123,7 +120,7 @@ fun OnboardingScreen(onFinish: () -> Unit) {
             .background(colors.background)
             .windowInsetsPadding(WindowInsets.navigationBars),
     ) {
-        WaveSurface(height = 64.dp + 30.dp) {
+        WaveSurface {
             Row(
                 Modifier
                     .fillMaxWidth()
@@ -149,24 +146,24 @@ fun OnboardingScreen(onFinish: () -> Unit) {
             verticalAlignment = Alignment.CenterVertically,
         ) {
             PageIndicator(pagerState, Modifier.weight(1f))
-            AnimatedContent(
-                targetState = isLast,
-                transitionSpec = { fadeIn(tween(Motion.MEDIUM)) togetherWith fadeOut(tween(Motion.SHORT)) },
-                label = "onboardingCta",
-            ) { last ->
-                Button(
-                    onClick = { if (last) onFinish() else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) } },
-                    shape = CircleShape,
-                    colors = ButtonDefaults.buttonColors(containerColor = colors.brand, contentColor = colors.onBrand),
-                    modifier = Modifier
-                        .heightIn(min = 52.dp)
-                        .dropShadow(CircleShape, Shadow(radius = 16.dp, color = colors.brand.copy(alpha = 0.35f), offset = DpOffset(0.dp, 6.dp))),
-                ) {
-                    Text(
-                        stringResource(if (last) R.string.onboarding_get_started else R.string.onboarding_next),
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(horizontal = if (last) spacing.lg else spacing.xs),
-                    )
+            // Standard M3 filled button: one component whose width morphs (anchored to the end)
+            // while the label cross-fades, instead of swapping two buttons.
+            Button(
+                onClick = { if (isLast) onFinish() else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) } },
+                modifier = Modifier.heightIn(min = 48.dp),
+            ) {
+                // The old label fades out first, the button resizes around its centre, and only
+                // then does the new label fade in: no frame where text is wider than the button.
+                AnimatedContent(
+                    targetState = isLast,
+                    contentAlignment = Alignment.Center,
+                    transitionSpec = {
+                        (fadeIn(tween(Motion.SHORT, delayMillis = Motion.MEDIUM)) togetherWith fadeOut(tween(Motion.SHORT / 2)))
+                            .using(SizeTransform(clip = true) { _, _ -> tween(Motion.MEDIUM, easing = Motion.Emphasized) })
+                    },
+                    label = "onboardingCta",
+                ) { last ->
+                    Text(stringResource(if (last) R.string.onboarding_get_started else R.string.onboarding_next))
                 }
             }
         }
@@ -177,11 +174,11 @@ fun OnboardingScreen(onFinish: () -> Unit) {
 private fun PageContent(page: OnboardingPage, index: Int, pagerState: PagerState) {
     val colors = CryptoManiaTheme.colors
     val spacing = CryptoManiaTheme.spacing
-    // Parallax: the illustration moves and fades faster than the text while swiping.
-    val offset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
     val illustration: @Composable (Modifier) -> Unit = { modifier ->
         Box(
             modifier.graphicsLayer {
+                // Parallax, read only while drawing: the illustration moves and fades faster than the text.
+                val offset = (pagerState.currentPage - index) + pagerState.currentPageOffsetFraction
                 translationX = offset * size.width * 0.35f
                 alpha = 1f - offset.absoluteValue.coerceIn(0f, 1f)
                 val scale = 1f - 0.15f * offset.absoluteValue.coerceIn(0f, 1f)
@@ -256,11 +253,10 @@ private fun BrandMark() {
         Box(
             Modifier
                 .size(140.dp)
-                .dropShadow(CircleShape, Shadow(radius = 24.dp, color = colors.brand.copy(alpha = 0.45f), offset = DpOffset(0.dp, 8.dp)))
                 .background(colors.brand, CircleShape),
             contentAlignment = Alignment.Center,
         ) {
-            Image(painterResource(R.drawable.ic_launcher_foreground), contentDescription = null, modifier = Modifier.size(200.dp))
+            Image(painterResource(R.drawable.ic_launcher_foreground), contentDescription = null, modifier = Modifier.size(260.dp))
         }
     }
 }

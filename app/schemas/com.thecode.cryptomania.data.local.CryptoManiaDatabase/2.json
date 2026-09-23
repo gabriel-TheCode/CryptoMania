@@ -1,0 +1,432 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 2,
+    "identityHash": "a4a195731b409ac2ab4a6c6baa99057e",
+    "entities": [
+      {
+        "tableName": "coins",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `symbol` TEXT NOT NULL, `name` TEXT NOT NULL, `imageUrl` TEXT, `marketCapRank` INTEGER, `price` REAL, `marketCap` REAL, `fullyDilutedValuation` REAL, `volume24h` REAL, `high24h` REAL, `low24h` REAL, `change1hPercent` REAL, `change24hPercent` REAL, `change7dPercent` REAL, `circulatingSupply` REAL, `totalSupply` REAL, `maxSupply` REAL, `allTimeHigh` REAL, `allTimeHighChangePercent` REAL, `allTimeHighDateMillis` INTEGER, `sparkline` TEXT NOT NULL, `lastUpdatedMillis` INTEGER, `fetchedAtMillis` INTEGER NOT NULL, `isListed` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "symbol",
+            "columnName": "symbol",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "marketCapRank",
+            "columnName": "marketCapRank",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "price",
+            "columnName": "price",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "marketCap",
+            "columnName": "marketCap",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "fullyDilutedValuation",
+            "columnName": "fullyDilutedValuation",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "volume24h",
+            "columnName": "volume24h",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "high24h",
+            "columnName": "high24h",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "low24h",
+            "columnName": "low24h",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "change1hPercent",
+            "columnName": "change1hPercent",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "change24hPercent",
+            "columnName": "change24hPercent",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "change7dPercent",
+            "columnName": "change7dPercent",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "circulatingSupply",
+            "columnName": "circulatingSupply",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "totalSupply",
+            "columnName": "totalSupply",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "maxSupply",
+            "columnName": "maxSupply",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "allTimeHigh",
+            "columnName": "allTimeHigh",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "allTimeHighChangePercent",
+            "columnName": "allTimeHighChangePercent",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "allTimeHighDateMillis",
+            "columnName": "allTimeHighDateMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "sparkline",
+            "columnName": "sparkline",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "lastUpdatedMillis",
+            "columnName": "lastUpdatedMillis",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "fetchedAtMillis",
+            "columnName": "fetchedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isListed",
+            "columnName": "isListed",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_coins_isListed_marketCapRank",
+            "unique": false,
+            "columnNames": [
+              "isListed",
+              "marketCapRank"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_coins_isListed_marketCapRank` ON `${TABLE_NAME}` (`isListed`, `marketCapRank`)"
+          }
+        ]
+      },
+      {
+        "tableName": "global_market",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `totalMarketCap` REAL NOT NULL, `totalVolume24h` REAL NOT NULL, `marketCapChange24hPercent` REAL, `btcDominancePercent` REAL, `ethDominancePercent` REAL, `activeCryptocurrencies` INTEGER, `fetchedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalMarketCap",
+            "columnName": "totalMarketCap",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "totalVolume24h",
+            "columnName": "totalVolume24h",
+            "affinity": "REAL",
+            "notNull": true
+          },
+          {
+            "fieldPath": "marketCapChange24hPercent",
+            "columnName": "marketCapChange24hPercent",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "btcDominancePercent",
+            "columnName": "btcDominancePercent",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "ethDominancePercent",
+            "columnName": "ethDominancePercent",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "activeCryptocurrencies",
+            "columnName": "activeCryptocurrencies",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "fetchedAtMillis",
+            "columnName": "fetchedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "price_history",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coinId` TEXT NOT NULL, `range` TEXT NOT NULL, `points` TEXT NOT NULL, `fetchedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`coinId`, `range`))",
+        "fields": [
+          {
+            "fieldPath": "coinId",
+            "columnName": "coinId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "range",
+            "columnName": "range",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "points",
+            "columnName": "points",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fetchedAtMillis",
+            "columnName": "fetchedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "coinId",
+            "range"
+          ]
+        }
+      },
+      {
+        "tableName": "coin_profiles",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `description` TEXT NOT NULL, `homepageUrl` TEXT, `categories` TEXT NOT NULL, `genesisDate` TEXT, `hashingAlgorithm` TEXT, `fetchedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "description",
+            "columnName": "description",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "homepageUrl",
+            "columnName": "homepageUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "categories",
+            "columnName": "categories",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "genesisDate",
+            "columnName": "genesisDate",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "hashingAlgorithm",
+            "columnName": "hashingAlgorithm",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "fetchedAtMillis",
+            "columnName": "fetchedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "exchanges",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `position` INTEGER NOT NULL, `name` TEXT NOT NULL, `imageUrl` TEXT, `country` TEXT, `yearEstablished` INTEGER, `websiteUrl` TEXT, `trustScore` INTEGER, `trustScoreRank` INTEGER, `volume24hBtc` REAL, `fetchedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "imageUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "country",
+            "columnName": "country",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "yearEstablished",
+            "columnName": "yearEstablished",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "websiteUrl",
+            "columnName": "websiteUrl",
+            "affinity": "TEXT"
+          },
+          {
+            "fieldPath": "trustScore",
+            "columnName": "trustScore",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "trustScoreRank",
+            "columnName": "trustScoreRank",
+            "affinity": "INTEGER"
+          },
+          {
+            "fieldPath": "volume24hBtc",
+            "columnName": "volume24hBtc",
+            "affinity": "REAL"
+          },
+          {
+            "fieldPath": "fetchedAtMillis",
+            "columnName": "fetchedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        }
+      },
+      {
+        "tableName": "trending",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coinId` TEXT NOT NULL, `position` INTEGER NOT NULL, `fetchedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`coinId`))",
+        "fields": [
+          {
+            "fieldPath": "coinId",
+            "columnName": "coinId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "position",
+            "columnName": "position",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "fetchedAtMillis",
+            "columnName": "fetchedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "coinId"
+          ]
+        }
+      },
+      {
+        "tableName": "watchlist",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`coinId` TEXT NOT NULL, `addedAtMillis` INTEGER NOT NULL, PRIMARY KEY(`coinId`))",
+        "fields": [
+          {
+            "fieldPath": "coinId",
+            "columnName": "coinId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "addedAtMillis",
+            "columnName": "addedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "coinId"
+          ]
+        }
+      }
+    ],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a4a195731b409ac2ab4a6c6baa99057e')"
+    ]
+  }
+}

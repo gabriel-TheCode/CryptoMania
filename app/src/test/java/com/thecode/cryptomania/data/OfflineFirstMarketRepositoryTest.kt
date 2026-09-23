@@ -53,6 +53,7 @@ class OfflineFirstMarketRepositoryTest {
                     path.endsWith("/coins/markets") && request.url.queryParameter("ids") != null -> WATCHED_JSON
                     path.endsWith("/coins/markets") -> MARKETS_JSON
                     path.endsWith("/global") -> GLOBAL_JSON
+                    path.endsWith("/search/trending") -> TRENDING_JSON
                     path.endsWith("/search") -> SEARCH_JSON
                     else -> return MockResponse.Builder().code(404).build()
                 }
@@ -75,6 +76,7 @@ class OfflineFirstMarketRepositoryTest {
         api = CoinGeckoApi.create(OkHttpClient(), server.url("/api/v3/").toString()),
         coinDao = db.coinDao(),
         globalMarketDao = db.globalMarketDao(),
+        trendingDao = db.trendingDao(),
         coordinator = RequestCoordinator(clock, scope),
         clock = clock,
     )
@@ -156,6 +158,18 @@ class OfflineFirstMarketRepositoryTest {
     }
 
     @Test
+    fun `trending coins are cached in order, with market data fetched in the same batch`() = runTest {
+        val repository = repository()
+
+        repository.refreshMarket()
+
+        assertEquals(listOf("pepecoin", "bitcoin"), repository.observeTrendingIds().first())
+        assertEquals(1, requests.count { "/search/trending" in it })
+        assertEquals("only unlisted trending coins are batched", 1, requests.count { "ids=" in it })
+        assertEquals(setOf("pepecoin", "bitcoin"), repository.observeCoins(setOf("pepecoin", "bitcoin")).first().map { it.id }.toSet())
+    }
+
+    @Test
     fun `identical searches are served from memory`() = runTest {
         val repository = repository()
 
@@ -184,6 +198,8 @@ class OfflineFirstMarketRepositoryTest {
         const val GLOBAL_JSON = """{"data":{"active_cryptocurrencies":21532,"total_market_cap":{"usd":2.88e12,"btc":3.4e7},
           "total_volume":{"usd":1.28e11},"market_cap_percentage":{"btc":58.7,"eth":11.3},
           "market_cap_change_percentage_24h_usd":-4.2}}"""
+        const val TRENDING_JSON = """{"coins":[{"item":{"id":"pepecoin","name":"PepeCoin","score":0}},
+          {"item":{"id":"bitcoin","name":"Bitcoin","score":1}}],"nfts":[],"categories":[]}"""
         const val SEARCH_JSON = """{"coins":[{"id":"pepecoin","name":"PepeCoin","symbol":"PEPECOIN","thumb":"t","market_cap_rank":1045}],
           "exchanges":[],"nfts":[]}"""
     }

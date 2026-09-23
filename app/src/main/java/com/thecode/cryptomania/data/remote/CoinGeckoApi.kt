@@ -6,6 +6,7 @@ import com.thecode.cryptomania.data.remote.dto.ExchangeDto
 import com.thecode.cryptomania.data.remote.dto.GlobalResponseDto
 import com.thecode.cryptomania.data.remote.dto.MarketChartDto
 import com.thecode.cryptomania.data.remote.dto.SearchResponseDto
+import com.thecode.cryptomania.data.remote.dto.TrendingResponseDto
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -56,6 +57,10 @@ interface CoinGeckoApi {
 
     @GET("exchanges")
     suspend fun exchanges(@Query("per_page") perPage: Int = 100): List<ExchangeDto>
+
+    /** Coins trending in CoinGecko searches over the last 24 hours ("Hot"). */
+    @GET("search/trending")
+    suspend fun trending(): TrendingResponseDto
 
     @GET("search")
     suspend fun search(@Query("query") query: String): SearchResponseDto

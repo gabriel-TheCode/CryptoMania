@@ -2,7 +2,7 @@
 
 package com.thecode.cryptomania.presentation.feature.market
 
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -22,32 +23,38 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.LocalFireDepartment
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Star
 import androidx.compose.material.icons.rounded.StarBorder
 import androidx.compose.material.icons.rounded.Tune
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -64,16 +71,16 @@ import com.thecode.cryptomania.presentation.designsystem.component.EmptyState
 import com.thecode.cryptomania.presentation.designsystem.component.ErrorState
 import com.thecode.cryptomania.presentation.designsystem.component.MarketStat
 import com.thecode.cryptomania.presentation.designsystem.component.MoverCard
-import com.thecode.cryptomania.presentation.designsystem.component.NetworkStatusIndicator
 import com.thecode.cryptomania.presentation.designsystem.component.PriceChangeBadge
 import com.thecode.cryptomania.presentation.designsystem.component.SectionHeader
 import com.thecode.cryptomania.presentation.designsystem.component.SegmentedBar
 import com.thecode.cryptomania.presentation.designsystem.component.SkeletonBlock
 import com.thecode.cryptomania.presentation.designsystem.component.staggeredEntrance
-import kotlinx.coroutines.delay
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
+import com.thecode.cryptomania.presentation.designsystem.theme.Motion
 import com.thecode.cryptomania.presentation.util.ScreenContent
-import com.thecode.cryptomania.presentation.util.rememberRelativeTime
+import kotlinx.coroutines.delay
+import kotlin.math.sign
 
 @Composable
 fun MarketRoute(
@@ -96,73 +103,96 @@ fun MarketScreen(
     onOpenCoin: (String) -> Unit,
     onOpenSearch: () -> Unit,
 ) {
-    val content = state.content
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Column(
-        Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) {
-        CryptoManiaTopBar(
-            scrollBehavior = scrollBehavior,
-            title = stringResource(R.string.app_name),
-            subtitle = (content as? ScreenContent.Ready)?.data?.fetchedAt?.let {
-                stringResource(R.string.status_updated, rememberRelativeTime(it))
-            },
-            actions = {
-                IconButton(onClick = onOpenSearch) {
-                    Icon(Icons.Rounded.Search, contentDescription = stringResource(R.string.action_search))
-                }
-            },
-        )
-        NetworkStatusIndicator(state.syncStatus)
-        when (content) {
-            ScreenContent.Loading -> MarketSkeleton()
-            is ScreenContent.Failed -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+    // The wave is drawn over the content (Scaffold top bar): lists scroll under it.
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        containerColor = CryptoManiaTheme.colors.background,
+        contentWindowInsets = WindowInsets(0),
+        topBar = {
+            CryptoManiaTopBar(
+                title = stringResource(R.string.app_name),
+                subtitle = stringResource(R.string.market_subtitle),
+                status = state.syncStatus,
+                scrollBehavior = scrollBehavior,
+                actions = {
+                    IconButton(onClick = onOpenSearch) {
+                        Icon(Icons.Rounded.Search, contentDescription = stringResource(R.string.action_search))
+                    }
+                },
+            )
+        },
+    ) { padding ->
+        val top = padding.calculateTopPadding()
+        when (val content = state.content) {
+            ScreenContent.Loading -> MarketSkeleton(top)
+            is ScreenContent.Failed -> Box(Modifier.fillMaxSize().padding(top = top), contentAlignment = Alignment.Center) {
                 ErrorState(content.error, onRetry = { onIntent(MarketIntent.Refresh) })
             }
             is ScreenContent.Ready -> CryptoManiaPullToRefresh(
                 isRefreshing = state.isRefreshing,
                 onRefresh = { onIntent(MarketIntent.Refresh) },
+                indicatorTopPadding = top,
                 modifier = Modifier.fillMaxSize(),
             ) {
                 MarketList(
                     content = content.data,
                     filter = state.filter,
+                    topPadding = top,
                     onFilterSelected = { onIntent(MarketIntent.FilterSelected(it)) },
                     onOpenCoin = onOpenCoin,
+                    onToggleWatchlist = { onIntent(MarketIntent.ToggleWatchlist(it)) },
                 )
             }
         }
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun MarketList(
     content: MarketContent,
     filter: MarketFilter,
+    topPadding: Dp,
     onFilterSelected: (MarketFilter) -> Unit,
     onOpenCoin: (String) -> Unit,
+    onToggleWatchlist: (String) -> Unit,
 ) {
     val spacing = CryptoManiaTheme.spacing
     val colors = CryptoManiaTheme.colors
+
+    // One-time staggered entrance of the first rows when the screen appears.
+    var animateEntrance by rememberSaveable { mutableStateOf(true) }
+    LaunchedEffect(Unit) {
+        delay(800)
+        animateEntrance = false
+    }
+
+    // A filter change reads as a page change: the new list slides in from the side of the
+    // selected chip (from the right when moving right, from the left when going back).
+    var previousFilter by remember { mutableIntStateOf(filter.ordinal) }
+    var direction by remember { mutableIntStateOf(0) }
+    val page = remember { Animatable(1f) }
+    LaunchedEffect(filter) {
+        if (filter.ordinal == previousFilter) return@LaunchedEffect
+        direction = (filter.ordinal - previousFilter).sign
+        previousFilter = filter.ordinal
+        page.snapTo(0f)
+        page.animateTo(1f, Motion.spatial())
+    }
+    val pageTransition = Modifier.graphicsLayer {
+        val remaining = 1f - page.value
+        translationX = remaining * direction * 72.dp.toPx()
+        alpha = 1f - remaining * 0.8f
+    }
+
     BoxWithConstraints(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         val expanded = maxWidth >= 720.dp
-        val listState = rememberLazyListState()
-        // Entrance animation plays once per screen visit, on the first rows only.
-        val animateEntrance = rememberSaveable { mutableStateOf(true) }
-        LaunchedEffect(Unit) {
-            delay(800)
-            animateEntrance.value = false
-        }
         LazyColumn(
-            state = listState,
             modifier = Modifier
                 .widthIn(max = 1100.dp)
                 .fillMaxSize()
                 .testTag("market_list"),
-            contentPadding = PaddingValues(bottom = spacing.xxl),
+            contentPadding = PaddingValues(top = topPadding, bottom = spacing.xxl),
         ) {
             item(key = "overview", contentType = "overview") {
                 if (content.global != null) {
@@ -180,31 +210,36 @@ private fun MarketList(
                             modifier = Modifier.padding(horizontal = spacing.lg),
                         )
                         LazyRow(
-                            contentPadding = PaddingValues(horizontal = spacing.lg),
-                            horizontalArrangement = Arrangement.spacedBy(spacing.sm),
+                            contentPadding = PaddingValues(horizontal = spacing.lg, vertical = spacing.sm),
+                            horizontalArrangement = Arrangement.spacedBy(spacing.md),
                         ) {
                             items(content.movers, key = { it.id }, contentType = { "mover" }) { coin ->
                                 MoverCard(coin = coin, onClick = { onOpenCoin(coin.id) })
                             }
                         }
-                        Spacer(Modifier.height(spacing.lg))
+                        Spacer(Modifier.height(spacing.sm))
                     }
                 }
             }
-            stickyHeader(key = "filters", contentType = "filters") {
-                FilterHeader(filter = filter, onFilterSelected = onFilterSelected, expanded = expanded)
+            item(key = "filters", contentType = "filters") {
+                // Column labels only describe rows: hidden when an empty state is shown instead.
+                FilterHeader(filter = filter, onFilterSelected = onFilterSelected, expanded = expanded, showColumns = content.coins.isNotEmpty())
             }
             if (content.coins.isEmpty()) {
-                item(key = "empty", contentType = "empty") {
-                    Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                        if (filter == MarketFilter.Watchlist) {
-                            EmptyState(
+                item(key = "empty_$filter", contentType = "empty") {
+                    Box(Modifier.fillMaxWidth().then(pageTransition), contentAlignment = Alignment.Center) {
+                        when (filter) {
+                            MarketFilter.Watchlist -> EmptyState(
                                 icon = Icons.Rounded.StarBorder,
                                 title = stringResource(R.string.watchlist_empty_title),
                                 message = stringResource(R.string.watchlist_empty_message),
                             )
-                        } else {
-                            EmptyState(
+                            MarketFilter.Hot -> EmptyState(
+                                icon = Icons.Rounded.LocalFireDepartment,
+                                title = stringResource(R.string.hot_empty_title),
+                                message = stringResource(R.string.hot_empty_message),
+                            )
+                            else -> EmptyState(
                                 icon = Icons.Rounded.Tune,
                                 title = stringResource(R.string.filter_empty_title),
                                 message = stringResource(R.string.filter_empty_message),
@@ -213,16 +248,21 @@ private fun MarketList(
                     }
                 }
             }
-            itemsIndexed(content.coins, key = { _, coin -> coin.id }, contentType = { _, _ -> "coin" }) { index, coin ->
-                CryptoListItem(
-                    coin = coin,
-                    onClick = { onOpenCoin(coin.id) },
-                    expanded = expanded,
-                    modifier = Modifier
+            itemsIndexed(content.coins, key = { _, coin -> "${filter}_${coin.id}" }, contentType = { _, _ -> "coin" }) { index, coin ->
+                Column(
+                    Modifier
                         .animateItem()
-                        .staggeredEntrance(index, animateEntrance.value),
-                )
-                HorizontalDivider(Modifier.padding(start = 80.dp, end = spacing.lg), color = colors.divider)
+                        .then(pageTransition)
+                        .staggeredEntrance(index, animateEntrance),
+                ) {
+                    CryptoListItem(
+                        coin = coin,
+                        onClick = { onOpenCoin(coin.id) },
+                        expanded = expanded,
+                        onToggleWatchlist = { onToggleWatchlist(coin.id) },
+                    )
+                    HorizontalDivider(Modifier.padding(start = 80.dp, end = spacing.lg), color = colors.divider)
+                }
             }
         }
     }
@@ -268,10 +308,10 @@ private fun Legend(color: Color, label: String) {
 }
 
 @Composable
-private fun FilterHeader(filter: MarketFilter, onFilterSelected: (MarketFilter) -> Unit, expanded: Boolean) {
+private fun FilterHeader(filter: MarketFilter, onFilterSelected: (MarketFilter) -> Unit, expanded: Boolean, showColumns: Boolean) {
     val colors = CryptoManiaTheme.colors
     val spacing = CryptoManiaTheme.spacing
-    Column(Modifier.fillMaxWidth().background(colors.background)) {
+    Column(Modifier.fillMaxWidth()) {
         LazyRow(
             contentPadding = PaddingValues(horizontal = spacing.lg, vertical = spacing.sm),
             horizontalArrangement = Arrangement.spacedBy(spacing.sm),
@@ -281,10 +321,15 @@ private fun FilterHeader(filter: MarketFilter, onFilterSelected: (MarketFilter) 
                     label = stringResource(option.labelRes()),
                     selected = option == filter,
                     onClick = { onFilterSelected(option) },
-                    icon = if (option == MarketFilter.Watchlist) Icons.Rounded.Star else null,
+                    icon = when (option) {
+                        MarketFilter.Watchlist -> Icons.Rounded.Star
+                        MarketFilter.Hot -> Icons.Rounded.LocalFireDepartment
+                        else -> null
+                    },
                 )
             }
         }
+        if (!showColumns) return@Column
         Row(
             Modifier
                 .fillMaxWidth()
@@ -309,9 +354,9 @@ private fun ColumnLabel(text: String, modifier: Modifier, align: TextAlign) {
 }
 
 @Composable
-private fun MarketSkeleton() {
+private fun MarketSkeleton(topPadding: Dp) {
     val spacing = CryptoManiaTheme.spacing
-    Column(Modifier.fillMaxSize().padding(top = spacing.sm)) {
+    Column(Modifier.fillMaxSize().padding(top = topPadding + spacing.sm)) {
         Column(Modifier.padding(horizontal = spacing.lg), verticalArrangement = Arrangement.spacedBy(spacing.sm)) {
             SkeletonBlock(width = 120.dp, height = 12.dp)
             SkeletonBlock(width = 220.dp, height = 32.dp)
@@ -324,6 +369,7 @@ private fun MarketSkeleton() {
 
 private fun MarketFilter.labelRes(): Int = when (this) {
     MarketFilter.All -> R.string.filter_all
+    MarketFilter.Hot -> R.string.filter_hot
     MarketFilter.Watchlist -> R.string.filter_watchlist
     MarketFilter.Gainers -> R.string.filter_gainers
     MarketFilter.Losers -> R.string.filter_losers

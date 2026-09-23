@@ -40,6 +40,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -56,6 +57,7 @@ import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.LifecycleResumeEffect
@@ -71,7 +73,6 @@ import com.thecode.cryptomania.presentation.designsystem.component.CryptoManiaTo
 import com.thecode.cryptomania.presentation.designsystem.component.CryptoPrice
 import com.thecode.cryptomania.presentation.designsystem.component.EmptyState
 import com.thecode.cryptomania.presentation.designsystem.component.ErrorState
-import com.thecode.cryptomania.presentation.designsystem.component.NetworkStatusIndicator
 import com.thecode.cryptomania.presentation.designsystem.component.PriceChangeBadge
 import com.thecode.cryptomania.presentation.designsystem.component.SectionHeader
 import com.thecode.cryptomania.presentation.designsystem.component.SegmentedBar
@@ -106,10 +107,14 @@ fun CoinDetailScreen(
     onBack: () -> Unit,
 ) {
     val content = (state.content as? ScreenContent.Ready)?.data
-    Column(Modifier.fillMaxSize()) {
+    Scaffold(
+        containerColor = CryptoManiaTheme.colors.background,
+        contentWindowInsets = WindowInsets(0),
+        topBar = {
         CryptoManiaTopBar(
             title = content?.name.orEmpty(),
             onBack = onBack,
+            status = state.syncStatus,
             actions = {
                 if (content != null) {
                     IconToggleButton(checked = state.isWatched, onCheckedChange = { onIntent(CoinDetailIntent.ToggleWatchlist) }) {
@@ -124,19 +129,21 @@ fun CoinDetailScreen(
                 }
             },
         )
-        NetworkStatusIndicator(state.syncStatus)
+        },
+    ) { padding ->
+        val top = padding.calculateTopPadding()
         when (val screen = state.content) {
-            ScreenContent.Loading -> DetailSkeleton()
-            is ScreenContent.Failed -> Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            ScreenContent.Loading -> DetailSkeleton(top)
+            is ScreenContent.Failed -> Box(Modifier.fillMaxSize().padding(top = top), contentAlignment = Alignment.Center) {
                 ErrorState(screen.error, onRetry = { onIntent(CoinDetailIntent.Retry) })
             }
-            is ScreenContent.Ready -> DetailBody(screen.data, state, onIntent)
+            is ScreenContent.Ready -> DetailBody(screen.data, state, onIntent, top)
         }
     }
 }
 
 @Composable
-private fun DetailBody(content: CoinDetailContent, state: CoinDetailUiState, onIntent: (CoinDetailIntent) -> Unit) {
+private fun DetailBody(content: CoinDetailContent, state: CoinDetailUiState, onIntent: (CoinDetailIntent) -> Unit, topPadding: Dp) {
     val spacing = CryptoManiaTheme.spacing
     // Scrubbing is high-frequency gesture feedback: kept local instead of round-tripping the ViewModel.
     var scrubbed by remember(state.range) { mutableStateOf<PricePoint?>(null) }
@@ -174,8 +181,8 @@ private fun DetailBody(content: CoinDetailContent, state: CoinDetailUiState, onI
                     .padding(horizontal = spacing.xxl),
                 horizontalArrangement = Arrangement.spacedBy(spacing.xxl),
             ) {
-                Column(Modifier.weight(1.3f).verticalScroll(rememberScrollState())) { market() }
-                Column(Modifier.weight(1f).verticalScroll(rememberScrollState())) {
+                Column(Modifier.weight(1.3f).verticalScroll(rememberScrollState()).padding(top = topPadding)) { market() }
+                Column(Modifier.weight(1f).verticalScroll(rememberScrollState()).padding(top = topPadding)) {
                     details()
                     Spacer(Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
                 }
@@ -187,7 +194,8 @@ private fun DetailBody(content: CoinDetailContent, state: CoinDetailUiState, onI
                     .verticalScroll(rememberScrollState())
                     .padding(horizontal = spacing.lg),
             ) {
-                Spacer(Modifier.height(spacing.sm))
+                // Content starts below the wave and scrolls under it.
+                Spacer(Modifier.height(topPadding + spacing.sm))
                 market()
                 Spacer(Modifier.height(spacing.xxl))
                 details()
@@ -430,9 +438,9 @@ private fun About(name: String, profile: CoinProfile) {
 }
 
 @Composable
-private fun DetailSkeleton() {
+private fun DetailSkeleton(topPadding: Dp) {
     val spacing = CryptoManiaTheme.spacing
-    Column(Modifier.padding(spacing.lg), verticalArrangement = Arrangement.spacedBy(spacing.md)) {
+    Column(Modifier.padding(top = topPadding).padding(spacing.lg), verticalArrangement = Arrangement.spacedBy(spacing.md)) {
         SkeletonBlock(width = 120.dp, height = 20.dp)
         SkeletonBlock(width = 200.dp, height = 40.dp)
         SkeletonBlock(height = CryptoManiaTheme.sizes.chartHeight)

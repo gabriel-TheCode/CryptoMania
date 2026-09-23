@@ -21,7 +21,7 @@ class MarketUseCasesTest {
         coin("microcap", rank = 240, change24h = 400.0, symbol = "MIC", name = "Micro"),
         coin("wrapped-bitcoin", rank = 15, change24h = null, symbol = "WBTC", name = "Wrapped Bitcoin"),
     )
-    private val overview = MarketOverview(coins, null, setOf("ethereum"), listOf(coins[1]), Instant.EPOCH)
+    private val overview = MarketOverview(coins, null, setOf("ethereum"), listOf(coins[1]), hotCoins = listOf(coins[3], coins[0]), fetchedAt = Instant.EPOCH)
 
     @Test
     fun `movers ignore micro caps and coins without data`() {
@@ -32,6 +32,7 @@ class MarketUseCasesTest {
     @Test
     fun `filters sort locally without touching the network`() {
         assertEquals(coins, overview.filtered(MarketFilter.All))
+        assertEquals("hot keeps trending order", listOf("microcap", "bitcoin"), overview.filtered(MarketFilter.Hot).map { it.id })
         assertEquals(listOf("ethereum"), overview.filtered(MarketFilter.Watchlist).map { it.id })
         assertEquals(listOf("microcap", "bitcoin-cash", "ethereum"), overview.filtered(MarketFilter.Gainers).map { it.id })
         assertEquals(listOf("bitcoin"), overview.filtered(MarketFilter.Losers).map { it.id })

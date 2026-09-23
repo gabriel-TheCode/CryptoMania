@@ -11,6 +11,7 @@ import com.thecode.cryptomania.data.local.entity.CoinProfileEntity
 import com.thecode.cryptomania.data.local.entity.ExchangeEntity
 import com.thecode.cryptomania.data.local.entity.GlobalMarketEntity
 import com.thecode.cryptomania.data.local.entity.PriceHistoryEntity
+import com.thecode.cryptomania.data.local.entity.TrendingEntity
 import com.thecode.cryptomania.data.local.entity.WatchlistEntity
 import kotlinx.coroutines.flow.Flow
 
@@ -34,9 +35,12 @@ interface CoinDao {
     @Query("SELECT * FROM coins WHERE id IN (:ids)")
     fun observeByIds(ids: Collection<String>): Flow<List<CoinEntity>>
 
-    /** Watched coins outside the top list: refreshed together in one batched request. */
-    @Query("SELECT coinId FROM watchlist WHERE coinId NOT IN (SELECT id FROM coins WHERE isListed = 1)")
-    suspend fun unlistedWatchedIds(): List<String>
+    /** Watched or trending coins outside the top list: refreshed together in one batched request. */
+    @Query(
+        "SELECT coinId FROM watchlist WHERE coinId NOT IN (SELECT id FROM coins WHERE isListed = 1) " +
+            "UNION SELECT coinId FROM trending WHERE coinId NOT IN (SELECT id FROM coins WHERE isListed = 1)",
+    )
+    suspend fun unlistedTrackedIds(): List<String>
 
     @Upsert
     suspend fun upsert(coins: List<CoinEntity>)
@@ -55,7 +59,7 @@ interface CoinDao {
     /** Unlisted, unwatched coins (e.g. opened from search) are dropped once they are old. */
     @Query(
         "DELETE FROM coins WHERE isListed = 0 AND fetchedAtMillis < :cutoffMillis " +
-            "AND id NOT IN (SELECT coinId FROM watchlist)",
+            "AND id NOT IN (SELECT coinId FROM watchlist) AND id NOT IN (SELECT coinId FROM trending)",
     )
     suspend fun deleteOrphans(cutoffMillis: Long)
 
@@ -130,6 +134,27 @@ interface ExchangeDao {
     suspend fun insertAll(exchanges: List<ExchangeEntity>)
 
     @Query("DELETE FROM exchanges")
+    suspend fun clear()
+}
+
+@Dao
+interface TrendingDao {
+    @Query("SELECT coinId FROM trending ORDER BY position")
+    fun observeIds(): Flow<List<String>>
+
+    @Query("SELECT MAX(fetchedAtMillis) FROM trending")
+    suspend fun fetchedAt(): Long?
+
+    @Transaction
+    suspend fun replaceAll(entities: List<TrendingEntity>) {
+        clear()
+        insertAll(entities)
+    }
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<TrendingEntity>)
+
+    @Query("DELETE FROM trending")
     suspend fun clear()
 }
 

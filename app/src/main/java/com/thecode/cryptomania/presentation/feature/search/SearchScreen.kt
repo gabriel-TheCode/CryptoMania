@@ -34,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -103,12 +104,12 @@ fun SearchScreen(
         onIntent(SearchIntent.ResultSelected(id))
     }
 
-    Column(
-        Modifier
-            .fillMaxSize()
-            .imePadding(),
-    ) {
-        WaveSurface(height = 64.dp + 26.dp) {
+    Scaffold(
+        modifier = Modifier.imePadding(),
+        containerColor = colors.background,
+        contentWindowInsets = WindowInsets(0),
+        topBar = {
+        WaveSurface {
         Row(
             Modifier
                 .height(64.dp)
@@ -130,13 +131,15 @@ fun SearchScreen(
             )
         }
         }
+        },
+    ) { padding ->
+        Box(Modifier.fillMaxSize(), contentAlignment = Alignment.TopCenter) {
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .widthIn(max = CryptoManiaTheme.sizes.maxContentWidth)
-                .align(Alignment.CenterHorizontally)
                 .testTag("search_results"),
-            contentPadding = PaddingValues(bottom = spacing.xxl),
+            contentPadding = PaddingValues(top = padding.calculateTopPadding(), bottom = spacing.xxl),
         ) {
             if (state.query.isBlank()) {
                 if (state.recentSearches.isNotEmpty()) {
@@ -210,6 +213,7 @@ fun SearchScreen(
                     }
                 }
             }
+        }
         }
     }
 }

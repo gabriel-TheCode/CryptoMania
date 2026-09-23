@@ -27,6 +27,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Switch
 import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.Scaffold
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
@@ -77,20 +79,22 @@ fun SettingsScreen(state: SettingsUiState, onIntent: (SettingsIntent) -> Unit) {
     val colors = CryptoManiaTheme.colors
     val uriHandler = LocalUriHandler.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Column(
-        Modifier
-            .fillMaxSize()
-            .nestedScroll(scrollBehavior.nestedScrollConnection),
-    ) {
-        CryptoManiaTopBar(
-            scrollBehavior = scrollBehavior,title = stringResource(R.string.settings_title))
+    Scaffold(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        containerColor = colors.background,
+        contentWindowInsets = WindowInsets(0),
+        topBar = { CryptoManiaTopBar(title = stringResource(R.string.settings_title), scrollBehavior = scrollBehavior) },
+    ) { padding ->
         Column(
             Modifier
                 .fillMaxSize()
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = spacing.lg)
-                .widthIn(max = CryptoManiaTheme.sizes.maxContentWidth)
-                .align(Alignment.CenterHorizontally),
+                .padding(top = padding.calculateTopPadding())
+                .padding(horizontal = spacing.lg),
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+        Column(
+            Modifier.widthIn(max = CryptoManiaTheme.sizes.maxContentWidth),
             verticalArrangement = Arrangement.spacedBy(spacing.sm),
         ) {
             SectionHeader(stringResource(R.string.settings_appearance))
@@ -164,6 +168,7 @@ fun SettingsScreen(state: SettingsUiState, onIntent: (SettingsIntent) -> Unit) {
                 )
             }
             Spacer(Modifier.height(spacing.xxl))
+        }
         }
     }
 }

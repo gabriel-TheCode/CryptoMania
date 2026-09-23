@@ -15,6 +15,8 @@ object CachePolicy {
     val GLOBAL_TTL: Duration = Duration.ofMinutes(5)
     val PROFILE_TTL: Duration = Duration.ofDays(1)
     val EXCHANGES_TTL: Duration = Duration.ofHours(1)
+    /** CoinGecko recomputes trending coins roughly every 10 minutes. */
+    val TRENDING_TTL: Duration = Duration.ofMinutes(15)
     val MIN_FORCED_REFRESH_INTERVAL: Duration = Duration.ofSeconds(30)
 
     /** Charts and search-only coins older than this are evicted to keep the database small. */

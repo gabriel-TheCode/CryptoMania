@@ -46,6 +46,7 @@ class RoomCacheRepository @Inject constructor(
             database.priceHistoryDao().clear()
             database.coinProfileDao().clear()
             database.exchangeDao().clear()
+            database.trendingDao().clear()
         }
     }
 }

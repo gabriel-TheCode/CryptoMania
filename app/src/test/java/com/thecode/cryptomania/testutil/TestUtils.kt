@@ -66,6 +66,7 @@ fun coin(
 class FakeMarketRepository : MarketRepository {
     val topCoins = MutableStateFlow<Cached<List<Coin>>?>(null)
     val global = MutableStateFlow<GlobalMarket?>(null)
+    val trending = MutableStateFlow<List<String>>(emptyList())
     var refreshResult: Outcome<Unit> = Done
     var refreshCoinResult: Outcome<Unit> = Done
     var searchResult: Outcome<List<CoinSearchHit>> = Outcome.Success(emptyList())
@@ -74,6 +75,7 @@ class FakeMarketRepository : MarketRepository {
 
     override fun observeTopCoins() = topCoins
     override fun observeGlobalMarket() = global
+    override fun observeTrendingIds() = trending
     override fun observeCoin(id: String): Flow<Coin?> = topCoins.map { cached -> cached?.value?.firstOrNull { it.id == id } }
     override fun observeCoins(ids: Set<String>): Flow<List<Coin>> = topCoins.map { cached -> cached?.value.orEmpty().filter { it.id in ids } }
     override suspend fun refreshMarket(force: Boolean): Outcome<Unit> = refreshResult.also { refreshCalls += force }

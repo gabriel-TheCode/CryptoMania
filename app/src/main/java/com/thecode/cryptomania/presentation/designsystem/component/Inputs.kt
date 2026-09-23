@@ -97,6 +97,8 @@ fun CryptoManiaSearchBar(
                     Modifier
                         .weight(1f)
                         .padding(horizontal = 10.dp),
+                    // Placeholder and field share one baseline: both centered vertically.
+                    contentAlignment = Alignment.CenterStart,
                 ) {
                     if (state.text.isEmpty()) {
                         Text(placeholder, style = MaterialTheme.typography.bodyLarge, color = colors.textTertiary, maxLines = 1)

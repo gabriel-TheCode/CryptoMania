@@ -153,8 +153,9 @@ fun PriceChart(
 
                 val maxIndex = points.indices.maxBy { points[it].price }
                 val minIndex = points.indices.minBy { points[it].price }
-                val high = textMeasurer.measure(highLabel, labelStyle)
-                val low = textMeasurer.measure(lowLabel, labelStyle)
+                // Period high in the "up" color, low in the "down" color (color-blind mode aware).
+                val high = textMeasurer.measure(highLabel, labelStyle.copy(color = colors.positive))
+                val low = textMeasurer.measure(lowLabel, labelStyle.copy(color = colors.negative))
                 val highX = (xs[maxIndex] - high.size.width / 2f).coerceIn(0f, size.width - high.size.width)
                 val lowX = (xs[minIndex] - low.size.width / 2f).coerceIn(0f, size.width - low.size.width)
 

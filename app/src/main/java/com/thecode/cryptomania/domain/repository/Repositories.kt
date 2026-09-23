@@ -28,6 +28,9 @@ interface MarketRepository {
 
     fun observeCoins(ids: Set<String>): Flow<List<Coin>>
 
+    /** Trending coin ids ("Hot"), most trending first. */
+    fun observeTrendingIds(): Flow<List<String>>
+
     suspend fun refreshMarket(force: Boolean = false): Outcome<Unit>
 
     /** Ensures market data exists for a coin that may not be part of the top list. */

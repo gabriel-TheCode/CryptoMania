@@ -1,7 +1,23 @@
 package com.thecode.cryptomania.presentation.designsystem.component
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Box
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Star
+import androidx.compose.material.icons.rounded.StarBorder
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Icon
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.semantics.CustomAccessibilityAction
+import androidx.compose.ui.semantics.customActions
+import androidx.compose.ui.unit.DpOffset
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -38,7 +54,11 @@ import com.thecode.cryptomania.presentation.model.CoinRowUi
 /**
  * Market row. On wide layouts ([expanded]) market cap and volume get their own columns
  * instead of being hidden, so tablets show more data rather than more whitespace.
+ *
+ * With [onToggleWatchlist], a long press opens a context menu to add or remove the coin
+ * from the watchlist without opening its details; TalkBack exposes the same custom action.
  */
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun CryptoListItem(
     coin: CoinRowUi,
@@ -46,18 +66,34 @@ fun CryptoListItem(
     modifier: Modifier = Modifier,
     expanded: Boolean = false,
     showRank: Boolean = true,
+    onToggleWatchlist: (() -> Unit)? = null,
 ) {
     val colors = CryptoManiaTheme.colors
     val spacing = CryptoManiaTheme.spacing
+    val haptics = LocalHapticFeedback.current
+    var menuOpen by remember { mutableStateOf(false) }
     val description = stringResource(R.string.cd_coin_row, coin.name, coin.symbol, coin.price, coin.change24h.accessibilityLabel())
+    val watchLabel = stringResource(if (coin.isWatched) R.string.coin_remove_watchlist else R.string.coin_add_watchlist)
+    Box(modifier) {
     Row(
-        modifier = modifier
+        modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = CryptoManiaTheme.sizes.listItemMinHeight)
-            .clickable(onClick = onClick)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onToggleWatchlist?.let {
+                    {
+                        haptics.performHapticFeedback(HapticFeedbackType.LongPress)
+                        menuOpen = true
+                    }
+                },
+            )
             .clearAndSetSemantics {
                 contentDescription = description
                 role = Role.Button
+                if (onToggleWatchlist != null) {
+                    customActions = listOf(CustomAccessibilityAction(watchLabel) { onToggleWatchlist(); true })
+                }
             }
             .padding(horizontal = spacing.lg, vertical = spacing.sm),
         verticalAlignment = Alignment.CenterVertically,
@@ -82,7 +118,10 @@ fun CryptoListItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
-            Text(coin.symbol, style = MaterialTheme.typography.labelMedium, color = colors.textSecondary, maxLines = 1)
+            Row(verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.spacedBy(4.dp)) {
+                Text(coin.symbol, style = MaterialTheme.typography.labelMedium, color = colors.textSecondary, maxLines = 1)
+                if (coin.isWatched) Icon(Icons.Rounded.Star, contentDescription = null, tint = colors.warning, modifier = Modifier.size(12.dp))
+            }
         }
         if (expanded) {
             NumericCell(coin.marketCap, Modifier.width(112.dp))
@@ -99,6 +138,21 @@ fun CryptoListItem(
             CryptoPrice(text = coin.price, value = coin.priceValue, style = MaterialTheme.typography.titleSmall)
             PriceChangeBadge(coin.change24h, style = BadgeStyle.Plain, textStyle = MaterialTheme.typography.labelMedium)
         }
+    }
+    if (onToggleWatchlist != null) {
+        DropdownMenu(expanded = menuOpen, onDismissRequest = { menuOpen = false }, offset = DpOffset(spacing.lg, 0.dp)) {
+            DropdownMenuItem(
+                text = { Text(watchLabel) },
+                leadingIcon = {
+                    Icon(if (coin.isWatched) Icons.Rounded.StarBorder else Icons.Rounded.Star, contentDescription = null, tint = colors.warning)
+                },
+                onClick = {
+                    menuOpen = false
+                    onToggleWatchlist()
+                },
+            )
+        }
+    }
     }
 }
 

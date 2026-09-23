@@ -8,6 +8,7 @@ import com.thecode.cryptomania.domain.model.Coin
 import com.thecode.cryptomania.domain.model.Outcome
 import com.thecode.cryptomania.domain.repository.MarketRepository
 import com.thecode.cryptomania.domain.repository.NetworkMonitor
+import com.thecode.cryptomania.domain.repository.WatchlistRepository
 import com.thecode.cryptomania.domain.usecase.MarketFilter
 import com.thecode.cryptomania.domain.usecase.MarketOverview
 import com.thecode.cryptomania.domain.usecase.ObserveMarketOverviewUseCase
@@ -40,6 +41,7 @@ sealed interface MarketIntent {
     data object Refresh : MarketIntent
     data object ScreenResumed : MarketIntent
     data class FilterSelected(val filter: MarketFilter) : MarketIntent
+    data class ToggleWatchlist(val coinId: String) : MarketIntent
 }
 
 @Immutable
@@ -74,6 +76,7 @@ data class GlobalMarketUi(
 class MarketViewModel @Inject constructor(
     observeMarketOverview: ObserveMarketOverviewUseCase,
     private val marketRepository: MarketRepository,
+    private val watchlistRepository: WatchlistRepository,
     networkMonitor: NetworkMonitor,
     @param:DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
 ) : ViewModel() {
@@ -118,6 +121,7 @@ class MarketViewModel @Inject constructor(
             MarketIntent.Refresh -> refresh(force = true, userInitiated = true)
             MarketIntent.ScreenResumed -> refresh(force = false, userInitiated = false)
             is MarketIntent.FilterSelected -> filter.value = intent.filter
+            is MarketIntent.ToggleWatchlist -> viewModelScope.launch { watchlistRepository.toggle(intent.coinId) }
         }
     }
 

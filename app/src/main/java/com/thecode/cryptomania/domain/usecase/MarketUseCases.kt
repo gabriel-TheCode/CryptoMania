@@ -12,7 +12,7 @@ import kotlinx.coroutines.flow.map
 import java.time.Instant
 import javax.inject.Inject
 
-enum class MarketFilter { All, Watchlist, Gainers, Losers }
+enum class MarketFilter { All, Hot, Watchlist, Gainers, Losers }
 
 data class MarketOverview(
     val coins: List<Coin>,
@@ -20,6 +20,8 @@ data class MarketOverview(
     val watchlist: Set<String>,
     /** Watched coins, including ones outside the top list, ordered by market cap rank. */
     val watchedCoins: List<Coin>,
+    /** CoinGecko trending coins, most trending first. */
+    val hotCoins: List<Coin> = emptyList(),
     val fetchedAt: Instant,
 ) {
     /** Movers are picked among established assets so illiquid micro-caps do not dominate. */
@@ -35,6 +37,7 @@ data class MarketOverview(
 
     fun filtered(filter: MarketFilter): List<Coin> = when (filter) {
         MarketFilter.All -> coins
+        MarketFilter.Hot -> hotCoins
         MarketFilter.Watchlist -> watchedCoins
         MarketFilter.Gainers -> coins.filter { (it.change24hPercent ?: 0.0) > 0 }.sortedByDescending { it.change24hPercent }
         MarketFilter.Losers -> coins.filter { (it.change24hPercent ?: 0.0) < 0 }.sortedBy { it.change24hPercent }
@@ -58,12 +61,19 @@ class ObserveMarketOverviewUseCase @Inject constructor(
                 ids to coins.sortedBy { it.marketCapRank ?: Int.MAX_VALUE }
             }
         }
+        val hot = marketRepository.observeTrendingIds().flatMapLatest { ids ->
+            marketRepository.observeCoins(ids.toSet()).map { coins ->
+                val byId = coins.associateBy { it.id }
+                ids.mapNotNull(byId::get)
+            }
+        }
         return combine(
             marketRepository.observeTopCoins(),
             marketRepository.observeGlobalMarket(),
             watched,
-        ) { coins, global, (ids, watchedCoins) ->
-            coins?.let { MarketOverview(it.value, global, ids, watchedCoins, it.fetchedAt) }
+            hot,
+        ) { coins, global, (ids, watchedCoins), hotCoins ->
+            coins?.let { MarketOverview(it.value, global, ids, watchedCoins, hotCoins = hotCoins, fetchedAt = it.fetchedAt) }
         }
     }
 }

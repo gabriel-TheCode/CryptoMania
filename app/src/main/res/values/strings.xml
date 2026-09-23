@@ -28,7 +28,6 @@
     <string name="status_offline">Offline · showing data from %1$s</string>
     <string name="status_offline_no_time">You are offline</string>
     <string name="status_stale">%1$s · showing data from %2$s</string>
-    <string name="status_updated">Updated %1$s</string>
     <string name="time_just_now">just now</string>
     <plurals name="time_minutes_ago">
         <item quantity="one">%d min ago</item>
@@ -66,7 +65,7 @@
     <string name="error_short_unknown">Refresh failed</string>
 
     <!-- Market -->
-    <string name="market_title">Market</string>
+    <string name="market_subtitle">Top 250 cryptocurrencies by market cap</string>
     <string name="market_search_hint">Search coins</string>
     <string name="market_cap_global">Total market cap</string>
     <string name="market_volume_global">24h volume</string>
@@ -76,6 +75,7 @@
     <string name="market_dominance_other">Others %1$s</string>
     <string name="market_movers">Top movers · 24h</string>
     <string name="filter_all">All</string>
+    <string name="filter_hot">Hot</string>
     <string name="filter_watchlist">Watchlist</string>
     <string name="filter_gainers">Gainers</string>
     <string name="filter_losers">Losers</string>
@@ -86,6 +86,8 @@
     <string name="market_column_7d">7d</string>
     <string name="watchlist_empty_title">Your watchlist is empty</string>
     <string name="watchlist_empty_message">Tap the star on any coin to follow it here.</string>
+    <string name="hot_empty_title">Nothing trending yet</string>
+    <string name="hot_empty_message">Trending coins from CoinGecko will appear after the next refresh.</string>
     <string name="filter_empty_title">Nothing to show</string>
     <string name="filter_empty_message">No coin matches this filter right now.</string>
     <string name="cd_coin_row">%1$s, %2$s, price %3$s, %4$s in 24 hours</string>

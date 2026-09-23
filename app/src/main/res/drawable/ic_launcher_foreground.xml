@@ -1,20 +1,106 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- CryptoMania mark: a rising market line inside the adaptive-icon safe zone. -->
+<!--
+  CryptoMania mark: two stacked gold coins, like the 1.x "$ coin" icon but alive.
+  Back coin: crypto diamond. Front coin: the CryptoMania rising market line.
+  Everything stays inside the 66dp adaptive-icon safe zone (circle r=33 around 54,54).
+-->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
+
+    <!-- Back coin -->
     <path
-        android:pathData="M33,68 L45,55 L55,62 L72,43"
-        android:strokeWidth="7"
-        android:strokeColor="#FFFFFF"
+        android:fillColor="#FFC27F00"
+        android:pathData="M44,48.5a18,18 0 1,0 36,0a18,18 0 1,0 -36,0" />
+    <path android:pathData="M44,46a18,18 0 1,0 36,0a18,18 0 1,0 -36,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="76"
+                android:endY="62"
+                android:startX="48"
+                android:startY="30"
+                android:type="linear">
+                <item android:color="#FFFFE9A0" android:offset="0" />
+                <item android:color="#FFFFC933" android:offset="0.55" />
+                <item android:color="#FFF2A900" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:pathData="M48,46a14,14 0 1,0 28,0a14,14 0 1,0 -28,0"
+        android:strokeWidth="1.4"
+        android:strokeAlpha="0.8"
+        android:strokeColor="#FFDC9400" />
+    <path
+        android:fillColor="#FFB47300"
+        android:pathData="M62,36.5L68.5,46.5L62,50L55.5,46.5Z" />
+    <path
+        android:fillColor="#FFB47300"
+        android:fillAlpha="0.8"
+        android:pathData="M62,51.8L68.5,48.2L62,56.5L55.5,48.2Z" />
+    <path
+        android:pathData="M49.5,39A14.5,14.5 0 0,1 60,31.6"
+        android:strokeWidth="2"
+        android:strokeAlpha="0.75"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+
+    <!-- Soft contact shadow of the front coin on the back one -->
+    <path
+        android:fillColor="#33000000"
+        android:pathData="M29,62.5a20,20 0 1,0 40,0a20,20 0 1,0 -40,0" />
+
+    <!-- Front coin -->
+    <path
+        android:fillColor="#FFC27F00"
+        android:pathData="M27,63a20,20 0 1,0 40,0a20,20 0 1,0 -40,0" />
+    <path android:pathData="M27,60a20,20 0 1,0 40,0a20,20 0 1,0 -40,0">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:endX="62"
+                android:endY="78"
+                android:startX="31"
+                android:startY="42"
+                android:type="linear">
+                <item android:color="#FFFFEDB0" android:offset="0" />
+                <item android:color="#FFFFCC3D" android:offset="0.5" />
+                <item android:color="#FFF0A500" android:offset="1" />
+            </gradient>
+        </aapt:attr>
+    </path>
+    <path
+        android:pathData="M31.5,60a15.5,15.5 0 1,0 31,0a15.5,15.5 0 1,0 -31,0"
+        android:strokeWidth="1.5"
+        android:strokeAlpha="0.8"
+        android:strokeColor="#FFDC9400" />
+    <path
+        android:pathData="M38,65.85L43.4,60L47.9,63.15L55.55,54.6"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFB06E00"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
     <path
-        android:pathData="M61,42 L73,42 L73,54"
-        android:strokeWidth="7"
-        android:strokeColor="#FFFFFF"
+        android:pathData="M50.6,54.15L56,54.15L56,59.55"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFB06E00"
         android:strokeLineCap="round"
         android:strokeLineJoin="round" />
+    <path
+        android:pathData="M32.2,52.5A16.5,16.5 0 0,1 43,43.3"
+        android:strokeWidth="2.2"
+        android:strokeAlpha="0.8"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round" />
+
+    <!-- Sparkles -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M75,29.5Q75.7,33.3 79.5,34Q75.7,34.7 75,38.5Q74.3,34.7 70.5,34Q74.3,33.3 75,29.5Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillAlpha="0.85"
+        android:pathData="M32,36.5Q32.45,38.55 34.5,39Q32.45,39.45 32,41.5Q31.55,39.45 29.5,39Q31.55,38.55 32,36.5Z" />
 </vector>
