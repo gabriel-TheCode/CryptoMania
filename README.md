@@ -3,6 +3,9 @@
 A modern, offline-first cryptocurrency market tracker for Android, built with Jetpack Compose on
 top of the free [CoinGecko API](https://www.coingecko.com/en/api).
 
+> CryptoMania 2.0 is a complete rewrite. The original 2021 app (XML views, MVVM) is preserved on the
+> [`old`](https://github.com/gabriel-TheCode/CryptoMania/tree/old) branch.
+
 <a href="https://play.google.com/store/apps/details?id=com.thecode.cryptomania">
   <img alt="Get it on Google Play" height="64" src="https://play.google.com/intl/en_us/badges/images/generic/en_badge_web_generic.png" />
 </a>
@@ -17,11 +20,13 @@ top of the free [CoinGecko API](https://www.coingecko.com/en/api).
   description, categories and website.
 - **Search** – instant ranking over the cached market, CoinGecko search only when the cache cannot
   answer, recent searches.
-- **Watchlist** – star any coin, including coins outside the top 250.
+- **Watchlist** – star a coin from its details, or long-press any market row for a quick
+  "Add to watchlist" menu (also exposed to TalkBack as a custom action); works for coins outside
+  the top 250 too.
 - **Exchanges** – ranked by trust score, 24h volume estimated in USD.
 - **Onboarding** – the original CryptoMania intro (Lottie animations) rebuilt in Compose.
 - **Offline-first** – everything already downloaded stays browsable in airplane mode, when rate
-  limited, or when CoinGecko is down; a subtle banner tells how old the data is.
+  limited, or when CoinGecko is down; a pill on the header wave tells how old the data is.
 - **Adaptive** – bottom bar on phones, navigation rail on tablets/foldables, extra market columns and
   a two-pane coin screen on wide windows, landscape-aware onboarding.
 - **Themes & accessibility** – light/dark/system, color-blind friendly mode (blue/orange instead of
@@ -58,7 +63,7 @@ com.thecode.cryptomania
 a side effect must complete before navigating (search, settings, onboarding). ViewModels combine
 repository flows into state with `stateIn(WhileSubscribed)`; screens are stateless composables
 (`XxxScreen(state, onIntent)`) wrapped by a `XxxRoute` that wires the ViewModel. Data is never
-replaced by an error page once something is cached: problems surface as a `SyncStatus` banner.
+replaced by an error page once something is cached: problems surface as a `SyncStatus` pill.
 
 ## API & caching strategy
 
@@ -100,8 +105,10 @@ marks the period open, high/low are labelled, and TalkBack reads a summary of th
 Semantic color tokens (dark/light + color-blind variants), **Ubuntu** carried over from
 CryptoMania 1.x (bold headlines, tabular digits for figures), spacing/size tokens, Material 3
 Expressive spring motion, and the original **wave header**, redrawn as an adaptive Compose `Shape`
-from the 1.x vector: two layers in slow liquid motion, drawn over the content so lists scroll under
-it. The launcher icon, splash and onboarding use a new vector mark: two stylized gold coins. Components: `CryptoManiaTopBar`, `CryptoManiaCard` (soft
+from the 1.x vector: two layers in slow liquid motion (drawn wider than the screen so no edge ever
+shows), drawn over the content so lists scroll under it. The wavy edge keeps a fixed height and only
+the flat part stretches, so title, subtitle and status pill always sit on solid blue; the header
+collapses on scroll. The launcher icon, splash and onboarding use a new vector mark: two stylized gold coins. Components: `CryptoManiaTopBar`, `CryptoManiaCard` (soft
 tinted shadows), `CryptoPrice` (rolling ticker), `PriceChangeBadge`, `MarketStat`, `CryptoListItem`,
 `MoverCard`, `Sparkline`, `CryptoManiaSearchBar`, `CryptoManiaFilterChip`, `SegmentedSelector`
 (time ranges), `PriceChart`, skeletons, `ErrorState`, `EmptyState`, `NetworkStatusIndicator`,
@@ -145,8 +152,11 @@ coingecko.apiKey=CG-xxxxxxxxxxxxxxxx
 Kotlin compiler warnings are errors. Tests cover behavior rather than implementation:
 error mapping, request deduplication/backoff/cooldown, cache policy, mappers, an offline-first
 repository test with real Room + Retrofit against MockWebServer, use cases, MVI reducers (debounced
-search on virtual time) and screen flows (load, refresh, filters, error, offline, chart range,
-watchlist, search).
+search on virtual time) and screen flows (load, refresh, filters, empty states, error, offline,
+chart range, watchlist long-press, search, onboarding).
+
+> Avoid running command-line Gradle builds while Android Studio builds the same project: two builds
+> writing `app/build` at once can package an APK with missing classes.
 
 ## Limitations
 
@@ -156,6 +166,10 @@ watchlist, search).
 - Exchange volume in USD is an estimate (BTC volume × cached BTC price).
 - Robolectric UI tests run on SDK 35 because SDK 36+ sandboxes require JDK 21.
 - No baseline profile module yet.
+- The Play Store listing image (512 px PNG) still has to be exported from the new vector icon.
+- Full Material 3 Expressive (`MaterialExpressiveTheme`, `LoadingIndicator`) needs material3
+  1.5.0-alpha, which pulls Compose core to alpha; the app stays on stable and uses the Expressive
+  navigation bar and spring motion available today.
 
 ## License
 
