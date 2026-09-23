@@ -8,9 +8,13 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -19,6 +23,7 @@ import com.thecode.cryptomania.domain.model.ThemePreference
 import com.thecode.cryptomania.domain.model.UserSettings
 import com.thecode.cryptomania.domain.repository.SettingsRepository
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
+import com.thecode.cryptomania.presentation.feature.splash.AnimatedSplash
 import com.thecode.cryptomania.presentation.navigation.CryptoManiaNavigation
 import dagger.hilt.android.AndroidEntryPoint
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -44,6 +49,13 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         // No artificial delay: the splash only stays until preferences are loaded (a few ms).
         splash.setKeepOnScreenCondition { viewModel.settings.value == null }
+        // The system splash is plain brand blue, exactly like the first frame of AnimatedSplash:
+        // drop it without its fade so the animation starts on screen, not behind it.
+        var systemSplashGone by mutableStateOf(savedInstanceState != null)
+        splash.setOnExitAnimationListener { provider ->
+            provider.remove()
+            systemSplashGone = true
+        }
         enableEdgeToEdge()
 
         setContent {
@@ -67,7 +79,12 @@ class MainActivity : ComponentActivity() {
             CryptoManiaTheme(darkTheme = darkTheme, colorBlindFriendly = current.colorBlindFriendly) {
                 // Decided once: finishing onboarding navigates away rather than rebuilding the graph.
                 val showOnboarding = remember { !current.onboardingCompleted }
-                CryptoManiaNavigation(showOnboarding = showOnboarding)
+                // Played once per launch (not on rotation), over the app while it loads.
+                var splashDone by rememberSaveable { mutableStateOf(false) }
+                Box {
+                    CryptoManiaNavigation(showOnboarding = showOnboarding)
+                    if (!splashDone) AnimatedSplash(onFinished = { splashDone = true }, ready = { systemSplashGone })
+                }
             }
         }
     }
