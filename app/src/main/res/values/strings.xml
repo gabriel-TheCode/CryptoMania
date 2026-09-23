@@ -1,3 +1,173 @@
 <resources>
     <string name="app_name">CryptoMania</string>
+
+    <!-- Navigation -->
+    <string name="nav_market">Market</string>
+    <string name="nav_exchanges">Exchanges</string>
+    <string name="nav_settings">Settings</string>
+    <string name="action_back">Back</string>
+    <string name="action_retry">Try again</string>
+    <string name="action_search">Search</string>
+    <string name="action_clear">Clear</string>
+
+    <!-- Status -->
+    <string name="status_offline">Offline · showing data from %1$s</string>
+    <string name="status_offline_no_time">You are offline</string>
+    <string name="status_stale">%1$s · showing data from %2$s</string>
+    <string name="status_updated">Updated %1$s</string>
+    <string name="time_just_now">just now</string>
+    <plurals name="time_minutes_ago">
+        <item quantity="one">%d min ago</item>
+        <item quantity="other">%d min ago</item>
+    </plurals>
+    <plurals name="time_hours_ago">
+        <item quantity="one">%d h ago</item>
+        <item quantity="other">%d h ago</item>
+    </plurals>
+    <plurals name="time_days_ago">
+        <item quantity="one">%d day ago</item>
+        <item quantity="other">%d days ago</item>
+    </plurals>
+
+    <!-- Errors -->
+    <string name="error_network_title">No connection</string>
+    <string name="error_network_message">Check your internet connection and try again.</string>
+    <string name="error_timeout_title">Taking too long</string>
+    <string name="error_timeout_message">The market data service did not respond in time.</string>
+    <string name="error_rate_limited_title">Too many requests</string>
+    <string name="error_rate_limited_message">The free CoinGecko tier is rate limited. Please wait a minute.</string>
+    <string name="error_server_title">Service unavailable</string>
+    <string name="error_server_message">CoinGecko is having trouble right now. Try again shortly.</string>
+    <string name="error_unauthorized_title">Access denied</string>
+    <string name="error_unauthorized_message">The API key was rejected. Check the key in local.properties.</string>
+    <string name="error_not_found_title">Not found</string>
+    <string name="error_not_found_message">This asset is no longer tracked.</string>
+    <string name="error_unknown_title">Something went wrong</string>
+    <string name="error_unknown_message">An unexpected error occurred.</string>
+    <string name="error_short_network">No connection</string>
+    <string name="error_short_timeout">Request timed out</string>
+    <string name="error_short_rate_limited">Rate limited</string>
+    <string name="error_short_server">Service unavailable</string>
+    <string name="error_short_unauthorized">Access denied</string>
+    <string name="error_short_unknown">Refresh failed</string>
+
+    <!-- Market -->
+    <string name="market_title">Market</string>
+    <string name="market_search_hint">Search coins</string>
+    <string name="market_cap_global">Total market cap</string>
+    <string name="market_volume_global">24h volume</string>
+    <string name="market_dominance">Dominance</string>
+    <string name="market_dominance_btc">BTC %1$s</string>
+    <string name="market_dominance_eth">ETH %1$s</string>
+    <string name="market_dominance_other">Others %1$s</string>
+    <string name="market_movers">Top movers · 24h</string>
+    <string name="market_gainers">Gainers</string>
+    <string name="market_losers">Losers</string>
+    <string name="filter_all">All</string>
+    <string name="filter_watchlist">Watchlist</string>
+    <string name="filter_gainers">Gainers</string>
+    <string name="filter_losers">Losers</string>
+    <string name="market_column_asset">Asset</string>
+    <string name="market_column_price">Price · 24h</string>
+    <string name="market_column_market_cap">Market cap</string>
+    <string name="market_column_volume">Volume 24h</string>
+    <string name="market_column_7d">7d</string>
+    <string name="watchlist_empty_title">Your watchlist is empty</string>
+    <string name="watchlist_empty_message">Tap the star on any coin to follow it here.</string>
+    <string name="filter_empty_title">Nothing to show</string>
+    <string name="filter_empty_message">No coin matches this filter right now.</string>
+    <string name="market_empty_title">No market data yet</string>
+    <string name="market_empty_message">Market data will appear once it has been downloaded.</string>
+    <string name="cd_coin_row">%1$s, %2$s, price %3$s, %4$s in 24 hours</string>
+    <string name="cd_change_up">up %1$s</string>
+    <string name="cd_change_down">down %1$s</string>
+    <string name="cd_change_flat">unchanged</string>
+    <string name="cd_sparkline">Seven day trend</string>
+
+    <!-- Search -->
+    <string name="search_recent">Recent searches</string>
+    <string name="search_top_coins">Top coins</string>
+    <string name="search_in_market">In your market list</string>
+    <string name="search_more_results">More on CoinGecko</string>
+    <string name="search_no_results_title">No results for “%1$s”</string>
+    <string name="search_no_results_message">Check the spelling or try the ticker symbol.</string>
+    <string name="search_remote_failed">Could not search CoinGecko: %1$s</string>
+    <string name="search_rank">Rank %1$s</string>
+
+    <!-- Coin details -->
+    <string name="coin_add_watchlist">Add to watchlist</string>
+    <string name="coin_remove_watchlist">Remove from watchlist</string>
+    <string name="coin_range_past">past %1$s</string>
+    <string name="range_1d">1D</string>
+    <string name="range_1w">1W</string>
+    <string name="range_1m">1M</string>
+    <string name="range_3m">3M</string>
+    <string name="range_1y">1Y</string>
+    <string name="range_1d_long">24 hours</string>
+    <string name="range_1w_long">week</string>
+    <string name="range_1m_long">month</string>
+    <string name="range_3m_long">3 months</string>
+    <string name="range_1y_long">year</string>
+    <string name="cd_range">%1$s range</string>
+    <string name="chart_high">High %1$s</string>
+    <string name="chart_low">Low %1$s</string>
+    <string name="chart_not_enough_data">Not enough price history for this period.</string>
+    <string name="chart_unavailable">Chart unavailable</string>
+    <string name="cd_chart">Price chart for the past %1$s. From %2$s to %3$s, %4$s. High %5$s, low %6$s.</string>
+    <string name="coin_stats">Statistics</string>
+    <string name="stat_market_cap">Market cap</string>
+    <string name="stat_volume">Volume 24h</string>
+    <string name="stat_rank">Rank</string>
+    <string name="stat_fdv">Fully diluted value</string>
+    <string name="stat_range_24h">24h range</string>
+    <string name="stat_low">Low</string>
+    <string name="stat_high">High</string>
+    <string name="stat_circulating">Circulating supply</string>
+    <string name="stat_max_supply">Max supply</string>
+    <string name="stat_total_supply">Total supply</string>
+    <string name="stat_supply_of_max">%1$s of max supply in circulation</string>
+    <string name="stat_ath">All-time high</string>
+    <string name="stat_ath_detail">%1$s from ATH · %2$s</string>
+    <string name="stat_change_1h">1h</string>
+    <string name="stat_change_24h">24h</string>
+    <string name="stat_change_7d">7d</string>
+    <string name="coin_performance">Performance</string>
+    <string name="coin_about">About %1$s</string>
+    <string name="coin_about_show_more">Show more</string>
+    <string name="coin_about_show_less">Show less</string>
+    <string name="coin_website">Website</string>
+    <string name="coin_genesis">Launched %1$s</string>
+    <string name="coin_algorithm">Algorithm: %1$s</string>
+
+    <!-- Exchanges -->
+    <string name="exchanges_title">Exchanges</string>
+    <string name="exchanges_subtitle">Ranked by CoinGecko trust score</string>
+    <string name="exchange_trust">Trust %1$d/10</string>
+    <string name="exchange_volume">%1$s · 24h</string>
+    <string name="exchange_established">Since %1$d</string>
+    <string name="exchanges_empty_title">No exchanges</string>
+    <string name="exchanges_empty_message">Exchange data will appear once it has been downloaded.</string>
+    <string name="cd_exchange_row">%1$s, trust score %2$s out of 10, volume %3$s. Opens website.</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme_system">System</string>
+    <string name="settings_theme_light">Light</string>
+    <string name="settings_theme_dark">Dark</string>
+    <string name="settings_color_blind">Color-blind friendly changes</string>
+    <string name="settings_color_blind_description">Show price moves in blue and orange instead of green and red.</string>
+    <string name="settings_data">Data</string>
+    <string name="settings_clear_cache">Clear cached market data</string>
+    <string name="settings_clear_cache_description">Your watchlist and preferences are kept.</string>
+    <string name="settings_cache_cleared">Cached market data cleared</string>
+    <string name="settings_clear_recent">Clear recent searches</string>
+    <string name="settings_api">API</string>
+    <string name="settings_api_key_configured">CoinGecko Demo API key configured</string>
+    <string name="settings_api_keyless">Using the public keyless CoinGecko tier</string>
+    <string name="settings_api_description">Prices refresh at most every 2 minutes, matching the free tier’s own caching.</string>
+    <string name="settings_about">About</string>
+    <string name="settings_attribution">Data provided by CoinGecko</string>
+    <string name="settings_version">Version %1$s</string>
+    <string name="settings_source">Source code on GitHub</string>
 </resources>
