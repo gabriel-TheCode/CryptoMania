@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Themed-icon silhouette of the two coins (Android 13+ tints it). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M44,46a18,18 0 1,0 36,0a18,18 0 1,0 -36,0ZM48,46a14,14 0 1,0 28,0a14,14 0 1,0 -28,0Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M62,36.5L68.5,46.5L62,50L55.5,46.5Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:fillType="evenOdd"
+        android:pathData="M25.5,60a21.5,21.5 0 1,0 43,0a21.5,21.5 0 1,0 -43,0ZM31.5,60a15.5,15.5 0 1,0 31,0a15.5,15.5 0 1,0 -31,0Z" />
+    <path
+        android:pathData="M38,65.85L43.4,60L47.9,63.15L55.55,54.6M50.6,54.15L56,54.15L56,59.55"
+        android:strokeWidth="3.2"
+        android:strokeColor="#FFFFFFFF"
+        android:strokeLineCap="round"
+        android:strokeLineJoin="round" />
+</vector>
