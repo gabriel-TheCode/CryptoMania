@@ -48,7 +48,9 @@ import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.text.lerp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.lerp
 import com.thecode.cryptomania.R
 import com.thecode.cryptomania.domain.model.AppError
 import com.thecode.cryptomania.presentation.designsystem.theme.CryptoManiaTheme
@@ -168,7 +170,7 @@ fun ErrorState(
  * dialog, never covers content; hidden entirely when everything is up to date.
  */
 @Composable
-fun NetworkStatusIndicator(status: SyncStatus, modifier: Modifier = Modifier) {
+fun NetworkStatusIndicator(status: SyncStatus, modifier: Modifier = Modifier, compact: Float = 0f) {
     val colors = CryptoManiaTheme.colors
     val (icon, text) = when (status) {
         SyncStatus.UpToDate -> return
@@ -191,13 +193,18 @@ fun NetworkStatusIndicator(status: SyncStatus, modifier: Modifier = Modifier) {
         modifier = modifier
             .clip(CircleShape)
             .background(colors.onWave.copy(alpha = 0.16f))
-            .padding(horizontal = CryptoManiaTheme.spacing.md, vertical = 6.dp)
+            .padding(horizontal = lerp(CryptoManiaTheme.spacing.md, CryptoManiaTheme.spacing.sm, compact), vertical = lerp(6.dp, 3.dp, compact))
             .semantics(mergeDescendants = true) { liveRegion = LiveRegionMode.Polite },
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(CryptoManiaTheme.spacing.sm),
+        horizontalArrangement = Arrangement.spacedBy(lerp(CryptoManiaTheme.spacing.sm, CryptoManiaTheme.spacing.xs, compact)),
     ) {
-        Icon(icon, contentDescription = null, tint = colors.onWave, modifier = Modifier.size(16.dp))
-        Text(text, style = MaterialTheme.typography.labelMedium, color = colors.onWave, maxLines = 1)
+        Icon(icon, contentDescription = null, tint = colors.onWave, modifier = Modifier.size(lerp(16.dp, 12.dp, compact)))
+        Text(
+            text,
+            style = lerp(MaterialTheme.typography.labelMedium, MaterialTheme.typography.labelSmall, compact),
+            color = colors.onWave,
+            maxLines = 1,
+        )
     }
 }
 

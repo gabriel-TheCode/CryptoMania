@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -151,6 +152,9 @@ fun OnboardingScreen(onFinish: () -> Unit) {
             Button(
                 onClick = { if (isLast) onFinish() else scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) } },
                 modifier = Modifier.heightIn(min = 48.dp),
+                // The horizontal padding lives inside each animated label (below), so the resize
+                // clips at the button's own rounded edge, never at an inner padding line.
+                contentPadding = PaddingValues(0.dp),
             ) {
                 // The old label fades out first, the button resizes around its centre, and only
                 // then does the new label fade in: no frame where text is wider than the button.
@@ -163,7 +167,11 @@ fun OnboardingScreen(onFinish: () -> Unit) {
                     },
                     label = "onboardingCta",
                 ) { last ->
-                    Text(stringResource(if (last) R.string.onboarding_get_started else R.string.onboarding_next))
+                    Text(
+                        stringResource(if (last) R.string.onboarding_get_started else R.string.onboarding_next),
+                        maxLines = 1,
+                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp),
+                    )
                 }
             }
         }

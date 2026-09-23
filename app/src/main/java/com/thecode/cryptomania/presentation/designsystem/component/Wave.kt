@@ -39,13 +39,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Matrix
-import androidx.compose.ui.graphics.Outline
 import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawscope.scale
+import androidx.compose.ui.graphics.PathOperation
 import androidx.compose.ui.graphics.drawscope.translate
 import androidx.compose.ui.graphics.vector.PathParser
 import androidx.compose.ui.platform.LocalDensity
@@ -54,9 +52,7 @@ import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.lerp
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.lerp
 import com.thecode.cryptomania.R
@@ -80,29 +76,34 @@ private const val WAVE_PATH =
 private const val VIEWPORT_WIDTH = 375f
 private const val VIEWPORT_HEIGHT = 94f
 
-/** Height reserved for the wavy edge below the bar content. */
+/** Height of the wavy edge. Fixed: taller headers stretch the flat part, never the waves. */
 val WaveEdgeHeight: Dp = 28.dp
 
-private val wavePath: Path by lazy { PathParser().parsePathString(WAVE_PATH).toPath() }
+/** Viewport y where the original artwork stops being flat and the waves begin. */
+private const val EDGE_TOP = 68f
 
-/** @param mirrored flips the wave horizontally, used for the translucent back layer. */
-class WaveShape(private val mirrored: Boolean = false) : Shape {
-    override fun createOutline(size: Size, layoutDirection: LayoutDirection, density: Density): Outline {
-        val matrix = Matrix().apply {
-            if (mirrored) {
-                translate(x = size.width)
-                scale(x = -size.width / VIEWPORT_WIDTH, y = size.height / VIEWPORT_HEIGHT)
-            } else {
-                scale(x = size.width / VIEWPORT_WIDTH, y = size.height / VIEWPORT_HEIGHT)
-            }
-        }
-        return Outline.Generic(Path().apply { addPath(wavePath); transform(matrix) })
+private val rawWave: Path by lazy { PathParser().parsePathString(WAVE_PATH).toPath() }
+
+/**
+ * Builds the wave for a [width]×[height] box: the wavy part keeps a constant [edge] height at
+ * the bottom and a flat rectangle fills everything above it (extended [bleed] above the top so
+ * vertical motion never opens a gap). One path, so translucent layers never double-blend.
+ */
+private fun wavePath(width: Float, height: Float, edge: Float, bleed: Float, mirrored: Boolean): Path {
+    val sx = width / VIEWPORT_WIDTH
+    val sy = edge / (VIEWPORT_HEIGHT - EDGE_TOP)
+    val matrix = Matrix().apply {
+        translate(x = if (mirrored) width else 0f, y = height - VIEWPORT_HEIGHT * sy)
+        scale(x = if (mirrored) -sx else sx, y = sy)
     }
+    val waves = Path().apply { addPath(rawWave); transform(matrix) }
+    val flat = Path().apply { addRect(Rect(0f, -bleed, width, height - edge + 1f)) }
+    return Path().apply { op(flat, waves, PathOperation.Union) }
 }
 
 /**
  * Two layered waves in slow, continuous motion, like liquid: the translucent back layer sways
- * and breathes, the gradient front layer drifts gently against it. Both layers are drawn wider
+ * and bobs, the gradient front layer drifts gently against it. Both layers are drawn wider
  * than the screen on each side, so swaying never reveals an edge. A single phase value drives
  * everything and is read only while drawing: no recomposition, no layout, one path per layer.
  * With animations disabled in system settings the waves simply stay still.
@@ -119,18 +120,21 @@ fun WaveBackground(modifier: Modifier = Modifier) {
     Box(
         modifier.drawWithCache {
             val overscan = 48.dp.toPx()
-            val wide = Size(size.width + overscan * 2, size.height)
-            val front = (WaveShape().createOutline(wide, layoutDirection, this) as Outline.Generic).path
-            val back = (WaveShape(mirrored = true).createOutline(wide.copy(height = size.height * 1.1f), layoutDirection, this) as Outline.Generic).path
-            val gradient = Brush.linearGradient(listOf(colors.waveStart, colors.waveEnd), end = Offset(wide.width, size.height))
+            val bleed = 8.dp.toPx()
+            val edge = WaveEdgeHeight.toPx()
+            val width = size.width + overscan * 2
+            val front = wavePath(width, size.height, edge, bleed, mirrored = false)
+            val back = wavePath(width, size.height + edge * 0.25f, edge * 1.25f, bleed, mirrored = true)
+            val gradient = Brush.linearGradient(listOf(colors.waveStart, colors.waveEnd), end = Offset(width, size.height))
             val backColor = colors.waveEnd.copy(alpha = 0.35f)
+            val bob = 3.dp.toPx()
             onDrawBehind {
                 val p = phase
-                translate(left = -overscan + sin(p) * overscan * 0.75f) {
-                    scale(scaleX = 1f, scaleY = 1f + 0.05f * sin(p + 1.3f), pivot = Offset.Zero) { drawPath(back, backColor) }
+                translate(left = -overscan + sin(p) * overscan * 0.75f, top = bob * sin(p + 1.3f)) {
+                    drawPath(back, backColor)
                 }
-                translate(left = -overscan + sin(p + PI.toFloat()) * overscan * 0.3f) {
-                    scale(scaleX = 1f, scaleY = 1f + 0.025f * cos(p), pivot = Offset.Zero) { drawPath(front, gradient) }
+                translate(left = -overscan + sin(p + PI.toFloat()) * overscan * 0.3f, top = bob * 0.6f * cos(p)) {
+                    drawPath(front, gradient)
                 }
             }
         },
@@ -149,7 +153,8 @@ fun WaveSurface(
         CompositionLocalProvider(LocalContentColor provides CryptoManiaTheme.colors.onWave) {
             Box(
                 Modifier
-                    .padding(top = statusBar, bottom = WaveEdgeHeight)
+                    // Content always ends above the waves, on the flat part of the header.
+                    .padding(top = statusBar, bottom = WaveEdgeHeight + 4.dp)
                     .fillMaxWidth(),
                 content = content,
             )
@@ -226,7 +231,8 @@ fun CryptoManiaTopBar(
                 exit = shrinkVertically() + fadeOut(),
             ) {
                 Column {
-                    NetworkStatusIndicator(status, Modifier.padding(horizontal = spacing.lg))
+                    // Shrinks together with the title as the bar collapses.
+                    NetworkStatusIndicator(status, Modifier.padding(horizontal = spacing.lg), compact = collapsed)
                     Spacer(Modifier.height(spacing.xs))
                 }
             }
