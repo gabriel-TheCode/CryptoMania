@@ -48,8 +48,8 @@ no recomposition per frame. The system splash window is plain brand blue and is 
 as the app draws, so the animation starts on screen instead of behind it; it plays once per
 launch, while the market loads underneath, and finishes at once when animations are disabled.
 
-Play Store assets live in [`docs/playstore`](docs/playstore): eight 1080×1920 phone screenshots
-and the 1024×500 feature graphic.
+Play Store assets live in [`docs/playstore`](docs/playstore): the 512×512 hi-res icon (rendered
+from the launcher vectors), eight 1080×1920 phone screenshots and the 1024×500 feature graphic.
 
 <br clear="right" />
 
@@ -187,7 +187,6 @@ chart range, watchlist long-press, search, onboarding).
 - Exchange volume in USD is an estimate (BTC volume × cached BTC price).
 - Robolectric UI tests run on SDK 35 because SDK 36+ sandboxes require JDK 21.
 - No baseline profile module yet.
-- The Play Store hi-res icon (512 px PNG) still has to be exported from the new vector icon.
 - Full Material 3 Expressive (`MaterialExpressiveTheme`, `LoadingIndicator`) needs material3
   1.5.0-alpha, which pulls Compose core to alpha; the app stays on stable and uses the Expressive
   navigation bar and spring motion available today.
