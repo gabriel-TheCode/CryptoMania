@@ -1,5 +1,8 @@
 # CryptoMania 2.0
 
+> **Archived.** This repository is kept as a Jetpack Compose reference and is no longer
+> updated. Development of CryptoMania continues privately.
+
 A modern, offline-first cryptocurrency market tracker for Android, built with Jetpack Compose on
 top of the free [CoinGecko API](https://www.coingecko.com/en/api).
 
@@ -193,4 +196,4 @@ chart range, watchlist long-press, search, onboarding).
 
 ## License
 
-MIT License — Copyright (c) 2021 TEKOMBO Gabriel. See [LICENSE](LICENSE).
+Apache License 2.0 — Copyright (c) 2021 TEKOMBO Gabriel. See [LICENSE](LICENSE).
